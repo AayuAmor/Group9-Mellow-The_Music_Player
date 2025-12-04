@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 import view.Login;
+import Dao.loginDao;
 
 /**
  *
@@ -37,7 +38,7 @@ public class LoginController {
 @Override
     public void actionPerformed (ActionEvent e){
         try{
-            String username= loginview.getUsername().getText();
+            String username= loginview.getEmail().getText();
             String password= loginview.getPassword().getText();
             UserData userdata = new UserData(username,password);
             boolean check = logindao.Login(userdata);

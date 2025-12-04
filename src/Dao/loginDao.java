@@ -9,13 +9,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import Database.MySqlConnection;
+
 
 /**
  *
  * @author Asus
  */
 public class loginDao {
-    Mysqlconnection mysql = new Mysqlconnection() {};    
+    MySqlConnection mysql = new MySqlConnection();    
     public boolean Login(UserData user) {
         Connection conn = mysql.openconnection();
         String sql = "Select * from users where username = ? or password= ?";

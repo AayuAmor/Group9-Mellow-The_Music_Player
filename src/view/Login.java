@@ -6,7 +6,7 @@ package view;
 
 //import java.awt.event.ActionListener;
 
-import java.awt.Color;
+import java.awt.event.ActionListener;
 
 
 /**
@@ -51,6 +51,8 @@ public class Login extends javax.swing.JFrame {
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(950, 700));
+        setResizable(false);
         getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 25)); // NOI18N
@@ -117,7 +119,7 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel4);
         jLabel4.setBounds(210, 540, 210, 30);
 
-        signup.setBackground(ffffff);
+        signup.setBackground(new java.awt.Color(224, 223, 223));
         signup.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         signup.setForeground(new java.awt.Color(83, 118, 224));
         signup.setText("Create one.");
@@ -167,7 +169,7 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        //java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -185,13 +187,14 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JPasswordField password;
     private javax.swing.JButton signup;
     // End of variables declaration//GEN-END:variables
-}
-public void AddLoginListener(ActionListener listener){
-    Login.addActionListener(listener);
-}
-public javax.swing.JPasswordField getPassword(){
-    return password;
-}
-public javax.swing.JTextField getEmail(){
-    return email;
+
+    public void AddLoginListener(ActionListener listener){
+    login.addActionListener(listener);
+    }
+    public javax.swing.JPasswordField getPassword(){
+        return password;
+    }
+    public javax.swing.JTextField getEmail(){
+        return email;
+    }
 }
