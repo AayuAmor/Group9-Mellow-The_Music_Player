@@ -10,6 +10,8 @@ import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
+import view.Login;
+import view.signUp;
 
 /**
  *

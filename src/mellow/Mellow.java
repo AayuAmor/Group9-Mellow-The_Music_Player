@@ -13,11 +13,14 @@ import view.signUp;
  */
 public class Mellow {
 
-    /**
+    /**Mellow
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        signUp signup = new signUp();
+    UserController usercontroller = new UserController(signup);
+    usercontroller.open();
 
 }
 }

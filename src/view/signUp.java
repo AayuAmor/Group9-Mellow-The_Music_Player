@@ -48,6 +48,8 @@ public class signUp extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(950, 700));
+        setResizable(false);
         getContentPane().setLayout(null);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellow logo.png"))); // NOI18N
@@ -116,7 +118,6 @@ public class signUp extends javax.swing.JFrame {
         getContentPane().add(jLabel7);
         jLabel7.setBounds(450, 260, 60, 19);
 
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
         jLabel8.setText("Already have an account?");
         getContentPane().add(jLabel8);
         jLabel8.setBounds(510, 500, 170, 20);
