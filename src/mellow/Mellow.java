@@ -5,6 +5,8 @@
 package mellow;
 
 import Controller.UserController;
+import Database.Database;
+import Database.MySqlConnection;
 import view.signUp;
 
 /**
@@ -18,9 +20,15 @@ public class Mellow {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        Database db = new MySqlConnection();
+        if(db.openconnection() !=null){
+            System.out.println("connection opened");
+        }else{
+            System.out.println("connection closed");
         signUp signup = new signUp();
     UserController usercontroller = new UserController(signup);
     usercontroller.open();
 
-}
+        }
+    }
 }
