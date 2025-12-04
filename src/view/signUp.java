@@ -4,6 +4,9 @@
  */
 package view;
 
+import java.awt.Color;
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author rohit
@@ -11,6 +14,7 @@ package view;
 public class signUp extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(signUp.class.getName());
+    private Color ffffff;
 
     /**
      * Creates new form signUp
@@ -28,21 +32,122 @@ public class signUp extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel2 = new javax.swing.JLabel();
+        username = new javax.swing.JTextField();
+        email = new javax.swing.JTextField();
+        password = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        Signup = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        loginbtn = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellow logo.png"))); // NOI18N
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(-20, -30, 220, 180);
+
+        username.setBackground(new java.awt.Color(219, 219, 219));
+        username.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(233, 232, 232), new java.awt.Color(219, 217, 217)));
+        username.addActionListener(this::usernameActionPerformed);
+        getContentPane().add(username);
+        username.setBounds(460, 210, 280, 30);
+
+        email.setBackground(new java.awt.Color(220, 218, 218));
+        email.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(231, 231, 231), new java.awt.Color(221, 221, 221)));
+        email.addActionListener(this::emailActionPerformed);
+        getContentPane().add(email);
+        email.setBounds(460, 290, 280, 30);
+
+        password.setBackground(new java.awt.Color(223, 221, 221));
+        password.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(231, 231, 231), new java.awt.Color(224, 222, 222)));
+        password.addActionListener(this::passwordActionPerformed);
+        getContentPane().add(password);
+        password.setBounds(460, 370, 280, 30);
+
+        jLabel3.setFont(new java.awt.Font("Arial Black", 1, 25)); // NOI18N
+        jLabel3.setText("Register");
+        jLabel3.setAlignmentX(5.0F);
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(580, 110, 130, 40);
+
+        Signup.setBackground(new java.awt.Color(154, 195, 237));
+        Signup.setFont(new java.awt.Font("Yu Gothic Medium", 1, 18)); // NOI18N
+        Signup.setForeground(new java.awt.Color(88, 147, 206));
+        Signup.setText("Sign up");
+        Signup.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(247, 244, 222), null));
+        Signup.addActionListener(this::SignupActionPerformed);
+        getContentPane().add(Signup);
+        Signup.setBounds(560, 430, 120, 40);
+
+        jLabel4.setFont(new java.awt.Font("Arial Black", 1, 27)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(203, 198, 198));
+        jLabel4.setText("Register");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(570, 110, 140, 40);
+
+        loginbtn.setBackground(ffffff);
+        loginbtn.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        loginbtn.setForeground(new java.awt.Color(84, 118, 221));
+        loginbtn.setText("Login.");
+        loginbtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(235, 235, 252), null));
+        getContentPane().add(loginbtn);
+        loginbtn.setBounds(650, 500, 70, 20);
+
+        jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        jLabel5.setText("Username :");
+        getContentPane().add(jLabel5);
+        jLabel5.setBounds(450, 180, 70, 19);
+
+        jLabel6.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        jLabel6.setText("Password :");
+        getContentPane().add(jLabel6);
+        jLabel6.setBounds(450, 340, 80, 19);
+
+        jLabel7.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
+        jLabel7.setText("Email :");
+        getContentPane().add(jLabel7);
+        jLabel7.setBounds(450, 260, 60, 19);
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        jLabel8.setText("Already have an account?");
+        getContentPane().add(jLabel8);
+        jLabel8.setBounds(510, 500, 170, 20);
+
+        jLabel9.setFont(new java.awt.Font("Gadugi", 1, 14)); // NOI18N
+        jLabel9.setText("A Personal Space just for you.");
+        getContentPane().add(jLabel9);
+        jLabel9.setBounds(210, 550, 230, 20);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(0, 0, 1000, 660);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_usernameActionPerformed
+
+    private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_emailActionPerformed
+
+    private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_passwordActionPerformed
+
+    private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SignupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +175,33 @@ public class signUp extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Signup;
+    private javax.swing.JTextField email;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton loginbtn;
+    private javax.swing.JTextField password;
+    private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
+public void AddAAUserListener(ActionListener listener){
+    loginbtn.addActionListener(listener);
+}
+
+public javax.swing.JTextField getEmail(){
+    return email;
+}
+
+public javax.swing.JTextField getPassword(){
+    return password;
+}
+public javax.swing.JTextField getUsername(){
+    return username;  
+}
 }
