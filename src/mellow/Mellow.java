@@ -4,6 +4,9 @@
  */
 package mellow;
 
+import Controller.UserController;
+import view.signUp;
+
 /**
  *
  * @author oakin
@@ -15,6 +18,6 @@ public class Mellow {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-    }
-    
+
+}
 }
