@@ -4,6 +4,7 @@
  */
 package Dao;
 
+import Database.MySqlConnection;
 import Model.UserData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
  * @author Asus
  */
 public class userDao {
-    Mysqlconnection mysql = new Mysqlconnection() {}; 
+    MySqlConnection mysql = new MySqlConnection() {}; 
     public void signUp(UserData user){
         Connection conn = mysql.openconnection();
         String sql=  "Insert into users (username, email, password) values(?,?,?)";
