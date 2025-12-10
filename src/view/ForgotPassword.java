@@ -49,7 +49,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         BackToLogInBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         BackToLogInBtn.setForeground(new java.awt.Color(255, 255, 255));
         BackToLogInBtn.setText("Back to Login");
-        BackToLogInBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        BackToLogInBtn.setBorder(null);
         BackToLogInBtn.addActionListener(this::BackToLogInBtnActionPerformed);
 
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -83,7 +83,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setText("Search");
-        searchBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        searchBtn.setBorder(null);
         searchBtn.addActionListener(this::searchBtnActionPerformed);
 
         jTextField1.setText("Your Email Address");
