@@ -78,6 +78,14 @@ public class Login extends javax.swing.JFrame {
         password.setForeground(new java.awt.Color(153, 153, 153));
         password.setText("Enter your password");
         password.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(242, 242, 242), new java.awt.Color(235, 235, 235)));
+        password.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                passwordFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                passwordFocusLost(evt);
+            }
+        });
         password.addActionListener(this::passwordActionPerformed);
         getContentPane().add(password);
         password.setBounds(460, 350, 280, 30);
@@ -87,6 +95,14 @@ public class Login extends javax.swing.JFrame {
         email.setForeground(new java.awt.Color(153, 153, 153));
         email.setText("Enter your email");
         email.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(236, 236, 236), new java.awt.Color(239, 238, 238)));
+        email.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                emailFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                emailFocusLost(evt);
+            }
+        });
         getContentPane().add(email);
         email.setBounds(460, 270, 280, 30);
 
@@ -146,6 +162,34 @@ public class Login extends javax.swing.JFrame {
     private void signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_signupActionPerformed
+
+    private void emailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusGained
+        // TODO add your handling code here:
+        if (email.getText().equals("Enter your email")){
+            email.setText("");
+        }
+    }//GEN-LAST:event_emailFocusGained
+
+    private void emailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusLost
+        // TODO add your handling code here:
+        if (email.getText().equals("")){
+            email.setText("Enter your email");
+        }
+    }//GEN-LAST:event_emailFocusLost
+
+    private void passwordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusGained
+        // TODO add your handling code here:
+        if(password.getText().equals("Enter your password")){
+            password.setText("");
+        }
+    }//GEN-LAST:event_passwordFocusGained
+
+    private void passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusLost
+        // TODO add your handling code here:
+        if(password.getText().equals("")){
+            password.setText("Enter your password");
+        }
+    }//GEN-LAST:event_passwordFocusLost
 
     /**
      * @param args the command line arguments
