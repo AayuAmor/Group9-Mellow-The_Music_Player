@@ -8,14 +8,14 @@ package view;
  *
  * @author oakin
  */
-public class ForgotPassword extends javax.swing.JFrame {
+public class AccountRecovery extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ForgotPassword.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AccountRecovery.class.getName());
 
     /**
      * Creates new form ForgotPassword
      */
-    public ForgotPassword() {
+    public AccountRecovery() {
         initComponents();
     }
 
@@ -225,7 +225,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new ForgotPassword().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new AccountRecovery().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
