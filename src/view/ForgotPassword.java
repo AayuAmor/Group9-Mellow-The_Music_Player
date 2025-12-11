@@ -34,7 +34,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         searchBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        emailText = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 
@@ -49,7 +49,7 @@ public class ForgotPassword extends javax.swing.JFrame {
         BackToLogInBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         BackToLogInBtn.setForeground(new java.awt.Color(255, 255, 255));
         BackToLogInBtn.setText("Back to Login");
-        BackToLogInBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        BackToLogInBtn.setBorder(null);
         BackToLogInBtn.addActionListener(this::BackToLogInBtnActionPerformed);
 
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -83,12 +83,21 @@ public class ForgotPassword extends javax.swing.JFrame {
         searchBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         searchBtn.setForeground(new java.awt.Color(255, 255, 255));
         searchBtn.setText("Search");
-        searchBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true));
+        searchBtn.setBorder(null);
         searchBtn.addActionListener(this::searchBtnActionPerformed);
 
-        jTextField1.setText("Your Email Address");
-        jTextField1.setBorder(null);
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        emailText.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        emailText.setForeground(new java.awt.Color(153, 153, 153));
+        emailText.setBorder(null);
+        emailText.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                emailTextFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                emailTextFocusLost(evt);
+            }
+        });
+        emailText.addActionListener(this::emailTextActionPerformed);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/email_logo.png"))); // NOI18N
 
@@ -97,14 +106,14 @@ public class ForgotPassword extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(emailText, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(emailText, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -176,9 +185,23 @@ public class ForgotPassword extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchBtnActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void emailTextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailTextActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_emailTextActionPerformed
+
+    private void emailTextFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailTextFocusGained
+        // TODO add your handling code here:
+        if (emailText.getText().equals("Enter Your Email")){
+            emailText.setText("");
+        }
+    }//GEN-LAST:event_emailTextFocusGained
+
+    private void emailTextFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailTextFocusLost
+        // TODO add your handling code here:
+        if (emailText.getText().equals("")){
+            emailText.setText("Enter Your Email");
+        }
+    }//GEN-LAST:event_emailTextFocusLost
 
     /**
      * @param args the command line arguments
@@ -207,13 +230,13 @@ public class ForgotPassword extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToLogInBtn;
+    private javax.swing.JTextField emailText;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
 

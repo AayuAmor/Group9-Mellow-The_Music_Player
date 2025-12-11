@@ -110,7 +110,7 @@ public class Login extends javax.swing.JFrame {
         login.setFont(new java.awt.Font("Yu Gothic Medium", 1, 16)); // NOI18N
         login.setForeground(new java.awt.Color(89, 149, 209));
         login.setText("LOGIN");
-        login.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(231, 230, 230), 2, true));
+        login.setBorder(null);
         login.addActionListener(this::loginActionPerformed);
         getContentPane().add(login);
         login.setBounds(560, 410, 100, 40);

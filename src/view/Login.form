@@ -157,11 +157,7 @@
         </Property>
         <Property name="text" type="java.lang.String" value="LOGIN"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-          <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
-            <LineBorder roundedCorners="true" thickness="2">
-              <Color PropertyName="color" blue="e6" green="e6" red="e7" type="rgb"/>
-            </LineBorder>
-          </Border>
+          <Border info="null"/>
         </Property>
       </Properties>
       <Events>
