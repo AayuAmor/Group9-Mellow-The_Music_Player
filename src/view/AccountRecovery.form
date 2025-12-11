@@ -59,7 +59,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <Component id="jLabel2" min="-2" pref="213" max="-2" attributes="0"/>
                   <EmptySpace pref="611" max="32767" attributes="0"/>
-                  <Component id="BackToLogInBtn" min="-2" pref="117" max="-2" attributes="0"/>
+                  <Component id="backToLogInBtn" min="-2" pref="117" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -73,7 +73,7 @@
               </Group>
               <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="BackToLogInBtn" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="backToLogInBtn" min="-2" pref="38" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -87,7 +87,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="BackToLogInBtn">
+        <Component class="javax.swing.JButton" name="backToLogInBtn">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="33" red="0" type="rgb"/>
@@ -104,7 +104,7 @@
             </Property>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BackToLogInBtnActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="backToLogInBtnActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>

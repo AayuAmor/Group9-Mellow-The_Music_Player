@@ -43,7 +43,7 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
         nextBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(964, 580));
+        setPreferredSize(new java.awt.Dimension(900, 550));
         setResizable(false);
         setSize(new java.awt.Dimension(964, 580));
 

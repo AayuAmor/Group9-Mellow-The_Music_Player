@@ -30,7 +30,7 @@ public class AccountRecovery extends javax.swing.JFrame {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jLabel2 = new javax.swing.JLabel();
-        BackToLogInBtn = new javax.swing.JButton();
+        backToLogInBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         searchBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -45,15 +45,15 @@ public class AccountRecovery extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellow logo.png"))); // NOI18N
 
-        BackToLogInBtn.setBackground(new java.awt.Color(0, 51, 255));
-        BackToLogInBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        BackToLogInBtn.setForeground(new java.awt.Color(255, 255, 255));
-        BackToLogInBtn.setText("Back to Login");
-        BackToLogInBtn.setBorder(null);
-        BackToLogInBtn.addActionListener(this::BackToLogInBtnActionPerformed);
+        backToLogInBtn.setBackground(new java.awt.Color(0, 51, 255));
+        backToLogInBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        backToLogInBtn.setForeground(new java.awt.Color(255, 255, 255));
+        backToLogInBtn.setText("Back to Login");
+        backToLogInBtn.setBorder(null);
+        backToLogInBtn.addActionListener(this::backToLogInBtnActionPerformed);
 
         jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(BackToLogInBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(backToLogInBtn, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -62,7 +62,7 @@ public class AccountRecovery extends javax.swing.JFrame {
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 611, Short.MAX_VALUE)
-                .addComponent(BackToLogInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(backToLogInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(19, 19, 19))
         );
         jDesktopPane1Layout.setVerticalGroup(
@@ -73,7 +73,7 @@ public class AccountRecovery extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(BackToLogInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(backToLogInBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
         );
 
@@ -177,9 +177,9 @@ public class AccountRecovery extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void BackToLogInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackToLogInBtnActionPerformed
+    private void backToLogInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToLogInBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_BackToLogInBtnActionPerformed
+    }//GEN-LAST:event_backToLogInBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed
         // TODO add your handling code here:
@@ -229,7 +229,7 @@ public class AccountRecovery extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BackToLogInBtn;
+    private javax.swing.JButton backToLogInBtn;
     private javax.swing.JTextField emailText;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
