@@ -89,7 +89,7 @@ public class ChangeForgottenPassword_Interface extends javax.swing.JFrame {
         jLabel5.setBackground(new java.awt.Color(153, 153, 153));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Conform Password:");
+        jLabel5.setText("Confirm Password:");
 
         newPasswordTextField.setBackground(new java.awt.Color(204, 204, 204));
         newPasswordTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
