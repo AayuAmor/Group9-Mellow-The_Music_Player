@@ -141,7 +141,7 @@ public class Login extends javax.swing.JFrame {
         signup.setText("Create one.");
         signup.addActionListener(this::signupActionPerformed);
         getContentPane().add(signup);
-        signup.setBounds(630, 490, 100, 23);
+        signup.setBounds(630, 490, 100, 22);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
