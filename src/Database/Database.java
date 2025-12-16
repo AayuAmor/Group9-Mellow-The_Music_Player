@@ -15,5 +15,4 @@ public interface Database {
     void closeConnection(Connection conn);
     ResultSet runQuery(Connection conn, String Query);
     int executeUpdate(Connection conn, String Query);
-    
 }

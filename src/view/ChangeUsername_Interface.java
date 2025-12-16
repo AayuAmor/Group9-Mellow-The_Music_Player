@@ -41,17 +41,22 @@ public class ChangeUsername_Interface extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(900, 550));
         setResizable(false);
+        getContentPane().setLayout(null);
 
-        jPanel1.setBackground(new java.awt.Color(72, 121, 137));
+        jPanel1.setBackground(new java.awt.Color(72, 118, 168));
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
 
-        backBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/backBtn_Image.png"))); // NOI18N
+        backBtn.setBackground(new java.awt.Color(159, 175, 192));
+        backBtn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        backBtn.setForeground(new java.awt.Color(255, 255, 255));
+        backBtn.setText("←Back");
         backBtn.setBorder(null);
         backBtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         backBtn.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
         backBtn.addActionListener(this::backBtnActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 28)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("Change Username");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -59,30 +64,38 @@ public class ChangeUsername_Interface extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(21, 21, 21)
                 .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(82, 82, 82)
+                .addGap(31, 31, 31)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(29, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(36, 36, 36))
+                .addGap(22, 22, 22))
         );
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 900, 118);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel3.setText("New Username:");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(39, 207, 215, 44);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 24)); // NOI18N
         jLabel4.setText("Password:");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(39, 277, 238, 44);
 
         newUsernameTextField.setBackground(new java.awt.Color(204, 204, 204));
         newUsernameTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        newUsernameTextField.setForeground(new java.awt.Color(153, 153, 153));
         newUsernameTextField.setText("Enter Your Username");
         newUsernameTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -93,9 +106,12 @@ public class ChangeUsername_Interface extends javax.swing.JFrame {
             }
         });
         newUsernameTextField.addActionListener(this::newUsernameTextFieldActionPerformed);
+        getContentPane().add(newUsernameTextField);
+        newUsernameTextField.setBounds(290, 220, 379, 31);
 
         PasswordTextField.setBackground(new java.awt.Color(204, 204, 204));
         PasswordTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        PasswordTextField.setForeground(new java.awt.Color(153, 153, 153));
         PasswordTextField.setText("******************");
         PasswordTextField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
@@ -105,48 +121,16 @@ public class ChangeUsername_Interface extends javax.swing.JFrame {
                 PasswordTextFieldFocusLost(evt);
             }
         });
+        getContentPane().add(PasswordTextField);
+        PasswordTextField.setBounds(290, 280, 379, 30);
 
-        updateBtn.setBackground(new java.awt.Color(71, 120, 135));
+        updateBtn.setBackground(new java.awt.Color(72, 118, 168));
         updateBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         updateBtn.setForeground(new java.awt.Color(255, 255, 255));
         updateBtn.setText("Update");
         updateBtn.addActionListener(this::updateBtnActionPerformed);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 215, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(292, 292, 292)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(newUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(190, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(newUsernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(PasswordTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59)
-                .addComponent(updateBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(157, Short.MAX_VALUE))
-        );
+        getContentPane().add(updateBtn);
+        updateBtn.setBounds(586, 383, 124, 42);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

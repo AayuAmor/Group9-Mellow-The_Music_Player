@@ -34,10 +34,10 @@ public class Account extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         changeusername = new javax.swing.JButton();
         changepassword = new javax.swing.JButton();
-        emailbtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -52,7 +52,8 @@ public class Account extends javax.swing.JFrame {
         backbtn.setText("←Back");
         backbtn.addActionListener(this::backbtnActionPerformed);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 204, 204));
         jLabel1.setText("Account");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -60,41 +61,38 @@ public class Account extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addGap(17, 17, 17)
                 .addComponent(backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(688, Short.MAX_VALUE))
+                .addGap(35, 35, 35)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(632, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(backbtn)
                     .addComponent(jLabel1))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGap(22, 22, 22))
         );
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(0, 0, 951, 70);
+        jPanel2.setBounds(0, 0, 951, 100);
 
+        changeusername.setBackground(new java.awt.Color(204, 204, 204));
         changeusername.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changeusername.setText("Change username");
         changeusername.addActionListener(this::changeusernameActionPerformed);
         jPanel1.add(changeusername);
-        changeusername.setBounds(80, 140, 182, 40);
+        changeusername.setBounds(80, 150, 290, 20);
 
+        changepassword.setBackground(new java.awt.Color(204, 204, 204));
         changepassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changepassword.setText("Change password");
         changepassword.addActionListener(this::changepasswordActionPerformed);
         jPanel1.add(changepassword);
-        changepassword.setBounds(80, 230, 190, 40);
-
-        emailbtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        emailbtn.setText("Email : username@gmail.com");
-        jPanel1.add(emailbtn);
-        emailbtn.setBounds(80, 320, 300, 40);
+        changepassword.setBounds(80, 240, 300, 20);
 
         jLabel2.setBackground(new java.awt.Color(153, 204, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mdi_user.png"))); // NOI18N
@@ -112,17 +110,22 @@ public class Account extends javax.swing.JFrame {
         jPanel1.add(jLabel4);
         jLabel4.setBounds(20, 310, 60, 60);
 
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setText("Email: ");
+        jPanel1.add(jLabel5);
+        jLabel5.setBounds(90, 330, 200, 30);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 947, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 663, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -180,11 +183,11 @@ public class Account extends javax.swing.JFrame {
     private javax.swing.JButton backbtn;
     private javax.swing.JButton changepassword;
     private javax.swing.JButton changeusername;
-    private javax.swing.JButton emailbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

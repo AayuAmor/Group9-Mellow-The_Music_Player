@@ -8,7 +8,6 @@ package view;
 
 import java.awt.event.ActionListener;
 
-
 /**
  *
  * @author Asus
@@ -157,9 +156,9 @@ public class Login extends javax.swing.JFrame {
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         // TODO add your handling code here:
-        UserDashboard UserDashboard = new UserDashboard();
-        UserDashboard.setVisible(true);
-        this.dispose();
+            UserDashboard UserDashboard = new UserDashboard();
+            UserDashboard.setVisible(true);
+            this.dispose();
     }//GEN-LAST:event_loginActionPerformed
 
     private void signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupActionPerformed
@@ -248,3 +247,4 @@ public class Login extends javax.swing.JFrame {
         return email;
     }
 }
+

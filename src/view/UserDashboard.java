@@ -308,9 +308,22 @@ public class UserDashboard extends javax.swing.JFrame {
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // TODO add your handling code here:
-        Login Login = new Login();
-        Login.setVisible(true);
-        this.dispose();
+        int choice = javax.swing.JOptionPane.showConfirmDialog(
+        this,
+        "Are you sure you want to logout?",
+        "confirm logout",
+        javax.swing.JOptionPane.YES_NO_OPTION
+        );
+        if (choice==javax.swing.JOptionPane.YES_OPTION){
+            Login Login = new Login();
+            Login.setVisible(true);
+            this.dispose();
+        }
+        else{
+            UserDashboard UserDashboard = new UserDashboard();
+            UserDashboard.setVisible(true);
+            this.dispose();
+        }
     }//GEN-LAST:event_logoutActionPerformed
 
     private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
