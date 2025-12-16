@@ -46,6 +46,7 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
         setPreferredSize(new java.awt.Dimension(900, 550));
         setResizable(false);
         setSize(new java.awt.Dimension(964, 580));
+        getContentPane().setLayout(null);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
 
@@ -79,6 +80,9 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
                 .addComponent(backToLoginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
+
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(0, 0, 964, 142);
 
         jPanel2.setBackground(new java.awt.Color(153, 153, 153));
 
@@ -161,30 +165,17 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
                 .addGap(36, 36, 36))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(244, Short.MAX_VALUE)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(219, 219, 219))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 101, Short.MAX_VALUE))
-        );
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(244, 214, 501, 267);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void backToLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToLoginBtnActionPerformed
         // TODO add your handling code here:
+        Login Login= new Login();
+        Login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_backToLoginBtnActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
