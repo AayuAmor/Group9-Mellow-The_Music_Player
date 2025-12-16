@@ -50,6 +50,7 @@ public class Account extends javax.swing.JFrame {
         backbtn.setFont(new java.awt.Font("Segoe UI Black", 1, 22)); // NOI18N
         backbtn.setForeground(new java.awt.Color(255, 255, 255));
         backbtn.setText("←Back");
+        backbtn.addActionListener(this::backbtnActionPerformed);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 22)); // NOI18N
         jLabel1.setText("Account");
@@ -80,11 +81,13 @@ public class Account extends javax.swing.JFrame {
 
         changeusername.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changeusername.setText("Change username");
+        changeusername.addActionListener(this::changeusernameActionPerformed);
         jPanel1.add(changeusername);
         changeusername.setBounds(80, 140, 182, 40);
 
         changepassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changepassword.setText("Change password");
+        changepassword.addActionListener(this::changepasswordActionPerformed);
         jPanel1.add(changepassword);
         changepassword.setBounds(80, 230, 190, 40);
 
@@ -126,6 +129,27 @@ public class Account extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
+        // TODO add your handling code here:
+        UserDashboard UserDashboard= new UserDashboard();
+        UserDashboard.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backbtnActionPerformed
+
+    private void changeusernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeusernameActionPerformed
+        // TODO add your handling code here:
+        ChangeUsername_Interface  ChangeUsername_Interface= new ChangeUsername_Interface();
+        ChangeUsername_Interface.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_changeusernameActionPerformed
+
+    private void changepasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changepasswordActionPerformed
+        // TODO add your handling code here:
+        ChangePassword_Interface ChangePassword_Interface= new ChangePassword_Interface();
+        ChangePassword_Interface.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_changepasswordActionPerformed
 
     /**
      * @param args the command line arguments

@@ -153,6 +153,9 @@ public class ChangeUsername_Interface extends javax.swing.JFrame {
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
+        Account Account = new Account();
+        Account.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
 
     private void newUsernameTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_newUsernameTextFieldFocusGained

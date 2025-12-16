@@ -179,6 +179,9 @@ public class AccountRecovery extends javax.swing.JFrame {
 
     private void backToLogInBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToLogInBtnActionPerformed
         // TODO add your handling code here:
+        Login Login= new Login();
+        Login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_backToLogInBtnActionPerformed
 
     private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchBtnActionPerformed

@@ -100,6 +100,7 @@ public class signUp extends javax.swing.JFrame {
         loginbtn.setForeground(new java.awt.Color(84, 118, 221));
         loginbtn.setText("Login.");
         loginbtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(235, 235, 252), null));
+        loginbtn.addActionListener(this::loginbtnActionPerformed);
         getContentPane().add(loginbtn);
         loginbtn.setBounds(650, 500, 70, 20);
 
@@ -148,7 +149,17 @@ public class signUp extends javax.swing.JFrame {
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
         // TODO add your handling code here:
+        Login Login= new Login();
+        Login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_SignupActionPerformed
+
+    private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
+        // TODO add your handling code here:
+        Login Login= new Login();
+        Login.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_loginbtnActionPerformed
 
     /**
      * @param args the command line arguments

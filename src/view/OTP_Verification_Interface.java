@@ -185,6 +185,9 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
 
     private void backToLoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backToLoginBtnActionPerformed
         // TODO add your handling code here:
+        Login Login= new Login();
+        Login.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_backToLoginBtnActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
