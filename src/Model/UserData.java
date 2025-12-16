@@ -13,6 +13,7 @@ public class UserData {
     private String username;
     private String password;
     private String email;
+    private String role;
     
     public void setUsername(String username) {
         this.username = username;
@@ -42,9 +43,23 @@ public class UserData {
         return user_id;
     }
     
-    public UserData(String username, String email) {
+    public void setRole(String role) {
+        this.role = role;
+    }
+    public String getRole() {
+        return role;
+    }
+    
+    // Constructor for signup
+    public UserData(String username, String email, String password) {
         this.username = username;
         this.email = email;
+        this.password = password;
+    }
+    
+    // Constructor for login
+    public UserData(String username, String password) {
+        this.username = username;
         this.password = password;
     }
 }

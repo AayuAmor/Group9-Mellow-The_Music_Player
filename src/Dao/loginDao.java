@@ -4,12 +4,12 @@
  */
 package Dao;
 
+import Database.MySqlConnection;
 import Model.UserData;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import Database.MySqlConnection;
 
 
 /**
@@ -18,20 +18,28 @@ import Database.MySqlConnection;
  */
 public class loginDao {
     MySqlConnection mysql = new MySqlConnection();    
-    public boolean Login(UserData user) {
+    public UserData Login(UserData user) {
         Connection conn = mysql.openconnection();
-        String sql = "Select * from users where username = ? or password= ?";
+        String sql = "Select * from users where (username = ? OR email = ?) AND password = ?";
         try(PreparedStatement pstm = conn.prepareStatement(sql)){
             pstm.setString(1, user.getUsername());
-            pstm.setString(2, user.getPassword());
+            pstm.setString(2, user.getUsername()); // Can login with email or username
+            pstm.setString(3, user.getPassword());
             ResultSet result = pstm.executeQuery();
-            return result.next();
+            if(result.next()){
+                UserData loggedInUser = new UserData(user.getUsername(), user.getPassword());
+                loggedInUser.setId(result.getInt("user_id"));
+                loggedInUser.setUsername(result.getString("username"));
+                loggedInUser.setEmail(result.getString("email"));
+                loggedInUser.setRole(result.getString("role")); // Fetch role from database
+                return loggedInUser;
+            }
         }catch(SQLException e){
             System.out.println(e);
         }finally{
             mysql.closeConnection(conn);
         }
-        return false;
+        return null;
     }
 }
 

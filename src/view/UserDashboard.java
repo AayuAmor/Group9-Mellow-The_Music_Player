@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+import Controller.SongController;
+import Model.Song;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.*;
+
 
 /**
  *
@@ -17,6 +23,11 @@ public class UserDashboard extends javax.swing.JFrame {
      */
     public UserDashboard() {
         initComponents();
+        SongController controller = new SongController();
+        List<Song> songs = controller.getAllLocalSongs();
+
+        loadSongsToUI(songs);
+
     }
 
     /**
@@ -289,7 +300,21 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_PlaylistActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
-        // TODO add your handling code here:
+        // Logout and return to Login window
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to logout?",
+            "Confirm Logout",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if(confirm == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose();
+            view.Login loginView = new view.Login();
+            Controller.LoginController loginController = new Controller.LoginController(loginView);
+            loginController.open();
+        }
     }//GEN-LAST:event_logoutActionPerformed
 
     private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
@@ -363,4 +388,28 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton logout;
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
+
+private void loadSongsToUI(List<Song> songs) {
+    JButton[] recButtons = {Recs1, Recs3, Recs4, jButton2};
+
+    for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
+        Song song = songs.get(i);
+        recButtons[i].setText(song.getTitle() + " - " + song.getArtist());
+
+        // Load image
+        ImageIcon icon;
+        try {
+            icon = new ImageIcon(getClass().getResource(song.getImagePath()));
+        } catch (Exception e) {
+            icon = new ImageIcon(getClass().getResource("/Images/default_song.jpg"));
+        }
+        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        recButtons[i].setIcon(new ImageIcon(img));
+
+        recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+        recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
+    }
+}
+
+    
 }

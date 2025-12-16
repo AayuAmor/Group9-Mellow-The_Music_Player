@@ -192,6 +192,10 @@ public class signUp extends javax.swing.JFrame {
     private javax.swing.JTextField username;
     // End of variables declaration//GEN-END:variables
 public void AddAAUserListener(ActionListener listener){
+    Signup.addActionListener(listener);
+}
+
+public void AddLoginButtonListener(ActionListener listener){
     loginbtn.addActionListener(listener);
 }
 

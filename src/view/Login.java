@@ -179,14 +179,14 @@ public class Login extends javax.swing.JFrame {
 
     private void passwordFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusGained
         // TODO add your handling code here:
-        if(password.getText().equals("Enter your password")){
+        if(String.valueOf(password.getPassword()).equals("Enter your password")){
             password.setText("");
         }
     }//GEN-LAST:event_passwordFocusGained
 
     private void passwordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_passwordFocusLost
         // TODO add your handling code here:
-        if(password.getText().equals("")){
+        if(String.valueOf(password.getPassword()).equals("")){
             password.setText("Enter your password");
         }
     }//GEN-LAST:event_passwordFocusLost
@@ -235,6 +235,11 @@ public class Login extends javax.swing.JFrame {
     public void AddLoginListener(ActionListener listener){
     login.addActionListener(listener);
     }
+    
+    public void AddSignupButtonListener(ActionListener listener){
+    signup.addActionListener(listener);
+    }
+    
     public javax.swing.JPasswordField getPassword(){
         return password;
     }
