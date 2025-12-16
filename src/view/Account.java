@@ -11,12 +11,74 @@ package view;
 public class Account extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Account.class.getName());
+    private String userEmail;
+    private String username;
 
     /**
      * Creates new form Account
      */
     public Account() {
         initComponents();
+        // Guard: redirect to Login if not logged in
+        Model.UserSession session = Model.UserSession.getInstance();
+        if (!session.isLoggedIn()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Please login to view your account.",
+                "Login Required",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            this.dispose();
+            view.Login loginView = new view.Login();
+            Controller.LoginController loginController = new Controller.LoginController(loginView);
+            loginController.open();
+            return;
+        }
+        displayUserInfo();
+    }
+    
+    /**
+     * Creates new form Account with user information
+     */
+    public Account(String username, String email) {
+        initComponents();
+        // Guard: redirect to Login if not logged in
+        Model.UserSession session = Model.UserSession.getInstance();
+        if (!session.isLoggedIn()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Please login to view your account.",
+                "Login Required",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            this.dispose();
+            view.Login loginView = new view.Login();
+            Controller.LoginController loginController = new Controller.LoginController(loginView);
+            loginController.open();
+            return;
+        }
+        this.username = username;
+        this.userEmail = email;
+        displayUserInfo();
+    }
+    
+    private void displayUserInfo() {
+        // Always get from UserSession for consistency
+        Model.UserSession session = Model.UserSession.getInstance();
+        
+        System.out.println("=== DEBUG: Account displayUserInfo ===");
+        System.out.println("Session logged in: " + session.isLoggedIn());
+        System.out.println("Session username: " + session.getUsername());
+        System.out.println("Session email: " + session.getEmail());
+        System.out.println("Passed email: " + userEmail);
+        
+        if(session.isLoggedIn() && session.getEmail() != null) {
+            email.setText("Email: " + session.getEmail());
+            System.out.println("Email label set to: " + session.getEmail());
+        } else {
+            email.setText("Email: Not available");
+            System.out.println("Email not available in session");
+        }
     }
 
     /**
@@ -37,7 +99,7 @@ public class Account extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        email = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -62,10 +124,10 @@ public class Account extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addComponent(backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35)
+                .addComponent(backbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(632, Short.MAX_VALUE))
+                .addContainerGap(554, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -85,14 +147,14 @@ public class Account extends javax.swing.JFrame {
         changeusername.setText("Change username");
         changeusername.addActionListener(this::changeusernameActionPerformed);
         jPanel1.add(changeusername);
-        changeusername.setBounds(80, 150, 290, 20);
+        changeusername.setBounds(80, 140, 290, 40);
 
         changepassword.setBackground(new java.awt.Color(204, 204, 204));
         changepassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changepassword.setText("Change password");
         changepassword.addActionListener(this::changepasswordActionPerformed);
         jPanel1.add(changepassword);
-        changepassword.setBounds(80, 240, 300, 20);
+        changepassword.setBounds(80, 230, 300, 40);
 
         jLabel2.setBackground(new java.awt.Color(153, 204, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mdi_user.png"))); // NOI18N
@@ -110,10 +172,10 @@ public class Account extends javax.swing.JFrame {
         jPanel1.add(jLabel4);
         jLabel4.setBounds(20, 310, 60, 60);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel5.setText("Email: ");
-        jPanel1.add(jLabel5);
-        jLabel5.setBounds(90, 330, 200, 30);
+        email.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        email.setText("Email: ");
+        jPanel1.add(email);
+        email.setBounds(90, 320, 310, 40);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -134,9 +196,8 @@ public class Account extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
-        // TODO add your handling code here:
-        UserDashboard UserDashboard= new UserDashboard();
-        UserDashboard.setVisible(true);
+        UserDashboard userDashboard = new UserDashboard();
+        userDashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backbtnActionPerformed
 
@@ -183,11 +244,11 @@ public class Account extends javax.swing.JFrame {
     private javax.swing.JButton backbtn;
     private javax.swing.JButton changepassword;
     private javax.swing.JButton changeusername;
+    private javax.swing.JLabel email;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables

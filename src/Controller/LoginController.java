@@ -47,6 +47,14 @@ public class LoginController {
             UserData loggedInUser = logindao.Login(userdata);
             
             if(loggedInUser != null){
+                // Store user session
+                Model.UserSession.getInstance().setUserData(loggedInUser);
+                
+                System.out.println("=== DEBUG: Login successful ===");
+                System.out.println("Username: " + loggedInUser.getUsername());
+                System.out.println("Email: " + loggedInUser.getEmail());
+                System.out.println("Role: " + loggedInUser.getRole());
+                
                 JOptionPane.showMessageDialog(loginview,
                     "Welcome back, " + loggedInUser.getUsername() + "!",
                     "Login Successful", 
