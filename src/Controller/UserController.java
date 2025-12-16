@@ -25,6 +25,7 @@ public class UserController {
         this.userView=userView;
         
         userView.AddAAUserListener(new AddActionListener());
+        userView.AddLoginButtonListener(new LoginButtonListener());
     }
     public void open(){
         this.userView.setVisible(true);
@@ -37,16 +38,40 @@ public class UserController {
 @Override
     public void actionPerformed (ActionEvent e){
         try{
-            String username= userView.getUsername().getText();
-            String email= userView.getEmail().getText();
+            String username= userView.getUsername().getText().trim();
+            String email= userView.getEmail().getText().trim();
             String password = userView.getPassword().getText();
-            UserData userdata = new UserData(username,email);
+            
+            // Validate input fields
+            if(username.isEmpty() || email.isEmpty() || password.isEmpty()){
+                JOptionPane.showMessageDialog(userView, 
+                    "Please fill in all required fields.",
+                    "Incomplete Form", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            if(password.length() < 6){
+                JOptionPane.showMessageDialog(userView, 
+                    "Password must be at least 6 characters long.",
+                    "Weak Password", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+            UserData userdata = new UserData(username, email, password);
             boolean check = userdao.check(userdata);
             if(check){
-                JOptionPane.showMessageDialog(userView,"Duplicate user");
+                JOptionPane.showMessageDialog(userView,
+                    "This username or email is already registered.\nPlease use a different one or login instead.",
+                    "Account Already Exists", 
+                    JOptionPane.INFORMATION_MESSAGE);
             }else{
                 userdao.signUp(userdata);
-                JOptionPane.showMessageDialog(userView,"Sucessful");
+                JOptionPane.showMessageDialog(userView,
+                    "Account created successfully!\nPlease login to continue.",
+                    "Registration Successful", 
+                    JOptionPane.INFORMATION_MESSAGE);
                 
                 Login lc = new Login();
                 LoginController log= new LoginController(lc);
@@ -55,8 +80,21 @@ public class UserController {
             }
         }catch (HeadlessException ex){
             System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(userView,
+                "Unable to complete registration.\nPlease try again.",
+                "Registration Error", 
+                JOptionPane.ERROR_MESSAGE);
         }
     }
         }
-}    
-
+    
+    class LoginButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Navigate to Login window
+            Login loginView = new Login();
+            LoginController loginController = new LoginController(loginView);
+            closer();
+            loginController.open();
+        }
+    }}

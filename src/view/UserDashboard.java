@@ -3,6 +3,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+import Controller.SongController;
+import Model.Song;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.*;
+
 
 /**
  *
@@ -17,6 +23,11 @@ public class UserDashboard extends javax.swing.JFrame {
      */
     public UserDashboard() {
         initComponents();
+        SongController controller = new SongController();
+        List<Song> songs = controller.getAllLocalSongs();
+
+        loadSongsToUI(songs);
+
     }
 
     /**
@@ -30,6 +41,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
         jPopupMenu2 = new javax.swing.JPopupMenu();
+        jToolBar1 = new javax.swing.JToolBar();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -52,10 +64,13 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
+        Userdisplay = new javax.swing.JLabel();
         Recent3 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         Recs4 = new javax.swing.JButton();
+
+        jToolBar1.setRollover(true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -115,8 +130,16 @@ public class UserDashboard extends javax.swing.JFrame {
         SearchBar.setBackground(new java.awt.Color(160, 148, 148));
         SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
         SearchBar.setForeground(new java.awt.Color(204, 204, 204));
-        SearchBar.setText("                 Search");
+        SearchBar.setText("               Search");
         SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchBarFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchBarFocusLost(evt);
+            }
+        });
         SearchBar.addActionListener(this::SearchBarActionPerformed);
         jPanel1.add(SearchBar);
         SearchBar.setBounds(310, 50, 650, 30);
@@ -222,6 +245,12 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(jLabel8);
         jLabel8.setBounds(30, 650, 40, 50);
 
+        Userdisplay.setFont(new java.awt.Font("Segoe UI Black", 1, 14)); // NOI18N
+        Userdisplay.setForeground(new java.awt.Color(204, 204, 204));
+        Userdisplay.setText("Hello,");
+        jPanel1.add(Userdisplay);
+        Userdisplay.setBounds(140, 150, 120, 20);
+
         Recent3.setBackground(new java.awt.Color(196, 195, 195));
         Recent3.setForeground(new java.awt.Color(102, 102, 102));
         Recent3.setText("Song 3");
@@ -241,7 +270,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 1000, 730);
+        jLabel2.setBounds(0, 0, 1010, 740);
 
         Recs4.setBackground(new java.awt.Color(229, 226, 226));
         Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -289,11 +318,28 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_PlaylistActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
-        // TODO add your handling code here:
+        // Logout and return to Login window
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(
+            this,
+            "Are you sure you want to logout?",
+            "Confirm Logout",
+            javax.swing.JOptionPane.YES_NO_OPTION,
+            javax.swing.JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if(confirm == javax.swing.JOptionPane.YES_OPTION) {
+            this.dispose();
+            view.Login loginView = new view.Login();
+            Controller.LoginController loginController = new Controller.LoginController(loginView);
+            loginController.open();
+        }
     }//GEN-LAST:event_logoutActionPerformed
 
     private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
         // TODO add your handling code here:
+        Account Account = new Account();
+        Account.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_AccountActionPerformed
 
     private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
@@ -307,6 +353,20 @@ public class UserDashboard extends javax.swing.JFrame {
     private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Recs4ActionPerformed
+
+    private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchBarFocusGained
+        // TODO add your handling code here:
+        if(SearchBar.getText().equals("               Search")){
+            SearchBar.setText("");  
+        }
+    }//GEN-LAST:event_SearchBarFocusGained
+
+    private void SearchBarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchBarFocusLost
+        // TODO add your handling code here:
+        if(SearchBar.getText().equals("")){
+            SearchBar.setText("               Search");
+        }
+    }//GEN-LAST:event_SearchBarFocusLost
 
     /**
      * @param args the command line arguments
@@ -345,6 +405,7 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton Recs3;
     private javax.swing.JButton Recs4;
     private javax.swing.JTextField SearchBar;
+    private javax.swing.JLabel Userdisplay;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -360,7 +421,32 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
+
+private void loadSongsToUI(List<Song> songs) {
+    JButton[] recButtons = {Recs1, Recs3, Recs4, jButton2};
+
+    for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
+        Song song = songs.get(i);
+        recButtons[i].setText(song.getTitle() + " - " + song.getArtist());
+
+        // Load image
+        ImageIcon icon;
+        try {
+            icon = new ImageIcon(getClass().getResource(song.getImagePath()));
+        } catch (Exception e) {
+            icon = new ImageIcon(getClass().getResource("/Images/default_song.jpg"));
+        }
+        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+        recButtons[i].setIcon(new ImageIcon(img));
+
+        recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+        recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
+    }
+}
+
+    
 }

@@ -4,13 +4,15 @@
  */
 package Controller;
 
+import Dao.loginDao;
 import Model.UserData;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
+import view.AdminDashboard;
 import view.Login;
-import Dao.loginDao;
+import view.UserDashboard;
 
 /**
  *
@@ -18,7 +20,6 @@ import Dao.loginDao;
  */
 public class LoginController {
     private final loginDao logindao= new loginDao();
-    //private final Login loginView;
     private final Login loginview;
     
     
@@ -26,6 +27,7 @@ public class LoginController {
         this.loginview=LoginView;
         
         loginview.AddLoginListener(new AddLoginListener());
+        loginview.AddSignupButtonListener(new SignupButtonListener());
     }
     public void open(){
         this.loginview.setVisible(true);
@@ -39,19 +41,48 @@ public class LoginController {
     public void actionPerformed (ActionEvent e){
         try{
             String username= loginview.getEmail().getText();
-            String password= loginview.getPassword().getText();
-            UserData userdata = new UserData(username,password);
-            boolean check = logindao.Login(userdata);
-            if(check){
-                JOptionPane.showMessageDialog(loginview,"Duplicate user");
+            String password= new String(loginview.getPassword().getPassword());
+            
+            UserData userdata = new UserData(username, password);
+            UserData loggedInUser = logindao.Login(userdata);
+            
+            if(loggedInUser != null){
+                JOptionPane.showMessageDialog(loginview,
+                    "Welcome back, " + loggedInUser.getUsername() + "!",
+                    "Login Successful", 
+                    JOptionPane.INFORMATION_MESSAGE);
+                
+                // Navigate based on role
+                if("admin".equalsIgnoreCase(loggedInUser.getRole())){
+                    AdminDashboard adminDashboard = new AdminDashboard();
+                    adminDashboard.setVisible(true);
+                } else {
+                    UserDashboard userDashboard = new UserDashboard();
+                    userDashboard.setVisible(true);
+                }
+                
+                closer();
             }else{
-                logindao.Login(userdata);
-                JOptionPane.showMessageDialog(loginview,"Sucessful");
-               
+                JOptionPane.showMessageDialog(loginview,
+                    "Invalid email/username or password.\nPlease check your credentials and try again.",
+                    "Login Failed", 
+                    JOptionPane.ERROR_MESSAGE);
             }
         }catch (HeadlessException ex){
             System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(loginview,"Login Error: " + ex.getMessage());
         }
     }
         }
+    
+    class SignupButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            // Navigate to SignUp window
+            view.signUp signupView = new view.signUp();
+            UserController userController = new UserController(signupView);
+            closer();
+            userController.open();
+        }
+    }
     }

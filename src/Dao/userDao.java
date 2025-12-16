@@ -19,11 +19,12 @@ public class userDao {
     MySqlConnection mysql = new MySqlConnection() {}; 
     public void signUp(UserData user){
         Connection conn = mysql.openconnection();
-        String sql=  "Insert into users (username, email, password) values(?,?,?)";
+        String sql=  "Insert into users (username, email, password, role) values(?,?,?,?)";
         try(PreparedStatement pstm = conn.prepareStatement(sql)){
             pstm.setString(1, user.getUsername());
             pstm.setString(2, user.getEmail());
             pstm.setString(3, user.getPassword());
+            pstm.setString(4, "user"); // Default role is 'user'
             pstm.executeUpdate();
         }catch(SQLException e){
             System.out.println(e);
