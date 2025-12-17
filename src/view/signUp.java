@@ -48,7 +48,7 @@ public class signUp extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(950, 700));
+        setPreferredSize(new java.awt.Dimension(994, 725));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -102,7 +102,7 @@ public class signUp extends javax.swing.JFrame {
         loginbtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(235, 235, 252), null));
         loginbtn.addActionListener(this::loginbtnActionPerformed);
         getContentPane().add(loginbtn);
-        loginbtn.setBounds(650, 500, 70, 20);
+        loginbtn.setBounds(680, 500, 70, 20);
 
         jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel5.setText("Username :");
@@ -148,17 +148,11 @@ public class signUp extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void SignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupActionPerformed
-        // TODO add your handling code here:
-        Login Login= new Login();
-        Login.setVisible(true);
-        this.dispose();
+        // Handled by Controller.UserController via AddAAUserListener
     }//GEN-LAST:event_SignupActionPerformed
 
     private void loginbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginbtnActionPerformed
-        // TODO add your handling code here:
-        Login Login= new Login();
-        Login.setVisible(true);
-        this.dispose();
+        // Handled by Controller.UserController via AddLoginButtonListener
     }//GEN-LAST:event_loginbtnActionPerformed
 
     /**
@@ -182,8 +176,12 @@ public class signUp extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new signUp().setVisible(true));
+        /* Create and display the form via controller to ensure listeners are attached */
+        java.awt.EventQueue.invokeLater(() -> {
+            signUp signUpView = new signUp();
+            Controller.UserController controller = new Controller.UserController(signUpView);
+            controller.open();
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -23,6 +23,13 @@ public class UserDashboard extends javax.swing.JFrame {
      */
     public UserDashboard() {
         initComponents();
+        
+        // Display logged-in username
+        Model.UserSession session = Model.UserSession.getInstance();
+        if(session.isLoggedIn()) {
+            Userdisplay.setText("Hello, " + session.getUsername());
+        }
+        
         SongController controller = new SongController();
         List<Song> songs = controller.getAllLocalSongs();
 
@@ -73,6 +80,7 @@ public class UserDashboard extends javax.swing.JFrame {
         jToolBar1.setRollover(true);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setLayout(null);
 
@@ -249,7 +257,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Userdisplay.setForeground(new java.awt.Color(204, 204, 204));
         Userdisplay.setText("Hello,");
         jPanel1.add(Userdisplay);
-        Userdisplay.setBounds(140, 150, 120, 20);
+        Userdisplay.setBounds(30, 150, 230, 20);
 
         Recent3.setBackground(new java.awt.Color(196, 195, 195));
         Recent3.setForeground(new java.awt.Color(102, 102, 102));
@@ -328,6 +336,9 @@ public class UserDashboard extends javax.swing.JFrame {
         );
         
         if(confirm == javax.swing.JOptionPane.YES_OPTION) {
+            // Clear user session
+            Model.UserSession.getInstance().clearSession();
+            
             this.dispose();
             view.Login loginView = new view.Login();
             Controller.LoginController loginController = new Controller.LoginController(loginView);
@@ -336,10 +347,24 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_logoutActionPerformed
 
     private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
-        // TODO add your handling code here:
-        Account Account = new Account();
-        Account.setVisible(true);
-        this.dispose();
+        // Only allow Account page when logged in; otherwise redirect to Login
+        Model.UserSession session = Model.UserSession.getInstance();
+        if (session.isLoggedIn()) {
+            Account account = new Account(session.getUsername(), session.getEmail());
+            account.setVisible(true);
+            this.dispose();
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,
+                "Please login to view your account.",
+                "Login Required",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+            );
+            this.dispose();
+            view.Login loginView = new view.Login();
+            Controller.LoginController loginController = new Controller.LoginController(loginView);
+            loginController.open();
+        }
     }//GEN-LAST:event_AccountActionPerformed
 
     private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed

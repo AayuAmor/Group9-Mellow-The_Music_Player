@@ -44,7 +44,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(900, 550));
+        setPreferredSize(new java.awt.Dimension(994, 725));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -75,17 +75,17 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel2.setText("Old Password:");
         getContentPane().add(jLabel2);
-        jLabel2.setBounds(39, 179, 215, 44);
+        jLabel2.setBounds(170, 190, 215, 44);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel3.setText("New Password:");
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(39, 253, 215, 44);
+        jLabel3.setBounds(170, 250, 215, 44);
 
         jLabel4.setFont(new java.awt.Font("Segoe UI Black", 0, 18)); // NOI18N
         jLabel4.setText("Confirm Password:");
         getContentPane().add(jLabel4);
-        jLabel4.setBounds(39, 320, 238, 44);
+        jLabel4.setBounds(170, 320, 238, 44);
 
         oldPasswordTextField.setBackground(new java.awt.Color(204, 204, 204));
         oldPasswordTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -99,7 +99,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
             }
         });
         getContentPane().add(oldPasswordTextField);
-        oldPasswordTextField.setBounds(331, 190, 379, 22);
+        oldPasswordTextField.setBounds(420, 190, 379, 40);
 
         newPasswordTextField.setBackground(new java.awt.Color(204, 204, 204));
         newPasswordTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -113,7 +113,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
             }
         });
         getContentPane().add(newPasswordTextField);
-        newPasswordTextField.setBounds(331, 264, 379, 23);
+        newPasswordTextField.setBounds(420, 260, 379, 40);
 
         confirmPasswordTextField.setBackground(new java.awt.Color(204, 204, 204));
         confirmPasswordTextField.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -127,7 +127,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
             }
         });
         getContentPane().add(confirmPasswordTextField);
-        confirmPasswordTextField.setBounds(331, 331, 379, 23);
+        confirmPasswordTextField.setBounds(420, 330, 379, 40);
 
         saveBtn.setBackground(new java.awt.Color(72, 118, 168));
         saveBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -135,7 +135,47 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         saveBtn.setText("Save");
         saveBtn.addActionListener(this::saveBtnActionPerformed);
         getContentPane().add(saveBtn);
-        saveBtn.setBounds(331, 399, 124, 42);
+        saveBtn.setBounds(420, 400, 124, 42);
+
+        jPanel2.setBackground(new java.awt.Color(72, 118, 168));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
+
+        backBtn1.setBackground(new java.awt.Color(159, 175, 192));
+        backBtn1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        backBtn1.setForeground(new java.awt.Color(255, 255, 255));
+        backBtn1.setText("←Back");
+        backBtn1.setBorder(null);
+        backBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        backBtn1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        backBtn1.addActionListener(this::backBtn1ActionPerformed);
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 28)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel5.setText("Change Password");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(backBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(536, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(backBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22))
+        );
+
+        getContentPane().add(jPanel2);
+        jPanel2.setBounds(-10, 0, 1010, 120);
 
         jPanel2.setBackground(new java.awt.Color(72, 118, 168));
         jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));

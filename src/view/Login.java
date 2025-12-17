@@ -50,7 +50,7 @@ public class Login extends javax.swing.JFrame {
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(950, 700));
+        setPreferredSize(new java.awt.Dimension(994, 725));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -140,7 +140,7 @@ public class Login extends javax.swing.JFrame {
         signup.setText("Create one.");
         signup.addActionListener(this::signupActionPerformed);
         getContentPane().add(signup);
-        signup.setBounds(630, 490, 100, 23);
+        signup.setBounds(670, 490, 100, 23);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -155,17 +155,11 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        // TODO add your handling code here:
-            UserDashboard UserDashboard = new UserDashboard();
-            UserDashboard.setVisible(true);
-            this.dispose();
+        // Handled by Controller.LoginController via AddLoginListener
     }//GEN-LAST:event_loginActionPerformed
 
     private void signupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signupActionPerformed
-        // TODO add your handling code here:
-        signUp signUp= new signUp();
-        signUp.setVisible(true);
-        this.dispose();
+        // Handled by Controller.LoginController via AddSignupButtonListener
     }//GEN-LAST:event_signupActionPerformed
 
     private void emailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_emailFocusGained
@@ -217,8 +211,12 @@ public class Login extends javax.swing.JFrame {
         }
         //</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
+        /* Create and display the form via controller to ensure listeners are attached */
+        java.awt.EventQueue.invokeLater(() -> {
+            Login loginView = new Login();
+            Controller.LoginController controller = new Controller.LoginController(loginView);
+            controller.open();
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
