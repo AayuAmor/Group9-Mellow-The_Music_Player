@@ -4,10 +4,10 @@
  */
 package mellow;
 
-import Controller.UserController;
+import Controller.LoginController;
 import Database.Database;
 import Database.MySqlConnection;
-import view.signUp;
+import view.Login;
 
 /**
  *
@@ -25,10 +25,10 @@ public class Mellow {
             System.out.println("connection opened");
             db.closeConnection(db.openconnection());
             
-            // Open SignUp window
-            signUp signup = new signUp();
-            UserController usercontroller = new UserController(signup);
-            usercontroller.open();
+            // Open Login window as app entry
+            Login loginView = new Login();
+            LoginController controller = new LoginController(loginView);
+            controller.open();
         } else {
             System.out.println("connection closed - cannot start application");
             System.err.println("ERROR: Database connection failed!");
