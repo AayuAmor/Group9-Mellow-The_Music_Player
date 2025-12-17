@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
 
@@ -8,7 +8,9 @@ package view;
  *
  * @author BIBEK's
  */
-public class Playlist extends javax.swing.JPanel {
+public class Playlist extends javax.swing.JFrame {
+    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Playlist.class.getName());
 
     /**
      * Creates new form Playlist
@@ -28,114 +30,198 @@ public class Playlist extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        Searchbutton = new javax.swing.JButton();
-        searchbar = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        Createnew = new javax.swing.JButton();
+        Playlist1 = new javax.swing.JButton();
+        Playlist2 = new javax.swing.JButton();
+        Back = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        Search = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
-        jPanel1.setBackground(new java.awt.Color(83, 135, 188));
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jPanel1.setBackground(new java.awt.Color(89, 141, 193));
         jPanel1.setLayout(null);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellow logo.png"))); // NOI18N
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(0, 0, 188, 129);
+        jLabel1.setBounds(6, 6, 179, 129);
 
-        Searchbutton.setBackground(new java.awt.Color(153, 153, 153));
-        Searchbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-        Searchbutton.addActionListener(this::SearchbuttonActionPerformed);
-        jPanel1.add(Searchbutton);
-        Searchbutton.setBounds(278, 84, 57, 31);
-
-        searchbar.setBackground(new java.awt.Color(153, 153, 153));
-        searchbar.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        searchbar.setText("Search");
-        searchbar.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                searchbarFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                searchbarFocusLost(evt);
-            }
-        });
-        jPanel1.add(searchbar);
-        searchbar.setBounds(341, 84, 545, 31);
-
-        jTextField2.setBackground(new java.awt.Color(83, 135, 188));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jTextField2.setBackground(new java.awt.Color(89, 141, 193));
+        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 45)); // NOI18N
+        jTextField2.setForeground(new java.awt.Color(51, 51, 51));
         jTextField2.setText("Playlist");
         jTextField2.setBorder(null);
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
         jPanel1.add(jTextField2);
-        jTextField2.setBounds(65, 217, 121, 48);
+        jTextField2.setBounds(26, 191, 152, 61);
 
-        jButton2.setBorder(null);
-        jPanel1.add(jButton2);
-        jButton2.setBounds(65, 333, 166, 147);
+        Createnew.setText("Create New");
+        Createnew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Createnew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Createnew.setIconTextGap(0);
+        Createnew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Createnew.addActionListener(this::CreatenewActionPerformed);
+        jPanel1.add(Createnew);
+        Createnew.setBounds(680, 340, 190, 180);
 
-        jButton3.setBorder(null);
-        jButton3.addActionListener(this::jButton3ActionPerformed);
-        jPanel1.add(jButton3);
-        jButton3.setBounds(403, 333, 166, 147);
+        Playlist1.setText("Playlist 1");
+        Playlist1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Playlist1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Playlist1.setIconTextGap(0);
+        Playlist1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Playlist1.addActionListener(this::Playlist1ActionPerformed);
+        jPanel1.add(Playlist1);
+        Playlist1.setBounds(40, 340, 190, 180);
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 95)); // NOI18N
-        jButton4.setText("+");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
-        jPanel1.add(jButton4);
-        jButton4.setBounds(720, 333, 166, 147);
+        Playlist2.setText("Playlist 2");
+        Playlist2.setActionCommand("Playlist 2");
+        Playlist2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        Playlist2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Playlist2.setIconTextGap(0);
+        Playlist2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Playlist2.addActionListener(this::Playlist2ActionPerformed);
+        jPanel1.add(Playlist2);
+        Playlist2.setBounds(360, 340, 190, 180);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        Back.setBackground(new java.awt.Color(153, 153, 153));
+        Back.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        Back.setForeground(new java.awt.Color(255, 255, 255));
+        Back.setText("←Back");
+        Back.setBorder(null);
+        Back.addActionListener(this::BackActionPerformed);
+        jPanel1.add(Back);
+        Back.setBounds(760, 590, 110, 30);
+
+        jPanel2.setBackground(new java.awt.Color(89, 141, 193));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
+
+        Search.setBackground(new java.awt.Color(153, 153, 153));
+        Search.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        Search.setText("Search");
+        Search.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchFocusLost(evt);
+            }
+        });
+
+        jButton1.setBackground(new java.awt.Color(153, 153, 153));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(284, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(124, 124, 124))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(83, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31))
+        );
+
+        jPanel1.add(jPanel2);
+        jPanel2.setBounds(-10, -10, 1030, 160);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-    }// </editor-fold>//GEN-END:initComponents
 
-    private void SearchbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SearchbuttonActionPerformed
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField2ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void SearchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchFocusLost
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void searchbarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchbarFocusGained
-        // TODO add your handling code here:
-        if(searchbar.getText().equals("Search")){
-            searchbar.setText("");
+        if (Search.getText().equals("")){
+            Search.setText("Search");
         }
-    }//GEN-LAST:event_searchbarFocusGained
+    }//GEN-LAST:event_SearchFocusLost
 
-    private void searchbarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchbarFocusLost
+    private void SearchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchFocusGained
         // TODO add your handling code here:
-        if(searchbar.getText().equals("")){
-            searchbar.setText("Search");
+        if (Search.getText().equals("Search")){
+            Search.setText("");
         }
-    }//GEN-LAST:event_searchbarFocusLost
+    }//GEN-LAST:event_SearchFocusGained
 
+    private void CreatenewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CreatenewActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CreatenewActionPerformed
+
+    private void Playlist1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Playlist1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Playlist1ActionPerformed
+
+    private void Playlist2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Playlist2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Playlist2ActionPerformed
+
+    private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
+        // TODO add your handling code here:
+        UserDashboard UserDashboard = new UserDashboard();
+        UserDashboard.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_BackActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new Playlist().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Searchbutton;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton Back;
+    private javax.swing.JButton Createnew;
+    private javax.swing.JButton Playlist1;
+    private javax.swing.JButton Playlist2;
+    private javax.swing.JTextField Search;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField searchbar;
     // End of variables declaration//GEN-END:variables
 }
