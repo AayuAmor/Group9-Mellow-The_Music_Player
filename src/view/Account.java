@@ -85,14 +85,14 @@ public class Account extends javax.swing.JFrame {
         changeusername.setText("Change username");
         changeusername.addActionListener(this::changeusernameActionPerformed);
         jPanel1.add(changeusername);
-        changeusername.setBounds(80, 150, 290, 20);
+        changeusername.setBounds(80, 150, 300, 30);
 
         changepassword.setBackground(new java.awt.Color(204, 204, 204));
         changepassword.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         changepassword.setText("Change password");
         changepassword.addActionListener(this::changepasswordActionPerformed);
         jPanel1.add(changepassword);
-        changepassword.setBounds(80, 240, 300, 20);
+        changepassword.setBounds(80, 240, 300, 30);
 
         jLabel2.setBackground(new java.awt.Color(153, 204, 255));
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mdi_user.png"))); // NOI18N
@@ -110,6 +110,7 @@ public class Account extends javax.swing.JFrame {
         jPanel1.add(jLabel4);
         jLabel4.setBounds(20, 310, 60, 60);
 
+        jLabel5.setBackground(new java.awt.Color(153, 153, 153));
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("Email: ");
         jPanel1.add(jLabel5);
