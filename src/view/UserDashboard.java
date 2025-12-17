@@ -323,6 +323,9 @@ public class UserDashboard extends javax.swing.JFrame {
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
         // TODO add your handling code here:
+        Playlist Playlist = new Playlist();
+        Playlist.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_PlaylistActionPerformed
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
