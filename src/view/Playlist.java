@@ -40,6 +40,10 @@ public class Playlist extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMaximumSize(new java.awt.Dimension(1000, 700));
+        setMinimumSize(new java.awt.Dimension(1000, 700));
+        setPreferredSize(new java.awt.Dimension(1000, 700));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(89, 141, 193));
         jPanel1.setLayout(null);
