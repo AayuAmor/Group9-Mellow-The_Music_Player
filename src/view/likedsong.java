@@ -72,6 +72,14 @@ public class likedsong extends javax.swing.JFrame {
         search.setForeground(java.awt.SystemColor.controlShadow);
         search.setText("Search");
         search.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        search.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                searchFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                searchFocusLost(evt);
+            }
+        });
         search.addActionListener(this::searchActionPerformed);
         jPanel2.add(search);
         search.setBounds(409, 76, 445, 38);
@@ -239,6 +247,20 @@ public class likedsong extends javax.swing.JFrame {
         UserDashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backbtnActionPerformed
+
+    private void searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchFocusGained
+        // TODO add your handling code here:
+        if(search.getText().equals("Search")){
+            search.setText("");
+        }
+    }//GEN-LAST:event_searchFocusGained
+
+    private void searchFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchFocusLost
+        // TODO add your handling code here:
+        if(search.getText().equals("")){
+            search.setText("Search");
+        }
+    }//GEN-LAST:event_searchFocusLost
 
     /**
      * @param args the command line arguments

@@ -99,6 +99,8 @@
                 <Property name="horizontalAlignment" type="int" value="2"/>
               </Properties>
               <Events>
+                <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="searchFocusGained"/>
+                <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="searchFocusLost"/>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="searchActionPerformed"/>
               </Events>
               <Constraints>
