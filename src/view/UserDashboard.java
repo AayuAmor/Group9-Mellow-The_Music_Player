@@ -166,6 +166,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Likedsongs.setForeground(new java.awt.Color(204, 204, 204));
         Likedsongs.setText("Liked Songs");
         Likedsongs.setBorder(null);
+        Likedsongs.addActionListener(this::LikedsongsActionPerformed);
         jPanel1.add(Likedsongs);
         Likedsongs.setBounds(110, 280, 130, 30);
 
@@ -393,6 +394,13 @@ public class UserDashboard extends javax.swing.JFrame {
             SearchBar.setText("               Search");
         }
     }//GEN-LAST:event_SearchBarFocusLost
+
+    private void LikedsongsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LikedsongsActionPerformed
+        // TODO add your handling code here:
+        likedsong likedsong = new likedsong();
+        likedsong.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_LikedsongsActionPerformed
 
     /**
      * @param args the command line arguments
