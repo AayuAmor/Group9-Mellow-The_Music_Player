@@ -42,7 +42,7 @@ public class likedsong extends javax.swing.JFrame {
         song5 = new javax.swing.JButton();
         song6 = new javax.swing.JButton();
         song7 = new javax.swing.JButton();
-        backbtn = new javax.swing.JButton();
+        Backbtn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -161,13 +161,13 @@ public class likedsong extends javax.swing.JFrame {
         jPanel1.add(song7);
         song7.setBounds(50, 510, 470, 32);
 
-        backbtn.setBackground(java.awt.SystemColor.activeCaption);
-        backbtn.setFont(new java.awt.Font("Segoe UI Black", 1, 22)); // NOI18N
-        backbtn.setForeground(new java.awt.Color(255, 255, 255));
-        backbtn.setText("←Back");
-        backbtn.addActionListener(this::backbtnActionPerformed);
-        jPanel1.add(backbtn);
-        backbtn.setBounds(780, 570, 110, 30);
+        Backbtn.setBackground(java.awt.SystemColor.activeCaption);
+        Backbtn.setFont(new java.awt.Font("Segoe UI Black", 1, 22)); // NOI18N
+        Backbtn.setForeground(new java.awt.Color(255, 255, 255));
+        Backbtn.setText("←Back");
+        Backbtn.addActionListener(this::BackbtnActionPerformed);
+        jPanel1.add(Backbtn);
+        Backbtn.setBounds(770, 580, 110, 30);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -241,12 +241,12 @@ public class likedsong extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_song6ActionPerformed
 
-    private void backbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backbtnActionPerformed
+    private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
         // TODO add your handling code here:
         UserDashboard UserDashboard = new UserDashboard();
         UserDashboard.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_backbtnActionPerformed
+    }//GEN-LAST:event_BackbtnActionPerformed
 
     private void searchFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_searchFocusGained
         // TODO add your handling code here:
@@ -288,7 +288,7 @@ public class likedsong extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backbtn;
+    private javax.swing.JButton Backbtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
