@@ -80,7 +80,6 @@ public class Playlist extends javax.swing.JFrame {
         Playlist1.setBounds(40, 340, 190, 180);
 
         Playlist2.setText("Playlist 2");
-        Playlist2.setActionCommand("Playlist 2");
         Playlist2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Playlist2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         Playlist2.setIconTextGap(0);

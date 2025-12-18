@@ -136,7 +136,6 @@
         <Component class="javax.swing.JButton" name="Playlist2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Playlist 2"/>
-            <Property name="actionCommand" type="java.lang.String" value="Playlist 2"/>
             <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
               <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
                 <LineBorder/>
