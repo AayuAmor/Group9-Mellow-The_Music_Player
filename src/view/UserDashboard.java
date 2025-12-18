@@ -166,6 +166,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Likedsongs.setForeground(new java.awt.Color(204, 204, 204));
         Likedsongs.setText("Liked Songs");
         Likedsongs.setBorder(null);
+        Likedsongs.addActionListener(this::LikedsongsActionPerformed);
         jPanel1.add(Likedsongs);
         Likedsongs.setBounds(110, 280, 130, 30);
 
@@ -278,7 +279,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 1010, 740);
+        jLabel2.setBounds(0, 0, 990, 710);
 
         Recs4.setBackground(new java.awt.Color(229, 226, 226));
         Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -297,13 +298,11 @@ public class UserDashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
         );
 
         pack();
@@ -395,6 +394,13 @@ public class UserDashboard extends javax.swing.JFrame {
             SearchBar.setText("               Search");
         }
     }//GEN-LAST:event_SearchBarFocusLost
+
+    private void LikedsongsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LikedsongsActionPerformed
+        // TODO add your handling code here:
+        likedsong likedsong = new likedsong();
+        likedsong.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_LikedsongsActionPerformed
 
     /**
      * @param args the command line arguments
