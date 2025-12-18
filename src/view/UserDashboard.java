@@ -279,7 +279,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 1010, 740);
+        jLabel2.setBounds(0, 0, 990, 710);
 
         Recs4.setBackground(new java.awt.Color(229, 226, 226));
         Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -298,13 +298,11 @@ public class UserDashboard extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 994, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 725, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
         );
 
         pack();

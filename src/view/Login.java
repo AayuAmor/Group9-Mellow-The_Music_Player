@@ -44,6 +44,7 @@ public class Login extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         signup = new javax.swing.JButton();
+        ForgotPassword = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         jCheckBoxMenuItem1.setSelected(true);
@@ -87,7 +88,7 @@ public class Login extends javax.swing.JFrame {
         });
         password.addActionListener(this::passwordActionPerformed);
         getContentPane().add(password);
-        password.setBounds(460, 350, 280, 30);
+        password.setBounds(460, 300, 280, 30);
 
         email.setBackground(new java.awt.Color(221, 220, 220));
         email.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -103,31 +104,31 @@ public class Login extends javax.swing.JFrame {
             }
         });
         getContentPane().add(email);
-        email.setBounds(460, 270, 280, 30);
+        email.setBounds(460, 220, 280, 30);
 
         login.setBackground(new java.awt.Color(153, 196, 239));
         login.setFont(new java.awt.Font("Yu Gothic Medium", 1, 16)); // NOI18N
         login.setForeground(new java.awt.Color(89, 149, 209));
         login.setText("LOGIN");
-        login.setBorder(null);
+        login.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(239, 240, 241), 1, true));
         login.addActionListener(this::loginActionPerformed);
         getContentPane().add(login);
-        login.setBounds(560, 410, 100, 40);
+        login.setBounds(560, 410, 100, 30);
 
         jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel5.setText("Email :");
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(460, 240, 60, 20);
+        jLabel5.setBounds(460, 190, 60, 20);
 
-        jLabel8.setFont(new java.awt.Font("Serif", 0, 14)); // NOI18N
+        jLabel8.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel8.setText("Don't have an account?");
         getContentPane().add(jLabel8);
-        jLabel8.setBounds(490, 490, 140, 20);
+        jLabel8.setBounds(480, 490, 150, 20);
 
         jLabel6.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel6.setText("Password :");
         getContentPane().add(jLabel6);
-        jLabel6.setBounds(460, 330, 70, 16);
+        jLabel6.setBounds(460, 270, 70, 16);
 
         jLabel4.setFont(new java.awt.Font("Gadugi", 1, 14)); // NOI18N
         jLabel4.setText("A Personal Space just for you.");
@@ -140,7 +141,15 @@ public class Login extends javax.swing.JFrame {
         signup.setText("Create one.");
         signup.addActionListener(this::signupActionPerformed);
         getContentPane().add(signup);
-        signup.setBounds(670, 490, 100, 23);
+        signup.setBounds(640, 490, 100, 23);
+
+        ForgotPassword.setBackground(new java.awt.Color(242, 242, 242));
+        ForgotPassword.setForeground(new java.awt.Color(51, 102, 255));
+        ForgotPassword.setText("Forgot Password?");
+        ForgotPassword.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(236, 236, 236), 1, true));
+        ForgotPassword.addActionListener(this::ForgotPasswordActionPerformed);
+        getContentPane().add(ForgotPassword);
+        ForgotPassword.setBounds(610, 340, 130, 20);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -190,6 +199,13 @@ public class Login extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_passwordFocusLost
 
+    private void ForgotPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ForgotPasswordActionPerformed
+        // TODO add your handling code here:
+        AccountRecovery AccountRecovery = new AccountRecovery();
+        AccountRecovery.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_ForgotPasswordActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -220,6 +236,7 @@ public class Login extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton ForgotPassword;
     private javax.swing.JTextField email;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
