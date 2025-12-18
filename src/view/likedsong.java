@@ -109,7 +109,7 @@ public class likedsong extends javax.swing.JFrame {
         song1.setText("\"Die With A Smile\" - Lady Gaga, Bruno Mars");
         song1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(song1);
-        song1.setBounds(50, 270, 470, 31);
+        song1.setBounds(50, 270, 470, 32);
 
         song2.setBackground(new java.awt.Color(95, 138, 184));
         song2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -117,7 +117,7 @@ public class likedsong extends javax.swing.JFrame {
         song2.setText("\"Espresso\" - Sabrina Carpenter");
         song2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(song2);
-        song2.setBounds(50, 310, 470, 31);
+        song2.setBounds(50, 310, 470, 32);
 
         song3.setBackground(new java.awt.Color(95, 138, 184));
         song3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -126,7 +126,7 @@ public class likedsong extends javax.swing.JFrame {
         song3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         song3.addActionListener(this::song3ActionPerformed);
         jPanel1.add(song3);
-        song3.setBounds(50, 350, 470, 31);
+        song3.setBounds(50, 350, 470, 32);
 
         song4.setBackground(new java.awt.Color(95, 138, 184));
         song4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -134,7 +134,7 @@ public class likedsong extends javax.swing.JFrame {
         song4.setText("\"As It Was\" - Harry Styles");
         song4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(song4);
-        song4.setBounds(50, 390, 470, 31);
+        song4.setBounds(50, 390, 470, 32);
 
         song5.setBackground(new java.awt.Color(95, 138, 184));
         song5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -142,7 +142,7 @@ public class likedsong extends javax.swing.JFrame {
         song5.setText(".......");
         song5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(song5);
-        song5.setBounds(50, 430, 470, 31);
+        song5.setBounds(50, 430, 470, 32);
 
         song6.setBackground(new java.awt.Color(95, 138, 184));
         song6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -151,7 +151,7 @@ public class likedsong extends javax.swing.JFrame {
         song6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         song6.addActionListener(this::song6ActionPerformed);
         jPanel1.add(song6);
-        song6.setBounds(50, 470, 470, 31);
+        song6.setBounds(50, 470, 470, 32);
 
         song7.setBackground(new java.awt.Color(95, 138, 184));
         song7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -159,7 +159,7 @@ public class likedsong extends javax.swing.JFrame {
         song7.setText("........");
         song7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jPanel1.add(song7);
-        song7.setBounds(50, 510, 470, 31);
+        song7.setBounds(50, 510, 470, 32);
 
         backbtn.setBackground(java.awt.SystemColor.activeCaption);
         backbtn.setFont(new java.awt.Font("Segoe UI Black", 1, 22)); // NOI18N
