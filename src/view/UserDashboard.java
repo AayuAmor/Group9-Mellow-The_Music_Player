@@ -73,7 +73,7 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         Userdisplay = new javax.swing.JLabel();
         Recent3 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        Recs2 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         Recs4 = new javax.swing.JButton();
 
@@ -263,19 +263,21 @@ public class UserDashboard extends javax.swing.JFrame {
         Recent3.setBackground(new java.awt.Color(196, 195, 195));
         Recent3.setForeground(new java.awt.Color(102, 102, 102));
         Recent3.setText("Song 3");
+        Recent3.addActionListener(this::Recent3ActionPerformed);
         jPanel1.add(Recent3);
         Recent3.setBounds(310, 660, 410, 20);
 
-        jButton2.setBackground(new java.awt.Color(217, 213, 213));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(153, 153, 153));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/wave.jpg"))); // NOI18N
-        jButton2.setText("Wave to earth- Ride");
-        jButton2.setBorder(null);
-        jButton2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        jPanel1.add(jButton2);
-        jButton2.setBounds(790, 350, 150, 150);
+        Recs2.setBackground(new java.awt.Color(217, 213, 213));
+        Recs2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        Recs2.setForeground(new java.awt.Color(153, 153, 153));
+        Recs2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/wave.jpg"))); // NOI18N
+        Recs2.setText("Wave to earth- Ride");
+        Recs2.setBorder(null);
+        Recs2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        Recs2.addActionListener(this::Recs2ActionPerformed);
+        jPanel1.add(Recs2);
+        Recs2.setBounds(790, 350, 150, 150);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
@@ -314,10 +316,16 @@ public class UserDashboard extends javax.swing.JFrame {
 
     private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
         // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Recent2ActionPerformed
 
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
         // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Recs3ActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
@@ -371,10 +379,16 @@ public class UserDashboard extends javax.swing.JFrame {
 
     private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
         // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Recent1ActionPerformed
 
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
         // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_Recs1ActionPerformed
 
     private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs4ActionPerformed
@@ -401,6 +415,20 @@ public class UserDashboard extends javax.swing.JFrame {
         likedsong.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_LikedsongsActionPerformed
+
+    private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs2ActionPerformed
+        // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_Recs2ActionPerformed
+
+    private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
+        // TODO add your handling code here:
+        Player Player= new Player();
+        Player.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_Recent3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -436,11 +464,11 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton Recent2;
     private javax.swing.JButton Recent3;
     private javax.swing.JButton Recs1;
+    private javax.swing.JButton Recs2;
     private javax.swing.JButton Recs3;
     private javax.swing.JButton Recs4;
     private javax.swing.JTextField SearchBar;
     private javax.swing.JLabel Userdisplay;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -461,7 +489,7 @@ public class UserDashboard extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 private void loadSongsToUI(List<Song> songs) {
-    JButton[] recButtons = {Recs1, Recs3, Recs4, jButton2};
+    JButton[] recButtons = {Recs1, Recs3, Recs4, Recs2};
 
     for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
         Song song = songs.get(i);
