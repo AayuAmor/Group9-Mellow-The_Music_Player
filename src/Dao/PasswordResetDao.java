@@ -1,15 +1,11 @@
 package Dao;
 
 import Database.MySqlConnection;
-
 import java.sql.*;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class PasswordResetDao {
-    private final MySqlConnection mysql = new MySqlConnection();
+    private final MySqlConnection mysql = new MySqlConnection() {};
 
     public PasswordResetDao() {
         ensureTable();
@@ -82,7 +78,7 @@ public class PasswordResetDao {
     }
 
     private void incrementLatestAttempts(Connection conn, String email) {
-        try (PreparedStatement ps = conn.prepareStatement("UPDATE password_reset_tokens SET attempts = attempts + 1 WHERE email = ? ORDER BY created_at DESC LIMIT 1")) {
+        try (PreparedStatement ps = conn.prepareStatement("UPDATE password_reset_tokens SET attempts = attempts + 1 WHERE id = (SELECT id FROM password_reset_tokens WHERE email = ? ORDER BY created_at DESC LIMIT 1)")) {
             ps.setString(1, email);
             ps.executeUpdate();
         } catch (SQLException ignored) {}

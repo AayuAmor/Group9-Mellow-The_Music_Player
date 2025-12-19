@@ -4,6 +4,8 @@
  */
 package view;
 
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author oakin
@@ -252,4 +254,18 @@ public class ChangeForgottenPassword_Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JTextField newPasswordTextField;
     // End of variables declaration//GEN-END:variables
+
+    public String getNewPassword() {
+        return newPasswordTextField.getText().trim();
+    }
+
+    public String getConfirmPassword() {
+        return confirmPasswordTextField.getText().trim();
+    }
+
+    public void addResetListener(ActionListener listener) {
+        // Trigger reset when user presses enter in either password field.
+        newPasswordTextField.addActionListener(listener);
+        confirmPasswordTextField.addActionListener(listener);
+    }
 }

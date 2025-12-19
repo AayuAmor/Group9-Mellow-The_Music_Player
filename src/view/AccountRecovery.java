@@ -4,6 +4,8 @@
  */
 package view;
 
+import java.awt.event.ActionListener;
+
 /**
  *
  * @author oakin
@@ -232,5 +234,11 @@ public class AccountRecovery extends javax.swing.JFrame {
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
 
+    public javax.swing.JTextField getEmailField() {
+        return emailText;
+    }
 
+    public void addSearchListener(ActionListener listener) {
+        searchBtn.addActionListener(listener);
+    }
 }

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import utils.PasswordService;
 
 /**
  *
@@ -47,5 +48,37 @@ public boolean check(UserData user) {
             mysql.closeConnection(conn);
         }
         return false;
+    }
+
+    public boolean existsByEmail(String email) {
+        Connection conn = mysql.openconnection();
+        String sql = "SELECT 1 FROM users WHERE email = ? LIMIT 1";
+        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setString(1, email);
+            ResultSet rs = pstm.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        } finally {
+            mysql.closeConnection(conn);
+        }
+    }
+
+    public boolean updatePasswordByEmail(String email, String plainPassword) {
+        Connection conn = mysql.openconnection();
+        String hashed = PasswordService.hashPassword(plainPassword);
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setString(1, hashed);
+            pstm.setString(2, email);
+            int rows = pstm.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        } finally {
+            mysql.closeConnection(conn);
+        }
     }
 }

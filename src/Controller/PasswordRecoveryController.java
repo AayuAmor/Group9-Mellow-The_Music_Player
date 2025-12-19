@@ -2,17 +2,16 @@ package Controller;
 
 import Dao.PasswordResetDao;
 import Dao.userDao;
-
-import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-
+import javax.swing.*;
+import utils.EmailService;
 import view.AccountRecovery;
-import view.OTP_Verification_Interface;
 import view.ChangeForgottenPassword_Interface;
+import view.OTP_Verification_Interface;
 
 public class PasswordRecoveryController {
     private final userDao userDao = new userDao();
@@ -37,23 +36,30 @@ public class PasswordRecoveryController {
     class SearchListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+            System.out.println("Search button clicked!");
+            try {
             String email = accountRecoveryView.getEmailField().getText().trim();
+            System.out.println("Email entered: " + email);
             if (email.isEmpty() || email.equalsIgnoreCase("Enter Your Email")) {
                 JOptionPane.showMessageDialog(accountRecoveryView, "Please enter your email.");
                 return;
             }
+            System.out.println("Checking if email exists in database...");
             if (!userDao.existsByEmail(email)) {
                 JOptionPane.showMessageDialog(accountRecoveryView, "No account found with this email.");
                 return;
             }
             targetEmail = email;
             String otp = generateOtp();
+            System.out.println("Generated OTP: " + otp);
             Instant expiresAt = Instant.now().plus(10, ChronoUnit.MINUTES);
+            System.out.println("Saving OTP to database...");
             boolean saved = resetDao.createToken(email, otp, expiresAt);
             if (!saved) {
                 JOptionPane.showMessageDialog(accountRecoveryView, "Could not initiate reset. Please try again.");
                 return;
             }
+            System.out.println("Sending OTP email...");
             boolean sent = emailService.sendOtp(email, otp);
             if (!sent) {
                 JOptionPane.showMessageDialog(accountRecoveryView, "Failed to send email. Check SMTP config.");
@@ -61,6 +67,14 @@ public class PasswordRecoveryController {
             }
             JOptionPane.showMessageDialog(accountRecoveryView, "OTP sent to your email. Enter it to continue.");
             openOtpView();
+            } catch (Exception ex) {
+                System.err.println("Error in SearchListener: " + ex.getMessage());
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(accountRecoveryView, 
+                    "An error occurred: " + ex.getMessage(), 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

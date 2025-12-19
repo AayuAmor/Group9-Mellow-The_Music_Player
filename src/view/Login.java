@@ -201,8 +201,9 @@ public class Login extends javax.swing.JFrame {
 
     private void ForgotPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ForgotPasswordActionPerformed
         // TODO add your handling code here:
-        AccountRecovery AccountRecovery = new AccountRecovery();
-        AccountRecovery.setVisible(true);
+        AccountRecovery accountRecoveryView = new AccountRecovery();
+        Controller.PasswordRecoveryController controller = new Controller.PasswordRecoveryController(accountRecoveryView);
+        controller.open();
         this.dispose();
     }//GEN-LAST:event_ForgotPasswordActionPerformed
 

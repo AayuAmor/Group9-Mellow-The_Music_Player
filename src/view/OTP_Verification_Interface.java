@@ -4,6 +4,10 @@
  */
 package view;
 
+import java.awt.datatransfer.DataFlavor;
+import java.awt.event.ActionListener;
+import java.util.logging.Level;
+
 /**
  *
  * @author oakin
@@ -11,12 +15,14 @@ package view;
 public class OTP_Verification_Interface extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(OTP_Verification_Interface.class.getName());
+    private javax.swing.JTextField[] otpFields;
 
     /**
      * Creates new form OTP_Verification_Interface
      */
     public OTP_Verification_Interface() {
         initComponents();
+        setupOtpFields();
     }
 
     /**
@@ -234,4 +240,172 @@ public class OTP_Verification_Interface extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField6;
     private javax.swing.JButton nextBtn;
     // End of variables declaration//GEN-END:variables
+
+    public String getOtp() {
+        StringBuilder sb = new StringBuilder();
+        for (javax.swing.JTextField f : otpFields) {
+            sb.append(f.getText());
+        }
+        return sb.toString().trim();
+    }
+
+    public void addNextListener(ActionListener listener) {
+        nextBtn.addActionListener(listener);
+    }
+
+    /** Populate the six fields from a single OTP string (non-digit characters ignored). */
+    public void setOtp(String otp) {
+        fillOtpFromString(otp);
+    }
+
+    /** Clear all OTP fields and focus the first. */
+    public void clearOtp() {
+        for (javax.swing.JTextField f : otpFields) {
+            f.setText("");
+        }
+        focusFirstField();
+    }
+
+    /** True when all six boxes have exactly one digit. */
+    public boolean isOtpComplete() {
+        for (javax.swing.JTextField f : otpFields) {
+            if (f.getText().length() != 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Move focus to the first field. */
+    public void focusFirstField() {
+        if (otpFields.length > 0) {
+            otpFields[0].requestFocusInWindow();
+        }
+    }
+
+    /**
+     * Configure OTP text fields to auto-advance, accept only digits, and handle paste across boxes.
+     */
+    private void setupOtpFields() {
+        otpFields = new javax.swing.JTextField[]{
+            jTextField1, jTextField2, jTextField3, jTextField4, jTextField5, jTextField6
+        };
+
+        for (int i = 0; i < otpFields.length; i++) {
+            final int idx = i;
+            javax.swing.JTextField field = otpFields[i];
+            field.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+            ((javax.swing.text.AbstractDocument) field.getDocument()).setDocumentFilter(new OtpDigitFilter(1));
+            attachPasteHandler(field);
+            field.addKeyListener(new java.awt.event.KeyAdapter() {
+                @Override
+                public void keyTyped(java.awt.event.KeyEvent e) {
+                    char c = e.getKeyChar();
+                    if (!Character.isDigit(c)) {
+                        e.consume();
+                    }
+                }
+
+                @Override
+                public void keyReleased(java.awt.event.KeyEvent e) {
+                    // Handle backspace navigation
+                    if (e.getKeyCode() == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                        if (field.getText().isEmpty() && idx > 0) {
+                            otpFields[idx - 1].requestFocusInWindow();
+                            otpFields[idx - 1].setCaretPosition(otpFields[idx - 1].getText().length());
+                        }
+                        return;
+                    }
+
+                    // Auto-advance on single digit
+                    if (field.getText().length() >= 1 && idx < otpFields.length - 1) {
+                        otpFields[idx + 1].requestFocusInWindow();
+                        otpFields[idx + 1].setCaretPosition(otpFields[idx + 1].getText().length());
+                    }
+                }
+            });
+        }
+    }
+
+    /** Distribute a digit string across the six fields. */
+    private void fillOtpFromString(String text) {
+        String digits = text == null ? "" : text.replaceAll("\\D", "");
+        for (int i = 0; i < otpFields.length; i++) {
+            String val = (i < digits.length()) ? String.valueOf(digits.charAt(i)) : "";
+            otpFields[i].setText(val);
+        }
+        // Focus next empty or last
+        for (int i = 0; i < otpFields.length; i++) {
+            if (otpFields[i].getText().isEmpty()) {
+                otpFields[i].requestFocusInWindow();
+                return;
+            }
+        }
+        otpFields[otpFields.length - 1].requestFocusInWindow();
+    }
+
+    /** Handle paste events to spread digits across all fields. */
+    private void attachPasteHandler(javax.swing.JTextField field) {
+        field.setTransferHandler(new javax.swing.TransferHandler(null) {
+            @Override
+            public boolean canImport(TransferSupport support) {
+                return support.isDataFlavorSupported(DataFlavor.stringFlavor);
+            }
+
+            @Override
+            public boolean importData(TransferSupport support) {
+                try {
+                    Object data = support.getTransferable().getTransferData(DataFlavor.stringFlavor);
+                    if (data instanceof String) {
+                        fillOtpFromString((String) data);
+                        return true;
+                    }
+                } catch (Exception ex) {
+                    logger.log(Level.FINE, "OTP paste failed", ex);
+                }
+                return false;
+            }
+        });
+    }
+
+    /**
+     * Document filter that limits length and only allows digits.
+     */
+    private static class OtpDigitFilter extends javax.swing.text.DocumentFilter {
+        private final int maxLen;
+
+        OtpDigitFilter(int maxLen) {
+            this.maxLen = maxLen;
+        }
+
+        @Override
+        public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+            if (string == null) return;
+            replace(fb, offset, 0, string, attr);
+        }
+
+        @Override
+        public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attrs) throws javax.swing.text.BadLocationException {
+            if (text == null) return;
+            StringBuilder filtered = new StringBuilder();
+            for (char c : text.toCharArray()) {
+                if (Character.isDigit(c)) {
+                    filtered.append(c);
+                }
+            }
+            int currentLength = fb.getDocument().getLength();
+            int overLimit = (currentLength + filtered.length()) - maxLen;
+            if (overLimit > 0) {
+                filtered.setLength(filtered.length() - overLimit);
+            }
+            if (filtered.length() > 0) {
+                super.replace(fb, offset, length, filtered.toString(), attrs);
+            }
+        }
+
+        @Override
+        public void remove(FilterBypass fb, int offset, int length) throws javax.swing.text.BadLocationException {
+            super.remove(fb, offset, length);
+        }
+    }
 }

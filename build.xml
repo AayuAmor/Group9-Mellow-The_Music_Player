@@ -70,4 +70,23 @@
     nbproject/build-impl.xml file. 
 
     -->
+
+    <target name="-post-compile">
+        <mkdir dir="${build.classes.dir}/Images"/>
+        <copy todir="${build.classes.dir}/Images" failonerror="false">
+            <fileset dir="src/Images">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="-post-compile-single">
+        <mkdir dir="${build.classes.dir}/Images"/>
+        <copy todir="${build.classes.dir}/Images" failonerror="false">
+            <fileset dir="src/Images">
+                <include name="**/*"/>
+            </fileset>
+        </copy>
+    </target>
+
 </project>
