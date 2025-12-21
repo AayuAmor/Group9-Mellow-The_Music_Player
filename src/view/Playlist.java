@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+import Controller.SongController;
+import Model.Song;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  *
@@ -12,11 +16,23 @@ public class Playlist extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Playlist.class.getName());
 
+    private final SongController songController;
+    private JList<Song> songList;
+
     /**
-     * Creates new form Playlist
+     * Creates new form Playlist with a shared controller.
      */
-    public Playlist() {
+    public Playlist(SongController controller) {
+        this.songController = controller;
         initComponents();
+        initSongList();
+    }
+
+    // Default constructor for builder/runtime compatibility (not used by dashboard)
+    public Playlist() {
+        this.songController = new SongController();
+        initComponents();
+        initSongList();
     }
 
     /**
@@ -227,4 +243,45 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+    private void initSongList() {
+        java.util.List<Song> songs = songController.getSongs();
+        songList = new JList<>(new DefaultListModel<>());
+        DefaultListModel<Song> model = (DefaultListModel<Song>) songList.getModel();
+        if (songs != null) {
+            for (Song s : songs) model.addElement(s);
+        }
+        songList.setCellRenderer(new ListCellRenderer<>());
+        songList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        songList.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    Song sel = songList.getSelectedValue();
+                    if (sel != null) songController.onSongSelected(sel);
+                }
+            }
+        });
+        JScrollPane scroll = new JScrollPane(songList);
+        scroll.setBounds(40, 340, 830, 180);
+        jPanel1.add(scroll);
+        jPanel1.revalidate();
+        jPanel1.repaint();
+    }
+
+    private static class ListCellRenderer<T extends Song> extends DefaultListCellRenderer {
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            if (value instanceof Song s) {
+                String duration = formatDuration(s.getDurationSeconds());
+                setText(s.getTitle() + "  —  " + s.getArtist() + "  (" + duration + ")");
+            }
+            return this;
+        }
+
+        private String formatDuration(int seconds) {
+            int m = seconds / 60; int s = seconds % 60;
+            return String.format("%d:%02d", m, s);
+        }
+    }
 }
