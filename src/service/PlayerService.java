@@ -22,6 +22,7 @@ public class PlayerService {
 
     /**
      * Play the provided local file path. Stops previous playback if active.
+     * @param filePath
      */
     public void play(String filePath) {
         if (filePath == null || filePath.isBlank()) return;
