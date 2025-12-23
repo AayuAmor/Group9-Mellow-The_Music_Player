@@ -58,7 +58,7 @@ public class Player extends javax.swing.JFrame {
             }
         }
 
-        /
+        
         ensureJavaFxInitialized();
 
         
