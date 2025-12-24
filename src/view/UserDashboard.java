@@ -65,17 +65,20 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         Recs1 = new javax.swing.JButton();
         Recs3 = new javax.swing.JButton();
-        Recent1 = new javax.swing.JButton();
-        Recent2 = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         Userdisplay = new javax.swing.JLabel();
-        Recent3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         Recs2 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         Recs4 = new javax.swing.JButton();
+        Likedsongs1 = new javax.swing.JButton();
 
         jToolBar1.setRollover(true);
 
@@ -224,20 +227,6 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(Recs3);
         Recs3.setBounds(560, 350, 150, 150);
 
-        Recent1.setBackground(new java.awt.Color(196, 195, 195));
-        Recent1.setForeground(new java.awt.Color(102, 102, 102));
-        Recent1.setText("Song 1");
-        Recent1.addActionListener(this::Recent1ActionPerformed);
-        jPanel1.add(Recent1);
-        Recent1.setBounds(310, 580, 410, 20);
-
-        Recent2.setBackground(new java.awt.Color(196, 195, 195));
-        Recent2.setForeground(new java.awt.Color(102, 102, 102));
-        Recent2.setText("Song 2");
-        Recent2.addActionListener(this::Recent2ActionPerformed);
-        jPanel1.add(Recent2);
-        Recent2.setBounds(310, 620, 410, 20);
-
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
         jLabel4.setBounds(30, 210, 41, 40);
@@ -260,12 +249,14 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(Userdisplay);
         Userdisplay.setBounds(30, 150, 230, 20);
 
-        Recent3.setBackground(new java.awt.Color(196, 195, 195));
-        Recent3.setForeground(new java.awt.Color(102, 102, 102));
-        Recent3.setText("Song 3");
-        Recent3.addActionListener(this::Recent3ActionPerformed);
-        jPanel1.add(Recent3);
-        Recent3.setBounds(310, 660, 410, 20);
+        jButton1.setBackground(new java.awt.Color(40, 52, 46));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(204, 204, 204));
+        jButton1.setText("All Songs");
+        jButton1.setBorder(null);
+        jButton1.addActionListener(this::jButton1ActionPerformed);
+        jPanel1.add(jButton1);
+        jButton1.setBounds(110, 350, 130, 30);
 
         Recs2.setBackground(new java.awt.Color(217, 213, 213));
         Recs2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -279,9 +270,36 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(Recs2);
         Recs2.setBounds(790, 350, 150, 150);
 
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
+        jPanel1.add(jLabel11);
+        jLabel11.setBounds(30, 340, 40, 50);
+
+        jTable1.setBackground(new java.awt.Color(225, 223, 223));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(jTable1);
+
+        jScrollPane1.setViewportView(jScrollPane2);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(330, 560, 590, 130);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 990, 710);
+        jLabel2.setBounds(0, 0, 980, 710);
 
         Recs4.setBackground(new java.awt.Color(229, 226, 226));
         Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -296,11 +314,20 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(Recs4);
         Recs4.setBounds(560, 350, 150, 150);
 
+        Likedsongs1.setBackground(new java.awt.Color(40, 52, 46));
+        Likedsongs1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        Likedsongs1.setForeground(new java.awt.Color(204, 204, 204));
+        Likedsongs1.setText("Liked Songs");
+        Likedsongs1.setBorder(null);
+        Likedsongs1.addActionListener(this::Likedsongs1ActionPerformed);
+        jPanel1.add(Likedsongs1);
+        Likedsongs1.setBounds(110, 280, 130, 30);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 983, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 978, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -313,13 +340,6 @@ public class UserDashboard extends javax.swing.JFrame {
     private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchBarActionPerformed
-
-    private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Recent2ActionPerformed
 
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
         // TODO add your handling code here:
@@ -377,13 +397,6 @@ public class UserDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AccountActionPerformed
 
-    private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Recent1ActionPerformed
-
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
         // TODO add your handling code here:
         Player Player= new Player();
@@ -423,12 +436,16 @@ public class UserDashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_Recs2ActionPerformed
 
-    private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
+    private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
+    }//GEN-LAST:event_Likedsongs1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        AllSongs AllSongs = new AllSongs();
+        AllSongs.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_Recent3ActionPerformed
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -458,19 +475,19 @@ public class UserDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Account;
     private javax.swing.JButton Likedsongs;
+    private javax.swing.JButton Likedsongs1;
     private javax.swing.JButton Playlist;
     private javax.swing.JLabel Reccomendation;
-    private javax.swing.JButton Recent1;
-    private javax.swing.JButton Recent2;
-    private javax.swing.JButton Recent3;
     private javax.swing.JButton Recs1;
     private javax.swing.JButton Recs2;
     private javax.swing.JButton Recs3;
     private javax.swing.JButton Recs4;
     private javax.swing.JTextField SearchBar;
     private javax.swing.JLabel Userdisplay;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -483,6 +500,9 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
     private javax.swing.JButton searchBtn;

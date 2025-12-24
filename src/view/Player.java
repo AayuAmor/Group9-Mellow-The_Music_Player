@@ -43,7 +43,7 @@ public class Player extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        PlayPausebtn = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -161,7 +161,7 @@ public class Player extends javax.swing.JFrame {
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
 
-        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
+        PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/right arrow.png"))); // NOI18N
 
@@ -175,7 +175,7 @@ public class Player extends javax.swing.JFrame {
                 .addContainerGap(103, Short.MAX_VALUE)
                 .addComponent(jButton4)
                 .addGap(30, 30, 30)
-                .addComponent(jButton7)
+                .addComponent(PlayPausebtn)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3)
                 .addGap(60, 60, 60)
@@ -188,7 +188,7 @@ public class Player extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jButton5)
             .addComponent(jButton6)
-            .addComponent(jButton7)
+            .addComponent(PlayPausebtn)
             .addComponent(jButton3)
             .addComponent(jButton4)
         );
@@ -269,6 +269,7 @@ public class Player extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton PlayPausebtn;
     private javax.swing.JButton SongPlaying;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -276,7 +277,6 @@ public class Player extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
