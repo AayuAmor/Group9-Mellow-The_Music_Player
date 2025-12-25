@@ -4,6 +4,8 @@
  */
 package view;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Asus
@@ -11,6 +13,7 @@ package view;
 public class Player extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Player.class.getName());
+    private boolean isPlaying = false;
 
     /**
      * Creates new form Player
@@ -162,6 +165,7 @@ public class Player extends javax.swing.JFrame {
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
 
         PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
+        PlayPausebtn.addActionListener(this::PlayPausebtnActionPerformed);
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/right arrow.png"))); // NOI18N
 
@@ -242,6 +246,18 @@ public class Player extends javax.swing.JFrame {
         likedsong.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void PlayPausebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayPausebtnActionPerformed
+        // TODO add your handling code here:
+        if (isPlaying) {
+            PlayPausebtn.setIcon(new ImageIcon(getClass().getResource("/images/play.png")));
+            System.out.println("Paused");
+        } else {
+            PlayPausebtn.setIcon(new ImageIcon(getClass().getResource("/Images/icon-park-outline_play.png")));
+            System.out.println("Playing");
+        }
+        isPlaying = !isPlaying;
+    }//GEN-LAST:event_PlayPausebtnActionPerformed
 
     /**
      * @param args the command line arguments
