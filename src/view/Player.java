@@ -9,6 +9,7 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Player extends javax.swing.JFrame {
     private MediaPlayer mediaPlayer;
     
     private boolean fxInitialized = false;
+    private boolean isPlaying = false;
 
     /**
      * Creates new form Player
@@ -293,6 +295,7 @@ public class Player extends javax.swing.JFrame {
         loopSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
 
         playBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
+        playBtn.addActionListener(this::playBtnActionPerformed);
 
         nextBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/right arrow.png"))); // NOI18N
 
@@ -387,6 +390,18 @@ public class Player extends javax.swing.JFrame {
         likedsong.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_backBtnActionPerformed
+
+    private void playBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBtnActionPerformed
+        // TODO add your handling code here:
+        if (isPlaying) {
+            playBtn.setIcon(new ImageIcon(getClass().getResource("/images/pause.png")));
+            System.out.println("Paused");
+        } else {
+           playBtn.setIcon(new ImageIcon(getClass().getResource("/Images/icon-park-outline_play.png")));
+            System.out.println("Playing");
+        }
+        isPlaying = !isPlaying;
+    }//GEN-LAST:event_playBtnActionPerformed
 
     /**
      * @param args the command line arguments
