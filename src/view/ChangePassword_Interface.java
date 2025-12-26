@@ -38,8 +38,8 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         newPasswordTextField = new javax.swing.JTextField();
         confirmPasswordTextField = new javax.swing.JTextField();
         saveBtn = new javax.swing.JButton();
-        jPanel2 = new javax.swing.JPanel();
-        backBtn1 = new javax.swing.JButton();
+        changepassword = new javax.swing.JPanel();
+        changepasswordbtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -137,50 +137,55 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         getContentPane().add(saveBtn);
         saveBtn.setBounds(420, 400, 124, 42);
 
-        jPanel2.setBackground(new java.awt.Color(72, 118, 168));
-        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
+        changepassword.setBackground(new java.awt.Color(72, 118, 168));
+        changepassword.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 4, true));
 
-        backBtn1.setBackground(new java.awt.Color(159, 175, 192));
-        backBtn1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        backBtn1.setForeground(new java.awt.Color(255, 255, 255));
-        backBtn1.setText("←Back");
-        backBtn1.setBorder(null);
-        backBtn1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        backBtn1.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
-        backBtn1.addActionListener(this::backBtn1ActionPerformed);
+        changepasswordbtn.setBackground(new java.awt.Color(159, 175, 192));
+        changepasswordbtn.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        changepasswordbtn.setForeground(new java.awt.Color(255, 255, 255));
+        changepasswordbtn.setText("←Back");
+        changepasswordbtn.setBorder(null);
+        changepasswordbtn.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        changepasswordbtn.setDebugGraphicsOptions(javax.swing.DebugGraphics.NONE_OPTION);
+        changepasswordbtn.addActionListener(this::changepasswordbtnActionPerformed);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 28)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(204, 204, 204));
         jLabel5.setText("Change Password");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout changepasswordLayout = new javax.swing.GroupLayout(changepassword);
+        changepassword.setLayout(changepasswordLayout);
+        changepasswordLayout.setHorizontalGroup(
+            changepasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(changepasswordLayout.createSequentialGroup()
                 .addGap(21, 21, 21)
-                .addComponent(backBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(changepasswordbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(536, Short.MAX_VALUE))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        changepasswordLayout.setVerticalGroup(
+            changepasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, changepasswordLayout.createSequentialGroup()
                 .addContainerGap(31, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(changepasswordLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(backBtn1, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(changepasswordbtn, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22))
         );
 
+<<<<<<< Updated upstream
         getContentPane().add(jPanel2);
         jPanel2.setBounds(-10, 0, 1010, 120);
+=======
+        getContentPane().add(changepassword);
+        changepassword.setBounds(-10, 0, 1010, 120);
+>>>>>>> Stashed changes
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    privachangepassword backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         Account Account = new Account();
         Account.setVisible(true);
@@ -196,8 +201,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
 
     private void oldPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_oldPasswordTextFieldFocusLost
         // TODO add your handling code here:
-         if (oldPasswordTextField.getText().equals("")){
-            oldPasswordTextField.setText("******************");
+         if (oldPasswordTextField.getchangepasswordequals(""))changepassword       oldPasswordTextField.setText("******************");
         }
     }//GEN-LAST:event_oldPasswordTextFieldFocusLost
 
@@ -222,8 +226,7 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_confirmPasswordTextFieldFocusGained
 
-    private void confirmPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_confirmPasswordTextFieldFocusLost
-        // TODO add your handling code here:
+    private void confirmPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {                            changepassword           changepassword       // TODO add your handling code here://GEN-FIRST:event_confirmPasswordTextFieldFocusLost
         if (confirmPasswordTextField.getText().equals("")){
             confirmPasswordTextField.setText("******************");
         }
@@ -233,12 +236,12 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_saveBtnActionPerformed
 
-    private void backBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtn1ActionPerformed
+    private void changepasswordbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changepasswordbtnActionPerformed
         // TODO add your handling code here:
         Account Account = new Account();
         Account.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_backBtn1ActionPerformed
+    }//GEN-LAST:event_changepasswordbtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -267,7 +270,8 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backBtn;
-    private javax.swing.JButton backBtn1;
+    private javax.swing.JPanel changepassword;
+    private javax.swing.JButton changepasswordbtn;
     private javax.swing.JTextField confirmPasswordTextField;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -275,7 +279,6 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField newPasswordTextField;
     private javax.swing.JTextField oldPasswordTextField;
     private javax.swing.JButton saveBtn;
