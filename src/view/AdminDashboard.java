@@ -96,6 +96,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         Delete.setBackground(new java.awt.Color(0, 153, 0));
         Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Delete.setText("Delete");
+        Delete.addActionListener(this::DeleteActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -170,6 +171,21 @@ public class AdminDashboard extends javax.swing.JFrame {
         }
     }
     }//GEN-LAST:event_ResetActionPerformed
+
+    private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRows = UserTable.getSelectedRows();
+    if (selectedRows.length == 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please select one or more rows to delete.");
+        return;
+    }
+    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) UserTable.getModel();
+    // Sort selected rows in descending order to avoid index issues when removing
+    java.util.Arrays.sort(selectedRows);
+    for (int i = selectedRows.length - 1; i >= 0; i--) {
+        model.removeRow(selectedRows[i]);
+    }
+    }//GEN-LAST:event_DeleteActionPerformed
 
     /**
      * @param args the command line arguments
