@@ -32,12 +32,12 @@ public class AdminDashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jTextField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        UserTable = new javax.swing.JTable();
+        Reset = new javax.swing.JButton();
+        Delete = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        Account = new javax.swing.JButton();
+        AdminDashboard = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 700));
@@ -54,8 +54,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         jTextField2.setText("Manage Users");
         jTextField2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jTable1.setBackground(new java.awt.Color(51, 51, 51));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        UserTable.setBackground(new java.awt.Color(51, 51, 51));
+        UserTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -86,15 +86,16 @@ public class AdminDashboard extends javax.swing.JFrame {
                 "USERNAME", "EMAIL", "DATE CREATED", "ROLE"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(UserTable);
 
-        jButton3.setBackground(new java.awt.Color(0, 153, 0));
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton3.setText("Reset");
+        Reset.setBackground(new java.awt.Color(0, 153, 0));
+        Reset.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Reset.setText("Reset");
+        Reset.addActionListener(this::ResetActionPerformed);
 
-        jButton4.setBackground(new java.awt.Color(0, 153, 0));
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton4.setText("Delete");
+        Delete.setBackground(new java.awt.Color(0, 153, 0));
+        Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Delete.setText("Delete");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -109,9 +110,9 @@ public class AdminDashboard extends javax.swing.JFrame {
                         .addGap(105, 105, 105)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 604, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(33, 33, 33)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton4)
-                            .addComponent(jButton3))))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(Delete)
+                            .addComponent(Reset))))
                 .addContainerGap(94, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -119,15 +120,13 @@ public class AdminDashboard extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(74, 74, 74)
-                        .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addComponent(Reset)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton4))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Delete))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 412, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(38, Short.MAX_VALUE))
         );
 
@@ -136,28 +135,41 @@ public class AdminDashboard extends javax.swing.JFrame {
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Home Icon.png"))); // NOI18N
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 60, -1, 50));
 
-        jTextField3.setBackground(new java.awt.Color(237, 237, 237));
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        jTextField3.setText("Admin Dashboard");
-        jTextField3.setBorder(null);
-        getContentPane().add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
+        Account.setBackground(new java.awt.Color(232, 232, 232));
+        Account.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login icon.png"))); // NOI18N
+        Account.setBorder(null);
+        Account.addActionListener(this::AccountActionPerformed);
+        getContentPane().add(Account, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 80, -1, 40));
 
-        jButton2.setBackground(new java.awt.Color(232, 232, 232));
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login icon.png"))); // NOI18N
-        jButton2.setBorder(null);
-        jButton2.addActionListener(this::jButton2ActionPerformed);
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 80, -1, 40));
+        AdminDashboard.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        AdminDashboard.setText("AdminDashboard");
+        getContentPane().add(AdminDashboard, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 80, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
         // TODO add your handling code here:
         Account Account = new Account();
         Account.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_AccountActionPerformed
+
+    private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
+        // TODO add your handling code here:
+            int[] selectedRows = UserTable.getSelectedRows();
+    if (selectedRows.length == 0) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Please select one or more rows to reset.");
+        return;
+    }
+    javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) UserTable.getModel();
+    for (int row : selectedRows) {
+        for (int col = 0; col < model.getColumnCount(); col++) {
+            model.setValueAt(null, row, col);
+        }
+    }
+    }//GEN-LAST:event_ResetActionPerformed
 
     /**
      * @param args the command line arguments
@@ -185,15 +197,15 @@ public class AdminDashboard extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton Account;
+    private javax.swing.JLabel AdminDashboard;
+    private javax.swing.JButton Delete;
+    private javax.swing.JButton Reset;
+    private javax.swing.JTable UserTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
