@@ -4,6 +4,11 @@
  */
 package view;
 
+import Controller.SongController;
+import Model.Song;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Asus
@@ -11,12 +16,30 @@ package view;
 public class AllSongs extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AllSongs.class.getName());
+    private final SongController songController;
+    private List<Song> allSongs;
 
     /**
      * Creates new form AllSongs
      */
     public AllSongs() {
         initComponents();
+        songController = new SongController();
+        
+        // Fetch all songs from SongController and populate table
+        loadAllSongs();
+        
+        // Add mouse listener for song selection
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable2.rowAtPoint(evt.getPoint());
+                if (row >= 0 && allSongs != null && row < allSongs.size()) {
+                    Song selectedSong = allSongs.get(row);
+                    songController.playSong(selectedSong);
+                }
+            }
+        });
     }
 
     /**
@@ -255,4 +278,32 @@ public class AllSongs extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Load all songs from SongController and populate the JTable.
+     * Displays Title, Artist, and Duration.
+     * Follows MVC principles - View fetches data from Controller.
+     */
+    private void loadAllSongs() {
+        // Fetch all songs from controller
+        allSongs = songController.getAllSongs();
+        
+        // Get table model and clear existing rows
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        
+        if (allSongs == null || allSongs.isEmpty()) {
+            return;
+        }
+        
+        // Populate table with all songs (3 columns: Title, Artist, Duration)
+        for (Song song : allSongs) {
+            String title = song.getTitle();
+            String artist = song.getArtist();
+            int durationSeconds = song.getDurationSeconds();
+            String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+            
+            model.addRow(new Object[]{title, artist, duration});
+        }
+    }
 }

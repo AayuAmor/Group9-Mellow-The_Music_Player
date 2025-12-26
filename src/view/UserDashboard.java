@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -21,6 +22,7 @@ public class UserDashboard extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserDashboard.class.getName());
     private final SongController songController = new SongController();
     private List<Song> loadedSongs;
+    private static boolean songsLoadedOnce = false;
 
     /**
      * Creates new form UserDashboard
@@ -34,8 +36,51 @@ public class UserDashboard extends javax.swing.JFrame {
             Userdisplay.setText("Hello, " + session.getUsername());
         }
         
-        // Prompt user to select a music folder using the search button
-        // Songs will be loaded after folder selection
+        // STEP 1: Load local songs once during application startup
+        if (!songsLoadedOnce) {
+            logger.info("Starting to load local songs from Music directory...");
+            
+            // Use dynamic, safe path - NOT hardcoded
+            String musicPath = System.getProperty("user.home") + File.separator + "Music";
+            songController.loadLocalSongsOnce(musicPath);
+            songsLoadedOnce = true;
+            
+            logger.info("Local songs loading completed.");
+        }
+        
+        // STEP 2: Fetch all songs AFTER loading
+        List<Song> allSongs = songController.getAllSongs();
+        logger.info("Total songs fetched from cache: " + (allSongs != null ? allSongs.size() : 0));
+        
+        // STEP 3: Render songs if available
+        if (allSongs != null && !allSongs.isEmpty()) {
+            logger.info("Starting dashboard rendering with " + allSongs.size() + " songs...");
+            
+            // Store in loadedSongs for UI interaction
+            loadedSongs = allSongs;
+            
+            // Render recommendation buttons
+            loadSongsToUI(allSongs);
+            
+            // Render Recently Played table
+            renderRecentlyPlayed(allSongs);
+            
+            logger.info("Dashboard rendering completed.");
+        } else {
+            logger.warning("No songs found in cache. Music directory may be empty or inaccessible.");
+        }
+        
+        // Add mouse click listener to recently played table
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable1.rowAtPoint(evt.getPoint());
+                if (row >= 0 && loadedSongs != null && row < loadedSongs.size()) {
+                    Song selectedSong = loadedSongs.get(row);
+                    songController.playSong(selectedSong);
+                }
+            }
+        });
 
     }
 
@@ -76,7 +121,6 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         Recs4 = new javax.swing.JButton();
@@ -301,14 +345,12 @@ public class UserDashboard extends javax.swing.JFrame {
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
         }
-
-        jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 560, 590, 130);
@@ -507,7 +549,6 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
@@ -553,6 +594,49 @@ private void playButtonIndex(int idx) {
     if (loadedSongs == null || idx < 0 || idx >= loadedSongs.size()) return;
     Song s = loadedSongs.get(idx);
     songController.onSongSelected(s);
+}
+
+/**
+ * Render recently played songs in the JTable.
+ * Displays up to the first 10 songs with Title, Artist, and Duration.
+ * Follows MVC principles - View only renders data from Controller.
+ * 
+ * @param songs List of songs to display
+ */
+private void renderRecentlyPlayed(List<Song> songs) {
+    logger.info("renderRecentlyPlayed called with " + (songs != null ? songs.size() : 0) + " songs");
+    
+    // Get the table model
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    // Verify table structure
+    int columnCount = model.getColumnCount();
+    logger.info("JTable column count: " + columnCount);
+    
+    // Clear existing rows
+    model.setRowCount(0);
+    
+    if (songs == null || songs.isEmpty()) {
+        logger.warning("No songs to render in Recently Played table.");
+        return;
+    }
+    
+    // Display up to the first 10 songs
+    int limit = Math.min(10, songs.size());
+    logger.info("Rendering " + limit + " songs in Recently Played table...");
+    
+    for (int i = 0; i < limit; i++) {
+        Song song = songs.get(i);
+        String title = song.getTitle();
+        String artist = song.getArtist();
+        int durationSeconds = song.getDurationSeconds();
+        String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+        
+        // Add row with exactly 3 columns: Title, Artist, Duration
+        model.addRow(new Object[]{title, artist, duration});
+    }
+    
+    logger.info("Successfully added " + model.getRowCount() + " rows to Recently Played table.");
 }
 
     

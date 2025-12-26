@@ -6,6 +6,7 @@ package view;
 import Controller.SongController;
 import Model.Song;
 import java.awt.*;
+import java.util.List;
 import javax.swing.*;
 
 /**
@@ -18,6 +19,7 @@ public class Playlist extends javax.swing.JFrame {
 
     private final SongController songController;
     private JList<Song> songList;
+    private List<Song> playlistSongs; // For future extension: filtering songs into playlists
 
     /**
      * Creates new form Playlist with a shared controller.
@@ -243,24 +245,42 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
+    
+    /**
+     * Initialize song list by loading songs from SongCache via SongController.
+     * Does not scan local files - uses pre-loaded songs from cache.
+     * Supports future extension for filtering songs into specific playlists.
+     */
     private void initSongList() {
-        java.util.List<Song> songs = songController.getSongs();
+        // Load songs from SongCache via SongController (no file scanning)
+        playlistSongs = songController.getAllSongs();
+        
         songList = new JList<>(new DefaultListModel<>());
         DefaultListModel<Song> model = (DefaultListModel<Song>) songList.getModel();
-        if (songs != null) {
-            for (Song s : songs) model.addElement(s);
+        
+        // Populate the list with all songs (future: filter by playlist)
+        if (playlistSongs != null) {
+            for (Song s : playlistSongs) {
+                model.addElement(s);
+            }
         }
+        
         songList.setCellRenderer(new ListCellRenderer<>());
         songList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // Double-click to play song
         songList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     Song sel = songList.getSelectedValue();
-                    if (sel != null) songController.onSongSelected(sel);
+                    if (sel != null) {
+                        songController.playSong(sel);
+                    }
                 }
             }
         });
+        
         JScrollPane scroll = new JScrollPane(songList);
         scroll.setBounds(40, 340, 830, 180);
         jPanel1.add(scroll);
