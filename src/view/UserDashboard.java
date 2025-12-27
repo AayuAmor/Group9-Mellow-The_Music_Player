@@ -6,6 +6,8 @@ package view;
 import Controller.SongController;
 import Model.Song;
 import java.awt.Image;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.*;
 
@@ -17,6 +19,8 @@ import javax.swing.*;
 public class UserDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserDashboard.class.getName());
+    private final SongController songController = new SongController();
+    private List<Song> loadedSongs;
 
     /**
      * Creates new form UserDashboard
@@ -30,10 +34,8 @@ public class UserDashboard extends javax.swing.JFrame {
             Userdisplay.setText("Hello, " + session.getUsername());
         }
         
-        SongController controller = new SongController();
-        List<Song> songs = controller.getAllLocalSongs();
-
-        loadSongsToUI(songs);
+        // Prompt user to select a music folder using the search button
+        // Songs will be loaded after folder selection
 
     }
 
@@ -135,6 +137,7 @@ public class UserDashboard extends javax.swing.JFrame {
         searchBtn.setBackground(new java.awt.Color(197, 191, 191));
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
         searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
         jPanel1.add(searchBtn);
         searchBtn.setBounds(310, 50, 70, 30);
 
@@ -341,16 +344,19 @@ public class UserDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchBarActionPerformed
 
+<<<<<<< HEAD
+=======
+    private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
+        playButtonIndex(1);
+    }//GEN-LAST:event_Recent2ActionPerformed
+
+>>>>>>> now_playing_feat
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(1);
     }//GEN-LAST:event_Recs3ActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
-        // TODO add your handling code here:
-        Playlist Playlist = new Playlist();
+        Playlist Playlist = new Playlist(songController);
         Playlist.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_PlaylistActionPerformed
@@ -397,11 +403,16 @@ public class UserDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AccountActionPerformed
 
+<<<<<<< HEAD
+=======
+    private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
+        // Optional: hook recent items to player
+        playButtonIndex(0);
+    }//GEN-LAST:event_Recent1ActionPerformed
+
+>>>>>>> now_playing_feat
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(0);
     }//GEN-LAST:event_Recs1ActionPerformed
 
     private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs4ActionPerformed
@@ -430,12 +441,10 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_LikedsongsActionPerformed
 
     private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs2ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(3);
     }//GEN-LAST:event_Recs2ActionPerformed
 
+<<<<<<< HEAD
     private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Likedsongs1ActionPerformed
@@ -446,6 +455,11 @@ public class UserDashboard extends javax.swing.JFrame {
         AllSongs.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+=======
+    private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
+        playButtonIndex(2);
+    }//GEN-LAST:event_Recent3ActionPerformed
+>>>>>>> now_playing_feat
 
     /**
      * @param args the command line arguments
@@ -510,10 +524,11 @@ public class UserDashboard extends javax.swing.JFrame {
 
 private void loadSongsToUI(List<Song> songs) {
     JButton[] recButtons = {Recs1, Recs3, Recs4, Recs2};
-
+    loadedSongs = songs;
     for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
         Song song = songs.get(i);
-        recButtons[i].setText(song.getTitle() + " - " + song.getArtist());
+        String duration = String.format("%d:%02d", song.getDurationSeconds()/60, song.getDurationSeconds()%60);
+        recButtons[i].setText(song.getTitle() + " - " + song.getArtist() + " (" + duration + ")");
 
         // Load image
         ImageIcon icon;
@@ -528,6 +543,24 @@ private void loadSongsToUI(List<Song> songs) {
         recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
         recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
     }
+}
+
+private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    int res = chooser.showOpenDialog(this);
+    if (res == JFileChooser.APPROVE_OPTION) {
+        File selected = chooser.getSelectedFile();
+        Path root = selected.toPath();
+        songController.loadSongs(root);
+        loadSongsToUI(songController.getSongs());
+    }
+}
+
+private void playButtonIndex(int idx) {
+    if (loadedSongs == null || idx < 0 || idx >= loadedSongs.size()) return;
+    Song s = loadedSongs.get(idx);
+    songController.onSongSelected(s);
 }
 
     
