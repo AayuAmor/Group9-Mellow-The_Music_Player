@@ -29,6 +29,8 @@ public class UserDashboard extends javax.swing.JFrame {
      */
     public UserDashboard() {
         initComponents();
+        setRecentlyPlayedColumnWidths();
+        jTable1.setFillsViewportHeight(true);
         
         // Display logged-in username
         Model.UserSession session = Model.UserSession.getInstance();
@@ -121,6 +123,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2 = new javax.swing.JButton();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         Recs4 = new javax.swing.JButton();
@@ -258,7 +261,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(320, 350, 150, 150);
+        Recs1.setBounds(320, 330, 170, 180);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -271,7 +274,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(560, 350, 150, 150);
+        Recs3.setBounds(530, 330, 180, 180);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -314,7 +317,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(790, 350, 150, 150);
+        Recs2.setBounds(750, 330, 180, 180);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
         jPanel1.add(jLabel11);
@@ -323,22 +326,29 @@ public class UserDashboard extends javax.swing.JFrame {
         jTable1.setBackground(new java.awt.Color(225, 223, 223));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Title", "Artist", "Duration"
+                "SN", "Title", "Artist", "Duration"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -350,6 +360,7 @@ public class UserDashboard extends javax.swing.JFrame {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jPanel1.add(jScrollPane1);
@@ -549,6 +560,7 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JPopupMenu jPopupMenu2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
@@ -596,6 +608,18 @@ private void playButtonIndex(int idx) {
     songController.onSongSelected(s);
 }
 
+private void setRecentlyPlayedColumnWidths() {
+    javax.swing.table.TableColumnModel columns = jTable1.getColumnModel();
+    columns.getColumn(0).setMinWidth(35);
+    columns.getColumn(0).setPreferredWidth(45);
+    columns.getColumn(0).setMaxWidth(55);
+    columns.getColumn(1).setPreferredWidth(240);
+    columns.getColumn(2).setPreferredWidth(180);
+    columns.getColumn(3).setMinWidth(60);
+    columns.getColumn(3).setPreferredWidth(70);
+    columns.getColumn(3).setMaxWidth(80);
+}
+
 /**
  * Render recently played songs in the JTable.
  * Displays up to the first 10 songs with Title, Artist, and Duration.
@@ -632,8 +656,7 @@ private void renderRecentlyPlayed(List<Song> songs) {
         int durationSeconds = song.getDurationSeconds();
         String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
         
-        // Add row with exactly 3 columns: Title, Artist, Duration
-        model.addRow(new Object[]{title, artist, duration});
+        model.addRow(new Object[]{i + 1, title, artist, duration});
     }
     
     logger.info("Successfully added " + model.getRowCount() + " rows to Recently Played table.");

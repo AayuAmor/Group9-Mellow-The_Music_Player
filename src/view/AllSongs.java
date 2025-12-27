@@ -28,6 +28,7 @@ public class AllSongs extends javax.swing.JFrame {
         
         // Fetch all songs from SongController and populate table
         loadAllSongs();
+        setAllSongsColumnWidths();
         
         // Add mouse listener for song selection
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -116,24 +117,31 @@ public class AllSongs extends javax.swing.JFrame {
         jTable2.setBackground(new java.awt.Color(221, 219, 219));
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-                "Title", "Artist", "Duration"
+                "SN", "Title", "Artist", "Duration"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -145,6 +153,7 @@ public class AllSongs extends javax.swing.JFrame {
             jTable2.getColumnModel().getColumn(0).setResizable(false);
             jTable2.getColumnModel().getColumn(1).setResizable(false);
             jTable2.getColumnModel().getColumn(2).setResizable(false);
+            jTable2.getColumnModel().getColumn(3).setResizable(false);
         }
 
         jScrollPane2.setViewportView(jScrollPane3);
@@ -297,13 +306,26 @@ public class AllSongs extends javax.swing.JFrame {
         }
         
         // Populate table with all songs (3 columns: Title, Artist, Duration)
-        for (Song song : allSongs) {
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
             String title = song.getTitle();
             String artist = song.getArtist();
             int durationSeconds = song.getDurationSeconds();
             String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
             
-            model.addRow(new Object[]{title, artist, duration});
+            model.addRow(new Object[]{i + 1, title, artist, duration});
         }
+    }
+
+    private void setAllSongsColumnWidths() {
+        javax.swing.table.TableColumnModel columns = jTable2.getColumnModel();
+        columns.getColumn(0).setMinWidth(35);
+        columns.getColumn(0).setPreferredWidth(45);
+        columns.getColumn(0).setMaxWidth(55);
+        columns.getColumn(1).setPreferredWidth(240);
+        columns.getColumn(2).setPreferredWidth(180);
+        columns.getColumn(3).setMinWidth(60);
+        columns.getColumn(3).setPreferredWidth(70);
+        columns.getColumn(3).setMaxWidth(80);
     }
 }
