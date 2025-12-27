@@ -5,6 +5,7 @@
 package view;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 import java.io.File;
 import javafx.application.Platform;
@@ -12,15 +13,28 @@ import javafx.embed.swing.JFXPanel;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 >>>>>>> now_playing_feat
+=======
+import Controller.PlayerController;
+import Model.PlaySource;
+import Model.Song;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
 import javax.swing.ImageIcon;
+import service.PlaybackManager;
+import utils.NowPlayingState;
+import utils.NowPlayingState.NowPlayingListener;
 
 /**
- *
- * @author Asus
+ * Player UI - Singleton pattern ensures only one player window exists
+ * Displays metadata and controls for the currently playing song
+ * Observes NowPlayingState for automatic UI updates
  */
-public class Player extends javax.swing.JFrame {
+public class Player extends javax.swing.JFrame implements NowPlayingListener {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Player.class.getName());
+<<<<<<< HEAD
 <<<<<<< HEAD
 =======
     
@@ -28,96 +42,166 @@ public class Player extends javax.swing.JFrame {
     
     private boolean fxInitialized = false;
 >>>>>>> now_playing_feat
+=======
+    private static Player instance;
+    
+    private final PlayerController playerController;
+    private final PlaybackManager playbackManager;
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
     private boolean isPlaying = false;
+    private PlaySource currentPlaySource = PlaySource.DASHBOARD;
 
     /**
-     * Creates new form Player
+     * Get singleton instance - creates if not exists
      */
-    public Player() {
+    public static synchronized Player getInstance() {
+        if (instance == null) {
+            instance = new Player();
+        }
+        return instance;
+    }
+
+    /**
+     * Set the play source (where playback was initiated from)
+     * Used by back button to navigate to correct screen
+     */
+    public void setPlaySource(PlaySource source) {
+        if (source != null) {
+            this.currentPlaySource = source;
+            NowPlayingState.getInstance().setPlaySource(source);
+            logger.info(() -> "Player source set to: " + source.name());
+        }
+    }
+
+    /**
+     * Private constructor - use getInstance() instead
+     */
+    private Player() {
         initComponents();
-        attachActionListeners();
+        playerController = PlayerController.getInstance();
+        playbackManager = PlaybackManager.getInstance();
+        
+        // Initialize PlayPausebtn with play icon
+        setPlayPauseIcon(false);
+        isPlaying = false;
+        
+        // Set window properties
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
+        
+        // Listen for now playing changes
+        NowPlayingState.getInstance().addListener(this);
     }
 
-    private void ensureJavaFxInitialized() {
-        if (!fxInitialized) {
-            new JFXPanel();
-            fxInitialized = true;
+    /**
+     * Called when now playing song changes
+     */
+    @Override
+    public void onNowPlayingChanged(Song song, boolean playing) {
+        if (song == null) {
+            return;
+        }
+        
+        // Update metadata display
+        updateMetadata(song);
+        
+        // Update button state
+        isPlaying = playing;
+        setPlayPauseIcon(playing);
+        
+        // Reset Like button to default state when song changes
+        // TODO: Check database if song is actually liked and set accordingly
+        likeSongBtn.setBackground(new java.awt.Color(164, 183, 203)); // Default color
+        likeSongBtn.setOpaque(true);
+        likeSongBtn.setBorderPainted(false);
+        
+        // Update loop button state
+        boolean looping = playbackManager.isLooping();
+        if (looping) {
+            loopSongBtn.setBackground(new java.awt.Color(100, 100, 50)); // Dark when active
+            loopSongBtn.setOpaque(true);
+            loopSongBtn.setBorderPainted(false);
+        } else {
+            loopSongBtn.setBackground(new java.awt.Color(164, 183, 203)); // Default
+            loopSongBtn.setOpaque(true);
+            loopSongBtn.setBorderPainted(false);
         }
     }
-
     
-    public void testPlay() {
+    /**
+     * Update metadata display for the given song
+     */
+    private void updateMetadata(Song song) {
+        albumNameMetadata.setText(song.getAlbum() != null ? song.getAlbum() : "Unknown Album");
+        artistMetadata.setText(song.getArtist());
         
-        String mp3Path = "C:/Users/aayus/Music/01 - RM2 - Baby Doll [DJMaza.Info](01).mp3";
-        File mp3File = new File(mp3Path);
-
+        int durationSeconds = song.getDurationSeconds();
+        String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+        durationMetadata.setText(duration);
         
-        if (!mp3File.exists()) {
-            String altPath = mp3Path.replace(" .mp3", ".mp3");
-            File altFile = new File(altPath);
-            if (altFile.exists()) {
-                System.out.println("Given path not found; using fallback without space: " + altPath);
-                mp3File = altFile;
+        // Load album art if available
+        if (song.getImagePath() != null) {
+            loadAlbumArt(song.getImagePath());
+        } else {
+            loadDefaultAlbumArt();
+        }
+    }
+    
+    /**
+     * Safely load album art from path
+     */
+    private void loadAlbumArt(String imagePath) {
+        try {
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                URL imageUrl = imageFile.toURI().toURL();
+                if (imageUrl != null) {
+                    ImageIcon icon = new ImageIcon(imageUrl);
+                    int width = songImagePanel.getWidth();
+                    int height = songImagePanel.getHeight();
+                    if (width > 0 && height > 0) {
+                        // Scale image to fit panel
+                        icon.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+                    }
+                } else {
+                    loadDefaultAlbumArt();
+                }
             } else {
-                System.out.println("MP3 file not found!");
-                System.out.println("Checked: " + mp3File.getAbsolutePath());
-                System.out.println("Also tried: " + altFile.getAbsolutePath());
-                return;
+                loadDefaultAlbumArt();
             }
+        } catch (IOException e) {
+            logger.log(java.util.logging.Level.WARNING, "Failed to load album art", e);
+            loadDefaultAlbumArt();
         }
-
-        
-        ensureJavaFxInitialized();
-
-        
-        System.out.println("Using file: " + mp3File.getAbsolutePath());
-        final String mediaUri = mp3File.toURI().toString();
-        System.out.println("Using URI:  " + mediaUri);
-
-        Platform.runLater(() -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.stop();
-            }
-            Media media = new Media(mediaUri);
-            mediaPlayer = new MediaPlayer(media);
-            mediaPlayer.setVolume(1.0);
-            System.out.println("Playing test song...");
-            mediaPlayer.play();
-        });
     }
-
     
-    public void playSong() {
-        
-        testPlay();
+    /**
+     * Load default placeholder album art
+     */
+    private void loadDefaultAlbumArt() {
+        // Default placeholder - can be enhanced
     }
-
-    public void pauseSong() {
-        ensureJavaFxInitialized();
-        Platform.runLater(() -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.pause();
+    
+    /**
+     * Safely set play/pause button icon based on state
+     */
+    private void setPlayPauseIcon(boolean playing) {
+        try {
+            URL iconUrl;
+            if (playing) {
+                iconUrl = getClass().getResource("/Images/pause.png");
+            } else {
+                iconUrl = getClass().getResource("/Images/icon-park-outline_play.png");
             }
-        });
-    }
-
-    public void nextSong() {
-        
-        System.out.println("Next song (placeholder)");
-    }
-
-    public void prevSong() {
-        
-        System.out.println("Previous song (placeholder)");
-    }
-
-    private void attachActionListeners() {
-        
-        playBtn.addActionListener(e -> playSong());
-        nextBtn.addActionListener(e -> nextSong());
-        previousBtn.addActionListener(e -> prevSong());
-        // If a dedicated pause button is added later:
-        // pauseBtn.addActionListener(e -> pauseSong());
+            
+            if (iconUrl != null) {
+                PlayPausebtn.setIcon(new ImageIcon(iconUrl));
+            } else {
+                logger.warning("Icon resource not found");
+            }
+        } catch (Exception e) {
+            logger.warning(() -> "Failed to load icon: " + e);
+        }
     }
 
     /**
@@ -125,7 +209,6 @@ public class Player extends javax.swing.JFrame {
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
      */
-    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -140,6 +223,7 @@ public class Player extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
 <<<<<<< HEAD
+<<<<<<< HEAD
         jPanel5 = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
@@ -147,18 +231,24 @@ public class Player extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 =======
+=======
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
         songImagePanel = new javax.swing.JPanel();
         albumNameMetadata = new javax.swing.JLabel();
-        genreMetadata = new javax.swing.JLabel();
+        durationMetadata = new javax.swing.JLabel();
         artistMetadata = new javax.swing.JLabel();
         buttonsHolderPanel = new javax.swing.JPanel();
         addToPlaylistBtn = new javax.swing.JButton();
         loopSongBtn = new javax.swing.JButton();
-        playBtn = new javax.swing.JButton();
+        PlayPausebtn = new javax.swing.JButton();
         nextBtn = new javax.swing.JButton();
         previousBtn = new javax.swing.JButton();
+        likeSongBtn = new javax.swing.JButton();
         playingSongImagePanel = new javax.swing.JPanel();
+<<<<<<< HEAD
 >>>>>>> now_playing_feat
+=======
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -213,9 +303,9 @@ public class Player extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(78, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(68, 68, 68))
+                .addGap(137, 137, 137))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,10 +316,10 @@ public class Player extends javax.swing.JFrame {
         );
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel2.setText("Album Name:");
+        jLabel2.setText("Album:");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel3.setText("Genre:");
+        jLabel3.setText("Duration:");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel4.setText("Artist:");
@@ -238,16 +328,16 @@ public class Player extends javax.swing.JFrame {
         songImagePanel.setLayout(songImagePanelLayout);
         songImagePanelLayout.setHorizontalGroup(
             songImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 111, Short.MAX_VALUE)
         );
         songImagePanelLayout.setVerticalGroup(
             songImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGap(0, 112, Short.MAX_VALUE)
         );
 
-        albumNameMetadata.setText("album name");
+        albumNameMetadata.setText("song name");
 
-        genreMetadata.setText("genre");
+        durationMetadata.setText("duration");
 
         artistMetadata.setText("artist");
 
@@ -255,29 +345,26 @@ public class Player extends javax.swing.JFrame {
         songsMetadataPanel.setLayout(songsMetadataPanelLayout);
         songsMetadataPanelLayout.setHorizontalGroup(
             songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(songsMetadataPanelLayout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, songsMetadataPanelLayout.createSequentialGroup()
-                        .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(songsMetadataPanelLayout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(albumNameMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, songsMetadataPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(artistMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGroup(songsMetadataPanelLayout.createSequentialGroup()
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(genreMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, songsMetadataPanelLayout.createSequentialGroup()
-                        .addComponent(songImagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(76, 76, 76))))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(songsMetadataPanelLayout.createSequentialGroup()
+                        .addComponent(durationMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 87, Short.MAX_VALUE))
+                    .addComponent(artistMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(songsMetadataPanelLayout.createSequentialGroup()
+                        .addComponent(albumNameMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, songsMetadataPanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(songImagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(119, 119, 119))
         );
         songsMetadataPanelLayout.setVerticalGroup(
             songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -285,22 +372,19 @@ public class Player extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(songImagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(songsMetadataPanelLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel2))
-                    .addGroup(songsMetadataPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(albumNameMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel3)
-                    .addComponent(genreMetadata, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
+                .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(albumNameMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(durationMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(songsMetadataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(artistMetadata))
-                .addGap(0, 23, Short.MAX_VALUE))
+                    .addComponent(artistMetadata, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(0, 15, Short.MAX_VALUE))
         );
 
         buttonsHolderPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(147, 176, 206), 10, true));
@@ -310,22 +394,31 @@ public class Player extends javax.swing.JFrame {
         loopSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
 
 <<<<<<< HEAD
+<<<<<<< HEAD
         PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
         PlayPausebtn.addActionListener(this::PlayPausebtnActionPerformed);
 =======
         playBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
         playBtn.addActionListener(this::playBtnActionPerformed);
 >>>>>>> now_playing_feat
+=======
+        PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
+        PlayPausebtn.addActionListener(this::PlayPausebtnActionPerformed);
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
 
         nextBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/right arrow.png"))); // NOI18N
 
         previousBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/backarrow.png"))); // NOI18N
+
+        likeSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/likedSongsBtn_icon.png"))); // NOI18N
+        likeSongBtn.addActionListener(this::likeSongBtnActionPerformed);
 
         javax.swing.GroupLayout buttonsHolderPanelLayout = new javax.swing.GroupLayout(buttonsHolderPanel);
         buttonsHolderPanel.setLayout(buttonsHolderPanelLayout);
         buttonsHolderPanelLayout.setHorizontalGroup(
             buttonsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, buttonsHolderPanelLayout.createSequentialGroup()
+<<<<<<< HEAD
                 .addContainerGap(103, Short.MAX_VALUE)
 <<<<<<< HEAD
                 .addComponent(jButton4)
@@ -334,16 +427,23 @@ public class Player extends javax.swing.JFrame {
 =======
                 .addComponent(previousBtn)
 >>>>>>> now_playing_feat
+=======
+                .addGap(17, 17, 17)
+                .addComponent(likeSongBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addComponent(previousBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
                 .addGap(18, 18, 18)
-                .addComponent(playBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(PlayPausebtn, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(nextBtn)
-                .addGap(60, 60, 60)
-                .addComponent(addToPlaylistBtn)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(nextBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(addToPlaylistBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(loopSongBtn)
-                .addGap(17, 17, 17))
+                .addGap(11, 11, 11))
         );
+<<<<<<< HEAD
 <<<<<<< HEAD
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -353,28 +453,37 @@ public class Player extends javax.swing.JFrame {
             .addComponent(jButton3)
             .addComponent(jButton4)
 =======
+=======
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
         buttonsHolderPanelLayout.setVerticalGroup(
             buttonsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(playBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(buttonsHolderPanelLayout.createSequentialGroup()
-                .addGroup(buttonsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addToPlaylistBtn)
-                    .addComponent(loopSongBtn)
-                    .addComponent(nextBtn)
-                    .addComponent(previousBtn))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(buttonsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(buttonsHolderPanelLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(likeSongBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(buttonsHolderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(addToPlaylistBtn)
+                        .addComponent(loopSongBtn)
+                        .addComponent(nextBtn)
+                        .addComponent(previousBtn)
+                        .addComponent(PlayPausebtn)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout playingSongImagePanelLayout = new javax.swing.GroupLayout(playingSongImagePanel);
         playingSongImagePanel.setLayout(playingSongImagePanelLayout);
         playingSongImagePanelLayout.setHorizontalGroup(
             playingSongImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 390, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         playingSongImagePanelLayout.setVerticalGroup(
             playingSongImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 269, Short.MAX_VALUE)
+<<<<<<< HEAD
 >>>>>>> now_playing_feat
+=======
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -384,10 +493,10 @@ public class Player extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(139, 139, 139)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(buttonsHolderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(playingSongImagePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 181, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonsHolderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(playingSongImagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 95, Short.MAX_VALUE)
                 .addComponent(songsMetadataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -421,35 +530,93 @@ public class Player extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
-        // TODO add your handling code here:
-        likedsong likedsong = new likedsong();
-        likedsong.setVisible(true);
-        this.dispose();
+        // Just hide the Player window - don't create new windows or dispose
+        // The parent view (Dashboard, AllSongs, etc.) is already open in background
+        this.setVisible(false);
     }//GEN-LAST:event_backBtnActionPerformed
 
-    private void playBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_playBtnActionPerformed
-        // TODO add your handling code here:
-        if (isPlaying) {
-            playBtn.setIcon(new ImageIcon(getClass().getResource("/images/pause.png")));
-            System.out.println("Paused");
-        } else {
-           playBtn.setIcon(new ImageIcon(getClass().getResource("/Images/icon-park-outline_play.png")));
-            System.out.println("Playing");
-        }
-        isPlaying = !isPlaying;
-    }//GEN-LAST:event_playBtnActionPerformed
-
     private void PlayPausebtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlayPausebtnActionPerformed
-        // TODO add your handling code here:
-        if (isPlaying) {
-            PlayPausebtn.setIcon(new ImageIcon(getClass().getResource("/images/play.png")));
-            System.out.println("Paused");
-        } else {
-            PlayPausebtn.setIcon(new ImageIcon(getClass().getResource("/Images/icon-park-outline_play.png")));
-            System.out.println("Playing");
-        }
-        isPlaying = !isPlaying;
+        // Toggle play/pause through PlaybackManager
+        playbackManager.togglePlayPause();
+        logger.info("Play/Pause toggled via UI button");
     }//GEN-LAST:event_PlayPausebtnActionPerformed
+
+    private void likeSongBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_likeSongBtnActionPerformed
+        // Like current song - add to liked songs
+        Song currentSong = playbackManager.getCurrentSong();
+        if (currentSong != null) {
+            logger.info("Liked song: " + currentSong.getTitle());
+            
+            // Toggle like state by changing button background color
+            boolean isLiked = likeSongBtn.getBackground().equals(new java.awt.Color(100, 50, 100));
+            if (!isLiked) {
+                // Like the song - set darker background
+                likeSongBtn.setBackground(new java.awt.Color(100, 50, 100)); // Dark purple
+                likeSongBtn.setOpaque(true);
+                likeSongBtn.setBorderPainted(false);
+            } else {
+                // Unlike the song - restore default background
+                likeSongBtn.setBackground(new java.awt.Color(164, 183, 203)); // Default
+                likeSongBtn.setOpaque(true);
+                likeSongBtn.setBorderPainted(false);
+            }
+            
+            // TODO: Persist like to database or liked songs list
+        } else {
+            logger.warning("No song currently playing to like");
+        }
+    }//GEN-LAST:event_likeSongBtnActionPerformed
+    
+    /**
+     * Handle next button click - play next song in playlist
+     */
+    private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        playbackManager.playNext();
+        logger.info("Next button clicked");
+    }
+    
+    /**
+     * Handle previous button click - play previous song in playlist
+     */
+    private void previousBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        playbackManager.playPrevious();
+        logger.info("Previous button clicked");
+    }
+    
+    /**
+     * Handle loop button click - toggle loop mode
+     */
+    private void loopSongBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        playbackManager.toggleLoop();
+        boolean looping = playbackManager.isLooping();
+        logger.info("Loop mode: " + (looping ? "ON" : "OFF"));
+        
+        // Update button appearance dynamically - change background color when active
+        if (looping) {
+            // Loop is ON - set darker background color
+            loopSongBtn.setBackground(new java.awt.Color(100, 100, 50)); // Dark yellow/brown
+            loopSongBtn.setOpaque(true);
+            loopSongBtn.setBorderPainted(false);
+        } else {
+            // Loop is OFF - restore default background
+            loopSongBtn.setBackground(new java.awt.Color(164, 183, 203)); // Default color
+            loopSongBtn.setOpaque(true);
+            loopSongBtn.setBorderPainted(false);
+        }
+    }
+    
+    /**
+     * Handle add to playlist button click
+     */
+    private void addToPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {
+        Song currentSong = playbackManager.getCurrentSong();
+        if (currentSong != null) {
+            logger.info("Adding to playlist: " + currentSong.getTitle());
+            // TODO: Open playlist selection dialog or add to default playlist
+        } else {
+            logger.warning("No song currently playing to add");
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -478,6 +645,7 @@ public class Player extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
 <<<<<<< HEAD
+<<<<<<< HEAD
     private javax.swing.JButton PlayPausebtn;
     private javax.swing.JButton SongPlaying;
     private javax.swing.JButton jButton1;
@@ -487,13 +655,20 @@ public class Player extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
 =======
+=======
+    private javax.swing.JButton PlayPausebtn;
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
     private javax.swing.JButton addToPlaylistBtn;
     private javax.swing.JLabel albumNameMetadata;
     private javax.swing.JLabel artistMetadata;
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel buttonsHolderPanel;
+<<<<<<< HEAD
     private javax.swing.JLabel genreMetadata;
 >>>>>>> now_playing_feat
+=======
+    private javax.swing.JLabel durationMetadata;
+>>>>>>> 1f46fbe10af77c2dcec1176cf7fbb18b2c4b2b74
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -502,9 +677,9 @@ public class Player extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JButton likeSongBtn;
     private javax.swing.JButton loopSongBtn;
     private javax.swing.JButton nextBtn;
-    private javax.swing.JButton playBtn;
     private javax.swing.JPanel playingSongImagePanel;
     private javax.swing.JButton previousBtn;
     private javax.swing.JPanel songImagePanel;

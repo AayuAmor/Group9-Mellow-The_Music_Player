@@ -4,19 +4,45 @@
  */
 package view;
 
+import Model.PlaySource;
+import Model.Song;
+import java.util.ArrayList;
+import java.util.List;
+import service.PlaybackManager;
+
 /**
+ * Liked Songs view - displays user's favorited songs
+ * Clicking a song sends full playlist to PlaybackManager with LIKED_SONGS source
  *
  * @author rohit
  */
 public class likedsong extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(likedsong.class.getName());
+    private List<Song> likedSongs = new ArrayList<>();
 
     /**
      * Creates new form likedsong
      */
     public likedsong() {
         initComponents();
+        initializeLikedSongs();
+    }
+    
+    /**
+     * Initialize the list of liked songs (placeholder data)
+     * TODO: Load from database in production
+     */
+    private void initializeLikedSongs() {
+        // This is placeholder data - in production, load from database/file
+        // For now, create dummy songs for demonstration
+        likedSongs.add(new Song("Die With A Smile", "Lady Gaga, Bruno Mars", "Die With A Smile", 213, ""));
+        likedSongs.add(new Song("Espresso", "Sabrina Carpenter", "Short n' Sweet", 194, ""));
+        likedSongs.add(new Song("Song 3", "Artist 3", "Album 3", 200, ""));
+        likedSongs.add(new Song("Song 4", "Artist 4", "Album 4", 210, ""));
+        likedSongs.add(new Song("Song 5", "Artist 5", "Album 5", 205, ""));
+        likedSongs.add(new Song("Song 6", "Artist 6", "Album 6", 215, ""));
+        likedSongs.add(new Song("Song 7", "Artist 7", "Album 7", 200, ""));
     }
 
     /**
@@ -237,23 +263,17 @@ public class likedsong extends javax.swing.JFrame {
     }//GEN-LAST:event_search1ActionPerformed
 
     private void song3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song3ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 6
+        playSongFromLiked(5);
     }//GEN-LAST:event_song3ActionPerformed
 
     private void song6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song6ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 7
+        playSongFromLiked(6);
     }//GEN-LAST:event_song6ActionPerformed
 
     private void BackbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackbtnActionPerformed
         // TODO add your handling code here:
-        UserDashboard UserDashboard = new UserDashboard();
-        UserDashboard.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_BackbtnActionPerformed
 
@@ -272,39 +292,49 @@ public class likedsong extends javax.swing.JFrame {
     }//GEN-LAST:event_searchFocusLost
 
     private void song1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song1ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 1
+        playSongFromLiked(0);
     }//GEN-LAST:event_song1ActionPerformed
 
     private void song2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song2ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();        
+        // Play liked song 2
+        playSongFromLiked(1);
     }//GEN-LAST:event_song2ActionPerformed
 
     private void song4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song4ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 3
+        playSongFromLiked(2);
     }//GEN-LAST:event_song4ActionPerformed
 
     private void song5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song5ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 4
+        playSongFromLiked(3);
     }//GEN-LAST:event_song5ActionPerformed
 
     private void song7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_song7ActionPerformed
-        // TODO add your handling code here:
-        Player Player = new Player(); 
-        Player.setVisible(true);
-        this.dispose();
+        // Play liked song 5
+        playSongFromLiked(4);
     }//GEN-LAST:event_song7ActionPerformed
+    
+    /**
+     * Helper method to play a liked song at given index
+     * Sends full liked songs list and index to PlaybackManager
+     */
+    private void playSongFromLiked(int index) {
+        if (index >= 0 && index < likedSongs.size()) {
+            Song selectedSong = likedSongs.get(index);
+            
+            // Send full liked songs list and selected index to PlaybackManager
+            PlaybackManager.getInstance().setPlaylist(likedSongs, index, PlaySource.LIKED_SONGS);
+            
+            // Open Player UI with correct play source
+            Player playerWindow = Player.getInstance();
+            playerWindow.setPlaySource(PlaySource.LIKED_SONGS);
+            playerWindow.setVisible(true);
+            
+            logger.info("Playing from Liked Songs: " + selectedSong.getTitle());
+        }
+    }
 
     /**
      * @param args the command line arguments

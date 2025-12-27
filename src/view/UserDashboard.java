@@ -4,6 +4,7 @@
  */
 package view;
 import Controller.SongController;
+import Model.PlaySource;
 import Model.Song;
 import java.awt.Image;
 import java.io.File;
@@ -11,13 +12,15 @@ import java.nio.file.Path;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import service.PlaybackManager;
+import utils.NowPlayingState;
 
 
 /**
  *
  * @author Asus
  */
-public class UserDashboard extends javax.swing.JFrame {
+public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayingState.NowPlayingListener {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserDashboard.class.getName());
     private final SongController songController = new SongController();
@@ -72,14 +75,27 @@ public class UserDashboard extends javax.swing.JFrame {
             logger.warning("No songs found in cache. Music directory may be empty or inaccessible.");
         }
         
+        // Register as listener for now playing changes
+        NowPlayingState.getInstance().addListener(this);
+        
         // Add mouse click listener to recently played table
+        // When user clicks a song: load full playlist into PlaybackManager and start playback
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = jTable1.rowAtPoint(evt.getPoint());
                 if (row >= 0 && loadedSongs != null && row < loadedSongs.size()) {
                     Song selectedSong = loadedSongs.get(row);
-                    songController.playSong(selectedSong);
+                    
+                    // Send full playlist and selected index to PlaybackManager
+                    PlaybackManager.getInstance().setPlaylist(loadedSongs, row, PlaySource.DASHBOARD);
+                    
+                    // Open Player UI with correct play source
+                    Player playerWindow = Player.getInstance();
+                    playerWindow.setPlaySource(PlaySource.DASHBOARD);
+                    playerWindow.setVisible(true);
+                    
+                    logger.info("Playing from Dashboard: " + selectedSong.getTitle());
                 }
             }
         });
@@ -179,7 +195,7 @@ public class UserDashboard extends javax.swing.JFrame {
         );
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(310, 140, 650, 130);
+        jPanel2.setBounds(310, 100, 650, 120);
 
         searchBtn.setBackground(new java.awt.Color(197, 191, 191));
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
@@ -243,7 +259,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Reccomendation.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         Reccomendation.setText("Reccomendation");
         jPanel1.add(Reccomendation);
-        Reccomendation.setBounds(310, 310, 150, 20);
+        Reccomendation.setBounds(310, 250, 150, 20);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         jLabel1.setText("Recently Played");
@@ -261,7 +277,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(320, 330, 170, 180);
+        Recs1.setBounds(300, 300, 200, 210);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -274,7 +290,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(530, 330, 180, 180);
+        Recs3.setBounds(520, 300, 210, 210);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -317,7 +333,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(750, 330, 180, 180);
+        Recs2.setBounds(750, 300, 200, 210);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
         jPanel1.add(jLabel11);
@@ -355,13 +371,14 @@ public class UserDashboard extends javax.swing.JFrame {
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
+
+        jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 560, 590, 130);
@@ -695,5 +712,17 @@ private void renderRecentlyPlayed(List<Song> songs) {
     logger.info("Successfully added " + model.getRowCount() + " rows to Recently Played table.");
 }
 
-    
+    /**
+     * Listen for now playing changes to update UI
+     */
+    @Override
+    public void onNowPlayingChanged(Song song, boolean playing) {
+        if (song == null) {
+            logger.fine("Playback stopped");
+            return;
+        }
+        
+        logger.info("Now playing: " + song.getTitle() + " - " + song.getArtist());
+        // UI updates can be added here if needed (e.g., highlight currently playing song)
+    }
 }

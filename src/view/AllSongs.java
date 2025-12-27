@@ -5,15 +5,19 @@
 package view;
 
 import Controller.SongController;
+import Model.PlaySource;
 import Model.Song;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import service.PlaybackManager;
+import utils.NowPlayingState;
+import utils.NowPlayingState.NowPlayingListener;
 
 /**
  *
  * @author Asus
  */
-public class AllSongs extends javax.swing.JFrame {
+public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AllSongs.class.getName());
     private final SongController songController;
@@ -30,14 +34,27 @@ public class AllSongs extends javax.swing.JFrame {
         loadAllSongs();
         setAllSongsColumnWidths();
         
+        // Register as listener for now playing changes
+        NowPlayingState.getInstance().addListener(this);
+        
         // Add mouse listener for song selection
+        // When user clicks a song: load full playlist into PlaybackManager and start playback
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 int row = jTable2.rowAtPoint(evt.getPoint());
                 if (row >= 0 && allSongs != null && row < allSongs.size()) {
                     Song selectedSong = allSongs.get(row);
-                    songController.playSong(selectedSong);
+                    
+                    // Send full playlist and selected index to PlaybackManager
+                    PlaybackManager.getInstance().setPlaylist(allSongs, row, PlaySource.ALL_SONGS);
+                    
+                    // Open Player UI with correct play source
+                    Player playerWindow = Player.getInstance();
+                    playerWindow.setPlaySource(PlaySource.ALL_SONGS);
+                    playerWindow.setVisible(true);
+                    
+                    logger.info("Playing from AllSongs: " + selectedSong.getTitle());
                 }
             }
         });
@@ -327,5 +344,19 @@ public class AllSongs extends javax.swing.JFrame {
         columns.getColumn(3).setMinWidth(60);
         columns.getColumn(3).setPreferredWidth(70);
         columns.getColumn(3).setMaxWidth(80);
+    }
+
+    /**
+     * Listen for now playing changes to update UI
+     */
+    @Override
+    public void onNowPlayingChanged(Song song, boolean playing) {
+        if (song == null) {
+            logger.fine("Playback stopped");
+            return;
+        }
+        
+        logger.info("Now playing: " + song.getTitle() + " - " + song.getArtist());
+        // UI updates can be added here if needed (e.g., highlight currently playing song)
     }
 }
