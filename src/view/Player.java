@@ -158,7 +158,7 @@ public class Player extends javax.swing.JFrame {
         backBtn.setText("←Back");
         backBtn.addActionListener(this::backBtnActionPerformed);
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 2, 24)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Player");
 
@@ -169,7 +169,7 @@ public class Player extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(backBtn)
-                .addGap(38, 38, 38)
+                .addGap(58, 58, 58)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
