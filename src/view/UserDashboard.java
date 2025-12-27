@@ -6,8 +6,11 @@ package view;
 import Controller.SongController;
 import Model.Song;
 import java.awt.Image;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 /**
@@ -17,12 +20,17 @@ import javax.swing.*;
 public class UserDashboard extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserDashboard.class.getName());
+    private final SongController songController = new SongController();
+    private List<Song> loadedSongs;
+    private static boolean songsLoadedOnce = false;
 
     /**
      * Creates new form UserDashboard
      */
     public UserDashboard() {
         initComponents();
+        setRecentlyPlayedColumnWidths();
+        jTable1.setFillsViewportHeight(true);
         
         // Display logged-in username
         Model.UserSession session = Model.UserSession.getInstance();
@@ -30,10 +38,51 @@ public class UserDashboard extends javax.swing.JFrame {
             Userdisplay.setText("Hello, " + session.getUsername());
         }
         
-        SongController controller = new SongController();
-        List<Song> songs = controller.getAllLocalSongs();
-
-        loadSongsToUI(songs);
+        // STEP 1: Load local songs once during application startup
+        if (!songsLoadedOnce) {
+            logger.info("Starting to load local songs from Music directory...");
+            
+            // Use dynamic, safe path - NOT hardcoded
+            String musicPath = System.getProperty("user.home") + File.separator + "Music";
+            songController.loadLocalSongsOnce(musicPath);
+            songsLoadedOnce = true;
+            
+            logger.info("Local songs loading completed.");
+        }
+        
+        // STEP 2: Fetch all songs AFTER loading
+        List<Song> allSongs = songController.getAllSongs();
+        logger.info("Total songs fetched from cache: " + (allSongs != null ? allSongs.size() : 0));
+        
+        // STEP 3: Render songs if available
+        if (allSongs != null && !allSongs.isEmpty()) {
+            logger.info("Starting dashboard rendering with " + allSongs.size() + " songs...");
+            
+            // Store in loadedSongs for UI interaction
+            loadedSongs = allSongs;
+            
+            // Render recommendation buttons
+            loadSongsToUI(allSongs);
+            
+            // Render Recently Played table
+            renderRecentlyPlayed(allSongs);
+            
+            logger.info("Dashboard rendering completed.");
+        } else {
+            logger.warning("No songs found in cache. Music directory may be empty or inaccessible.");
+        }
+        
+        // Add mouse click listener to recently played table
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable1.rowAtPoint(evt.getPoint());
+                if (row >= 0 && loadedSongs != null && row < loadedSongs.size()) {
+                    Song selectedSong = loadedSongs.get(row);
+                    songController.playSong(selectedSong);
+                }
+            }
+        });
 
     }
 
@@ -212,7 +261,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(320, 350, 150, 150);
+        Recs1.setBounds(320, 330, 170, 180);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -225,7 +274,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(560, 350, 150, 150);
+        Recs3.setBounds(530, 330, 180, 180);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -268,7 +317,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(790, 350, 150, 150);
+        Recs2.setBounds(750, 330, 180, 180);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
         jPanel1.add(jLabel11);
@@ -277,22 +326,42 @@ public class UserDashboard extends javax.swing.JFrame {
         jTable1.setBackground(new java.awt.Color(225, 223, 223));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-
+                "SN", "Title", "Artist", "Duration"
             }
-        ));
-        jScrollPane2.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        jScrollPane1.setViewportView(jScrollPane2);
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 560, 590, 130);
@@ -341,16 +410,22 @@ public class UserDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchBarActionPerformed
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
+        playButtonIndex(1);
+    }//GEN-LAST:event_Recent2ActionPerformed
+
+>>>>>>> now_playing_feat
+=======
+>>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(1);
     }//GEN-LAST:event_Recs3ActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
-        // TODO add your handling code here:
-        Playlist Playlist = new Playlist();
+        Playlist Playlist = new Playlist(songController);
         Playlist.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_PlaylistActionPerformed
@@ -397,11 +472,19 @@ public class UserDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AccountActionPerformed
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+    private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
+        // Optional: hook recent items to player
+        playButtonIndex(0);
+    }//GEN-LAST:event_Recent1ActionPerformed
+
+>>>>>>> now_playing_feat
+=======
+>>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(0);
     }//GEN-LAST:event_Recs1ActionPerformed
 
     private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs4ActionPerformed
@@ -430,12 +513,13 @@ public class UserDashboard extends javax.swing.JFrame {
     }//GEN-LAST:event_LikedsongsActionPerformed
 
     private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs2ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
+        playButtonIndex(3);
     }//GEN-LAST:event_Recs2ActionPerformed
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Likedsongs1ActionPerformed
@@ -446,6 +530,14 @@ public class UserDashboard extends javax.swing.JFrame {
         AllSongs.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+<<<<<<< HEAD
+=======
+    private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
+        playButtonIndex(2);
+    }//GEN-LAST:event_Recent3ActionPerformed
+>>>>>>> now_playing_feat
+=======
+>>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
 
     /**
      * @param args the command line arguments
@@ -510,10 +602,11 @@ public class UserDashboard extends javax.swing.JFrame {
 
 private void loadSongsToUI(List<Song> songs) {
     JButton[] recButtons = {Recs1, Recs3, Recs4, Recs2};
-
+    loadedSongs = songs;
     for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
         Song song = songs.get(i);
-        recButtons[i].setText(song.getTitle() + " - " + song.getArtist());
+        String duration = String.format("%d:%02d", song.getDurationSeconds()/60, song.getDurationSeconds()%60);
+        recButtons[i].setText(song.getTitle() + " - " + song.getArtist() + " (" + duration + ")");
 
         // Load image
         ImageIcon icon;
@@ -528,6 +621,78 @@ private void loadSongsToUI(List<Song> songs) {
         recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
         recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
     }
+}
+
+private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {
+    JFileChooser chooser = new JFileChooser();
+    chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+    int res = chooser.showOpenDialog(this);
+    if (res == JFileChooser.APPROVE_OPTION) {
+        File selected = chooser.getSelectedFile();
+        Path root = selected.toPath();
+        songController.loadSongs(root);
+        loadSongsToUI(songController.getSongs());
+    }
+}
+
+private void playButtonIndex(int idx) {
+    if (loadedSongs == null || idx < 0 || idx >= loadedSongs.size()) return;
+    Song s = loadedSongs.get(idx);
+    songController.onSongSelected(s);
+}
+
+private void setRecentlyPlayedColumnWidths() {
+    javax.swing.table.TableColumnModel columns = jTable1.getColumnModel();
+    columns.getColumn(0).setMinWidth(35);
+    columns.getColumn(0).setPreferredWidth(45);
+    columns.getColumn(0).setMaxWidth(55);
+    columns.getColumn(1).setPreferredWidth(240);
+    columns.getColumn(2).setPreferredWidth(180);
+    columns.getColumn(3).setMinWidth(60);
+    columns.getColumn(3).setPreferredWidth(70);
+    columns.getColumn(3).setMaxWidth(80);
+}
+
+/**
+ * Render recently played songs in the JTable.
+ * Displays up to the first 10 songs with Title, Artist, and Duration.
+ * Follows MVC principles - View only renders data from Controller.
+ * 
+ * @param songs List of songs to display
+ */
+private void renderRecentlyPlayed(List<Song> songs) {
+    logger.info("renderRecentlyPlayed called with " + (songs != null ? songs.size() : 0) + " songs");
+    
+    // Get the table model
+    DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    
+    // Verify table structure
+    int columnCount = model.getColumnCount();
+    logger.info("JTable column count: " + columnCount);
+    
+    // Clear existing rows
+    model.setRowCount(0);
+    
+    if (songs == null || songs.isEmpty()) {
+        logger.warning("No songs to render in Recently Played table.");
+        return;
+    }
+    
+    // Display up to the first 10 songs
+    int limit = Math.min(10, songs.size());
+    logger.info("Rendering " + limit + " songs in Recently Played table...");
+    
+    for (int i = 0; i < limit; i++) {
+        Song song = songs.get(i);
+        String title = song.getTitle();
+        String artist = song.getArtist();
+        int durationSeconds = song.getDurationSeconds();
+        String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+        
+        model.addRow(new Object[]{i + 1, title, artist, duration});
+    }
+    
+    logger.info("Successfully added " + model.getRowCount() + " rows to Recently Played table.");
 }
 
     

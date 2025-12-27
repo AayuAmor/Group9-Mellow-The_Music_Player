@@ -4,39 +4,62 @@
  */
 package Dao;
 import Model.Song;
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import utils.MetadataReader;
 /**
  *
  * @author oakin
  */
 public class SongDAO {
-        private static final String MUSIC_DIR = "C:/Users/Public/Music"; // change if needed
     private static final String DEFAULT_IMAGE = "/Images/default_song.png";
+    private static final Set<String> SUPPORTED_EXTS = Set.of("mp3", "wav", "flac");
 
-    public List<Song> fetchLocalSongs() {
+    /**
+     * Recursively scans the provided root folder for supported audio files.
+     * Uses java.nio.file for efficient traversal and MetadataReader for tags.
+     * @param root user-selected root folder
+     * @param reader metadata reader utility
+     * @return List of discovered songs
+     */
+    public List<Song> scanSongs(Path root, MetadataReader reader) {
+        if (root == null) return List.of();
         List<Song> songs = new ArrayList<>();
-        scanFolder(new File(MUSIC_DIR), songs);
+        try (Stream<Path> stream = Files.walk(root)) {
+            List<Path> audioFiles = stream
+                .filter(Files::isRegularFile)
+                .filter(p -> isAudio(p))
+                .collect(Collectors.toList());
+
+            for (Path p : audioFiles) {
+                try {
+                    Song s = reader.extract(p);
+                    // preserve default image for existing UI
+                    s.setImagePath(DEFAULT_IMAGE);
+                    songs.add(s);
+                } catch (Exception e) {
+                    // Skip problematic files without failing the entire scan
+                }
+            }
+        } catch (IOException e) {
+            // Return what we have; caller can decide how to report/handle
+        }
         return songs;
     }
 
-    private void scanFolder(File folder, List<Song> songs) {
-        File[] files = folder.listFiles();
-        if (files == null) return;
-
-        for (File file : files) {
-            if (file.isDirectory()) {
-                scanFolder(file, songs);
-            } else if (file.getName().endsWith(".mp3")) {
-                String title = file.getName().replace(".mp3", "");
-                String artist = "Unknown";
-                String path = file.getAbsolutePath();
-                String image = DEFAULT_IMAGE; // Default image for now
-
-                songs.add(new Song(title, artist, path, image));
-            }
-        }
+    private boolean isAudio(Path p) {
+        String name = p.getFileName().toString();
+        int idx = name.lastIndexOf('.')
+                ;
+        if (idx <= 0) return false;
+        String ext = name.substring(idx + 1).toLowerCase();
+        return SUPPORTED_EXTS.contains(ext);
     }
 }
 
