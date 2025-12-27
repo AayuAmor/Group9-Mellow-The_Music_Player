@@ -174,18 +174,13 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
                 .addGap(22, 22, 22))
         );
 
-<<<<<<< Updated upstream
-        getContentPane().add(jPanel2);
-        jPanel2.setBounds(-10, 0, 1010, 120);
-=======
         getContentPane().add(changepassword);
         changepassword.setBounds(-10, 0, 1010, 120);
->>>>>>> Stashed changes
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    privachangepassword backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
+    private void backBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backBtnActionPerformed
         // TODO add your handling code here:
         Account Account = new Account();
         Account.setVisible(true);
@@ -201,7 +196,8 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
 
     private void oldPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_oldPasswordTextFieldFocusLost
         // TODO add your handling code here:
-         if (oldPasswordTextField.getchangepasswordequals(""))changepassword       oldPasswordTextField.setText("******************");
+         if (oldPasswordTextField.getText().equals("")){
+            oldPasswordTextField.setText("******************");
         }
     }//GEN-LAST:event_oldPasswordTextFieldFocusLost
 
@@ -226,7 +222,8 @@ public class ChangePassword_Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_confirmPasswordTextFieldFocusGained
 
-    private void confirmPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {                            changepassword           changepassword       // TODO add your handling code here://GEN-FIRST:event_confirmPasswordTextFieldFocusLost
+    private void confirmPasswordTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_confirmPasswordTextFieldFocusLost
+        // TODO add your handling code here:
         if (confirmPasswordTextField.getText().equals("")){
             confirmPasswordTextField.setText("******************");
         }

@@ -4,6 +4,11 @@
  */
 package view;
 
+import Controller.SongController;
+import Model.Song;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Asus
@@ -11,12 +16,31 @@ package view;
 public class AllSongs extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AllSongs.class.getName());
+    private final SongController songController;
+    private List<Song> allSongs;
 
     /**
      * Creates new form AllSongs
      */
     public AllSongs() {
         initComponents();
+        songController = new SongController();
+        
+        // Fetch all songs from SongController and populate table
+        loadAllSongs();
+        setAllSongsColumnWidths();
+        
+        // Add mouse listener for song selection
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable2.rowAtPoint(evt.getPoint());
+                if (row >= 0 && allSongs != null && row < allSongs.size()) {
+                    Song selectedSong = allSongs.get(row);
+                    songController.playSong(selectedSong);
+                }
+            }
+        });
     }
 
     /**
@@ -44,6 +68,8 @@ public class AllSongs extends javax.swing.JFrame {
         Likedsongs1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(994, 725));
+        setResizable(false);
         getContentPane().setLayout(null);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellowlogo.png"))); // NOI18N
@@ -91,22 +117,44 @@ public class AllSongs extends javax.swing.JFrame {
         jTable2.setBackground(new java.awt.Color(221, 219, 219));
         jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {}
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-
+                "SN", "Title", "Artist", "Duration"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable2.getTableHeader().setReorderingAllowed(false);
         jScrollPane3.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setResizable(false);
+            jTable2.getColumnModel().getColumn(1).setResizable(false);
+            jTable2.getColumnModel().getColumn(2).setResizable(false);
+            jTable2.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jScrollPane2.setViewportView(jScrollPane3);
 
@@ -239,4 +287,45 @@ public class AllSongs extends javax.swing.JFrame {
     private javax.swing.JTable jTable2;
     private javax.swing.JButton searchBtn;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Load all songs from SongController and populate the JTable.
+     * Displays Title, Artist, and Duration.
+     * Follows MVC principles - View fetches data from Controller.
+     */
+    private void loadAllSongs() {
+        // Fetch all songs from controller
+        allSongs = songController.getAllSongs();
+        
+        // Get table model and clear existing rows
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        
+        if (allSongs == null || allSongs.isEmpty()) {
+            return;
+        }
+        
+        // Populate table with all songs (3 columns: Title, Artist, Duration)
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
+            String title = song.getTitle();
+            String artist = song.getArtist();
+            int durationSeconds = song.getDurationSeconds();
+            String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+            
+            model.addRow(new Object[]{i + 1, title, artist, duration});
+        }
+    }
+
+    private void setAllSongsColumnWidths() {
+        javax.swing.table.TableColumnModel columns = jTable2.getColumnModel();
+        columns.getColumn(0).setMinWidth(35);
+        columns.getColumn(0).setPreferredWidth(45);
+        columns.getColumn(0).setMaxWidth(55);
+        columns.getColumn(1).setPreferredWidth(240);
+        columns.getColumn(2).setPreferredWidth(180);
+        columns.getColumn(3).setMinWidth(60);
+        columns.getColumn(3).setPreferredWidth(70);
+        columns.getColumn(3).setMaxWidth(80);
+    }
 }
