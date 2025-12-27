@@ -58,11 +58,12 @@ public class Playlist extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         Search = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        NowPlaying = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMaximumSize(new java.awt.Dimension(1000, 700));
         setMinimumSize(new java.awt.Dimension(1000, 700));
-        setPreferredSize(new java.awt.Dimension(1000, 700));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(89, 141, 193));
@@ -159,6 +160,22 @@ public class Playlist extends javax.swing.JFrame {
         jPanel1.add(jPanel2);
         jPanel2.setBounds(-10, -10, 1030, 160);
 
+        NowPlaying.setBackground(new java.awt.Color(89, 141, 193));
+        NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
+        NowPlaying.setLayout(null);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setText("Song");
+        NowPlaying.add(jLabel7);
+        jLabel7.setBounds(120, 30, 60, 20);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
+        NowPlaying.add(jLabel2);
+        jLabel2.setBounds(30, 0, 270, 70);
+
+        jPanel1.add(NowPlaying);
+        NowPlaying.setBounds(-20, 580, 380, 80);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -238,11 +255,14 @@ public class Playlist extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Back;
     private javax.swing.JButton Createnew;
+    private javax.swing.JPanel NowPlaying;
     private javax.swing.JButton Playlist1;
     private javax.swing.JButton Playlist2;
     private javax.swing.JTextField Search;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField jTextField2;

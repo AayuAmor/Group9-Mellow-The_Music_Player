@@ -76,6 +76,9 @@ public class likedsong extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
+        NowPlaying = new javax.swing.JPanel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -240,6 +243,22 @@ public class likedsong extends javax.swing.JFrame {
         jPanel1.add(jLabel9);
         jLabel9.setBounds(30, 510, 18, 25);
 
+        NowPlaying.setBackground(new java.awt.Color(95, 138, 184));
+        NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
+        NowPlaying.setLayout(null);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel10.setText("Song");
+        NowPlaying.add(jLabel10);
+        jLabel10.setBounds(120, 30, 60, 20);
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
+        NowPlaying.add(jLabel11);
+        jLabel11.setBounds(40, 0, 270, 70);
+
+        jPanel1.add(NowPlaying);
+        NowPlaying.setBounds(-10, 560, 310, 80);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -363,7 +382,10 @@ public class likedsong extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JPanel NowPlaying;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

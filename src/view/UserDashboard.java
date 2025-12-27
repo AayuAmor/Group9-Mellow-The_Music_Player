@@ -137,6 +137,8 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Userdisplay = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         Recs2 = new javax.swing.JButton();
+        NowPlaying = new javax.swing.JPanel();
+        jLabel13 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -178,7 +180,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 258, Short.MAX_VALUE))
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 278, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,13 +197,13 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         );
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(310, 100, 650, 120);
+        jPanel2.setBounds(310, 90, 660, 110);
 
         searchBtn.setBackground(new java.awt.Color(197, 191, 191));
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
         searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
         jPanel1.add(searchBtn);
-        searchBtn.setBounds(310, 50, 70, 30);
+        searchBtn.setBounds(310, 30, 70, 30);
 
         SearchBar.setBackground(new java.awt.Color(160, 148, 148));
         SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
@@ -218,7 +220,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         });
         SearchBar.addActionListener(this::SearchBarActionPerformed);
         jPanel1.add(SearchBar);
-        SearchBar.setBounds(310, 50, 650, 30);
+        SearchBar.setBounds(310, 30, 650, 30);
 
         Playlist.setBackground(new java.awt.Color(40, 52, 46));
         Playlist.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -259,12 +261,12 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Reccomendation.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         Reccomendation.setText("Reccomendation");
         jPanel1.add(Reccomendation);
-        Reccomendation.setBounds(310, 250, 150, 20);
+        Reccomendation.setBounds(310, 220, 150, 20);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         jLabel1.setText("Recently Played");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(310, 520, 120, 30);
+        jLabel1.setBounds(310, 440, 120, 30);
 
         Recs1.setBackground(new java.awt.Color(217, 213, 213));
         Recs1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -277,7 +279,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(300, 300, 200, 210);
+        Recs1.setBounds(310, 250, 160, 170);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -290,7 +292,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(520, 300, 210, 210);
+        Recs3.setBounds(540, 260, 180, 150);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -333,7 +335,27 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(750, 300, 200, 210);
+        Recs2.setBounds(760, 260, 190, 160);
+
+        NowPlaying.setBackground(new java.awt.Color(214, 214, 214));
+
+        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
+
+        javax.swing.GroupLayout NowPlayingLayout = new javax.swing.GroupLayout(NowPlaying);
+        NowPlaying.setLayout(NowPlayingLayout);
+        NowPlayingLayout.setHorizontalGroup(
+            NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 280, Short.MAX_VALUE)
+        );
+        NowPlayingLayout.setVerticalGroup(
+            NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(NowPlayingLayout.createSequentialGroup()
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 4, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(NowPlaying);
+        NowPlaying.setBounds(480, 640, 280, 70);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
         jPanel1.add(jLabel11);
@@ -381,11 +403,11 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(330, 560, 590, 130);
+        jScrollPane1.setBounds(330, 480, 590, 130);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 980, 710);
+        jLabel2.setBounds(0, 0, 990, 730);
 
         Recs4.setBackground(new java.awt.Color(229, 226, 226));
         Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -413,11 +435,11 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 978, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 728, Short.MAX_VALUE)
         );
 
         pack();
@@ -427,16 +449,10 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchBarActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
         playButtonIndex(1);
     }//GEN-LAST:event_Recent2ActionPerformed
 
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
         playButtonIndex(1);
     }//GEN-LAST:event_Recs3ActionPerformed
@@ -489,17 +505,11 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         }
     }//GEN-LAST:event_AccountActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
         // Optional: hook recent items to player
         playButtonIndex(0);
     }//GEN-LAST:event_Recent1ActionPerformed
 
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
         playButtonIndex(0);
     }//GEN-LAST:event_Recs1ActionPerformed
@@ -533,10 +543,6 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         playButtonIndex(3);
     }//GEN-LAST:event_Recs2ActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Likedsongs1ActionPerformed
@@ -547,14 +553,11 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         AllSongs.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-<<<<<<< HEAD
-=======
+
     private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
         playButtonIndex(2);
     }//GEN-LAST:event_Recent3ActionPerformed
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
+
 
     /**
      * @param args the command line arguments
@@ -585,6 +588,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     private javax.swing.JButton Account;
     private javax.swing.JButton Likedsongs;
     private javax.swing.JButton Likedsongs1;
+    private javax.swing.JPanel NowPlaying;
     private javax.swing.JButton Playlist;
     private javax.swing.JLabel Reccomendation;
     private javax.swing.JButton Recs1;
@@ -597,6 +601,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;

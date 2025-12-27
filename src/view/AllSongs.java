@@ -80,12 +80,15 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
         Playlist = new javax.swing.JButton();
         Likedsongs = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        NowPlaying = new javax.swing.JPanel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         Likedsongs1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(994, 725));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -200,13 +203,29 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
         getContentPane().add(jLabel4);
         jLabel4.setBounds(30, 210, 41, 40);
 
+        NowPlaying.setBackground(new java.awt.Color(222, 222, 222));
+        NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
+        NowPlaying.setLayout(null);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel7.setText("Song");
+        NowPlaying.add(jLabel7);
+        jLabel7.setBounds(120, 30, 60, 20);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
+        NowPlaying.add(jLabel2);
+        jLabel2.setBounds(50, 0, 270, 70);
+
+        getContentPane().add(NowPlaying);
+        NowPlaying.setBounds(450, 600, 380, 80);
+
         jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/icon-park-outline_like.png"))); // NOI18N
         getContentPane().add(jLabel6);
         jLabel6.setBounds(30, 270, 50, 50);
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         getContentPane().add(jLabel5);
-        jLabel5.setBounds(0, 0, 1000, 710);
+        jLabel5.setBounds(0, 0, 1000, 720);
 
         Likedsongs1.setBackground(new java.awt.Color(40, 52, 46));
         Likedsongs1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -216,6 +235,8 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
         Likedsongs1.addActionListener(this::Likedsongs1ActionPerformed);
         getContentPane().add(Likedsongs1);
         Likedsongs1.setBounds(110, 280, 130, 30);
+        getContentPane().add(jPanel1);
+        jPanel1.setBounds(600, 570, 200, 100);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -292,13 +313,17 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
     private javax.swing.JButton Backtodashboard;
     private javax.swing.JButton Likedsongs;
     private javax.swing.JButton Likedsongs1;
+    private javax.swing.JPanel NowPlaying;
     private javax.swing.JButton Playlist;
     private javax.swing.JTextField SearchBar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
