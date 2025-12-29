@@ -116,58 +116,25 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
         durationMetadata.setText(duration);
 
-        // Load album art if available
-        if (song.getImagePath() != null) {
-            loadAlbumArt(song.getImagePath());
-        } else {
-            loadDefaultAlbumArt();
-        }
+        // Load album art if available — set to both detail and main image labels
+        setSongImages(song.getImagePath());
     }
 
     /**
      * Safely load album art from path
      */
     private void loadAlbumArt(String imagePath) {
-        try {
-            File imageFile = new File(imagePath);
-            if (imageFile.exists()) {
-                URL imageUrl = imageFile.toURI().toURL();
-                if (imageUrl != null) {
-                    ImageIcon icon = new ImageIcon(imageUrl);
-                    // Ensure image loaded successfully
-                    if (icon.getImage() != null && icon.getImageLoadStatus() == java.awt.MediaTracker.COMPLETE) {
-                        int width = songImagePanel.getWidth();
-                        int height = songImagePanel.getHeight();
-                        if (width > 0 && height > 0) {
-                            // Scale image to fit panel
-                            icon.getImage().getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-                        }
-                        logger.fine(() -> "Album art loaded successfully: " + imagePath);
-                    } else {
-                        logger.warning(() -> "Album art image failed to load: " + imagePath);
-                        loadDefaultAlbumArt();
-                    }
-                } else {
-                    logger.warning(() -> "Could not convert image path to URL: " + imagePath);
-                    loadDefaultAlbumArt();
-                }
-            } else {
-                logger.warning(() -> "Album art file not found: " + imagePath);
-                loadDefaultAlbumArt();
-            }
-        } catch (IOException e) {
-            logger.log(java.util.logging.Level.WARNING, () -> "Failed to load album art: " + imagePath);
-            logger.log(java.util.logging.Level.WARNING, "Exception: ", e);
-            loadDefaultAlbumArt();
-        }
+        // Redirect to unified setter that handles both labels and fallback
+        setSongImages(imagePath);
     }
 
     /**
      * Load default placeholder album art
      */
     private void loadDefaultAlbumArt() {
-        // Default placeholder - can be enhanced
-        logger.fine("Using default album art placeholder");
+        // Default placeholder - set default song image on both labels
+        setSafeLabelIcon(detailsImageJLabel, getClass().getResource("/Images/default_song.jpg"));
+        setSafeLabelIcon(imageJLabel, getClass().getResource("/Images/default_song.jpg"));
     }
 
     /**
@@ -195,9 +162,66 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
                 button.setText(fallbackText);
             }
         } catch (Exception e) {
-            logger.log(java.util.logging.Level.WARNING, () -> "Failed to load icon " + resourcePath);
+            logger.log(java.util.logging.Level.WARNING, "Failed to load icon " + resourcePath);
             logger.log(java.util.logging.Level.WARNING, "Exception: ", e);
             button.setText(fallbackText);
+        }
+    }
+
+    /**
+     * Safely set an ImageIcon on a JLabel using a URL. Falls back to default song
+     * image.
+     */
+    private void setSafeLabelIcon(javax.swing.JLabel label, URL iconUrl) {
+        try {
+            URL useUrl = iconUrl;
+            if (useUrl == null) {
+                useUrl = getClass().getResource("/Images/default_song.jpg");
+            }
+            if (useUrl != null) {
+                ImageIcon icon = new ImageIcon(useUrl);
+                if (icon.getImage() != null) {
+                    int w = Math.max(100, label.getWidth());
+                    int h = Math.max(100, label.getHeight());
+                    java.awt.Image scaled = icon.getImage().getScaledInstance(w, h, java.awt.Image.SCALE_SMOOTH);
+                    label.setIcon(new ImageIcon(scaled));
+                    label.setText("");
+                    return;
+                }
+            }
+            // If we got here, fallback to clearing icon and show placeholder text
+            label.setIcon(null);
+            label.setText("No Image");
+        } catch (Exception e) {
+            logger.log(java.util.logging.Level.WARNING, "Failed to set label icon: " + e.getMessage());
+            label.setIcon(null);
+            label.setText("No Image");
+        }
+    }
+
+    /**
+     * Set song images to both the details image label and main image label.
+     * If imagePath points to a file, uses it; otherwise uses resource default.
+     */
+    private void setSongImages(String imagePath) {
+        try {
+            URL url = null;
+            if (imagePath != null) {
+                File f = new File(imagePath);
+                if (f.exists()) {
+                    url = f.toURI().toURL();
+                }
+            }
+            if (url == null) {
+                url = getClass().getResource("/Images/default_song.jpg");
+            }
+            setSafeLabelIcon(detailsImageJLabel, url);
+            setSafeLabelIcon(imageJLabel, url);
+        } catch (IOException e) {
+            logger.log(java.util.logging.Level.WARNING, "Error loading song image: " + e.getMessage());
+            // fallback to resource
+            setSafeLabelIcon(detailsImageJLabel, getClass().getResource("/Images/default_song.jpg"));
+            setSafeLabelIcon(imageJLabel, getClass().getResource("/Images/default_song.jpg"));
         }
     }
 
@@ -229,6 +253,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
      * regenerated by the Form Editor.
      */
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -243,6 +268,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         songImagePanel = new javax.swing.JPanel();
+        detailsImageJLabel = new javax.swing.JLabel();
         albumNameMetadata = new javax.swing.JLabel();
         durationMetadata = new javax.swing.JLabel();
         artistMetadata = new javax.swing.JLabel();
@@ -254,6 +280,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         previousBtn = new javax.swing.JButton();
         likeSongBtn = new javax.swing.JButton();
         playingSongImagePanel = new javax.swing.JPanel();
+        imageJLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -331,10 +358,10 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         songImagePanel.setLayout(songImagePanelLayout);
         songImagePanelLayout.setHorizontalGroup(
                 songImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 111, Short.MAX_VALUE));
+                        .addComponent(detailsImageJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE));
         songImagePanelLayout.setVerticalGroup(
                 songImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 112, Short.MAX_VALUE));
+                        .addComponent(detailsImageJLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE));
 
         albumNameMetadata.setText("song name");
 
@@ -406,23 +433,20 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
 
         buttonsHolderPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(147, 176, 206), 10, true));
 
-        // Safely set button icons with fallback text if resources missing
-        setSafeButtonIcon(addToPlaylistBtn, "/Images/addtoplaylist.png", "+PL");
-        addToPlaylistBtn.addActionListener(this::addToPlaylistBtnActionPerformed);
+        addToPlaylistBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addtoplaylist.png"))); // NOI18N
 
-        setSafeButtonIcon(loopSongBtn, "/Images/fad_loop.png", "⟲");
-        loopSongBtn.addActionListener(this::loopSongBtnActionPerformed);
+        loopSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
 
-        setSafeButtonIcon(PlayPausebtn, "/Images/pause.png", "⏸");
+        PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
         PlayPausebtn.addActionListener(this::PlayPausebtnActionPerformed);
 
-        setSafeButtonIcon(nextBtn, "/Images/right arrow.png", "→");
+        nextBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/right arrow.png"))); // NOI18N
         nextBtn.addActionListener(this::nextBtnActionPerformed);
 
-        setSafeButtonIcon(previousBtn, "/Images/backarrow.png", "←");
+        previousBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/backarrow.png"))); // NOI18N
         previousBtn.addActionListener(this::previousBtnActionPerformed);
 
-        setSafeButtonIcon(likeSongBtn, "/Images/likedSongsBtn_icon.png", "♡");
+        likeSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/likedSongsBtn_icon.png"))); // NOI18N
         likeSongBtn.addActionListener(this::likeSongBtnActionPerformed);
 
         javax.swing.GroupLayout buttonsHolderPanelLayout = new javax.swing.GroupLayout(buttonsHolderPanel);
@@ -472,10 +496,15 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         playingSongImagePanel.setLayout(playingSongImagePanelLayout);
         playingSongImagePanelLayout.setHorizontalGroup(
                 playingSongImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 0, Short.MAX_VALUE));
+                        .addComponent(imageJLabel, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         playingSongImagePanelLayout.setVerticalGroup(
                 playingSongImagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 269, Short.MAX_VALUE));
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                playingSongImagePanelLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(imageJLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 323,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -670,7 +699,9 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
     private javax.swing.JLabel artistMetadata;
     private javax.swing.JButton backBtn;
     private javax.swing.JPanel buttonsHolderPanel;
+    private javax.swing.JLabel detailsImageJLabel;
     private javax.swing.JLabel durationMetadata;
+    private javax.swing.JLabel imageJLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

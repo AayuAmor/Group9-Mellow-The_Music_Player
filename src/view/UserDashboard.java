@@ -431,7 +431,8 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     }// GEN-LAST:event_SearchBarActionPerformed
 
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs3ActionPerformed
-        // TODO: Implement recommendation button
+        // Recs3 is index 1 (from loadSongsToUI mapping)
+        playRecommendationSong(1);
     }// GEN-LAST:event_Recs3ActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PlaylistActionPerformed
@@ -481,11 +482,13 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     }// GEN-LAST:event_AccountActionPerformed
 
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs1ActionPerformed
-        // TODO: Implement recommendation button
+        // Recs1 is index 0 (from loadSongsToUI mapping)
+        playRecommendationSong(0);
     }// GEN-LAST:event_Recs1ActionPerformed
 
     private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs4ActionPerformed
-        // TODO add your handling code here:
+        // Recs4 is index 2 (from loadSongsToUI mapping)
+        playRecommendationSong(2);
     }// GEN-LAST:event_Recs4ActionPerformed
 
     private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusGained
@@ -510,7 +513,8 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     }// GEN-LAST:event_LikedsongsActionPerformed
 
     private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs2ActionPerformed
-        // TODO: Implement recommendation button
+        // Recs2 is index 3 (from loadSongsToUI mapping)
+        playRecommendationSong(3);
     }// GEN-LAST:event_Recs2ActionPerformed
 
     private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Likedsongs1ActionPerformed
@@ -634,6 +638,29 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         columns.getColumn(3).setMinWidth(60);
         columns.getColumn(3).setPreferredWidth(70);
         columns.getColumn(3).setMaxWidth(80);
+    }
+
+    /**
+     * Play a recommendation song by index
+     * Sends playlist and selected index to PlaybackManager and opens Player
+     */
+    private void playRecommendationSong(int index) {
+        if (loadedSongs == null || index < 0 || index >= loadedSongs.size()) {
+            logger.warning("Invalid recommendation song index: " + index);
+            return;
+        }
+
+        Song selectedSong = loadedSongs.get(index);
+
+        // Send full playlist and selected index to PlaybackManager
+        PlaybackManager.getInstance().setPlaylist(loadedSongs, index, PlaySource.DASHBOARD);
+
+        // Open Player UI with correct play source
+        Player playerWindow = Player.getInstance();
+        playerWindow.setPlaySource(PlaySource.DASHBOARD);
+        playerWindow.setVisible(true);
+
+        logger.info(() -> "Playing from Dashboard recommendation: " + selectedSong.getTitle());
     }
 
     /**
