@@ -410,23 +410,13 @@ public class UserDashboard extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SearchBarActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    private void Recent2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent2ActionPerformed
-        playButtonIndex(1);
-    }//GEN-LAST:event_Recent2ActionPerformed
-
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
         playButtonIndex(1);
     }//GEN-LAST:event_Recs3ActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
-        Playlist Playlist = new Playlist(songController);
-        Playlist.setVisible(true);
+        Playlist playlistWindow = new Playlist(songController);
+        playlistWindow.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_PlaylistActionPerformed
 
@@ -472,17 +462,6 @@ public class UserDashboard extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AccountActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    private void Recent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent1ActionPerformed
-        // Optional: hook recent items to player
-        playButtonIndex(0);
-    }//GEN-LAST:event_Recent1ActionPerformed
-
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
         playButtonIndex(0);
     }//GEN-LAST:event_Recs1ActionPerformed
@@ -516,10 +495,6 @@ public class UserDashboard extends javax.swing.JFrame {
         playButtonIndex(3);
     }//GEN-LAST:event_Recs2ActionPerformed
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
     private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_Likedsongs1ActionPerformed
@@ -530,14 +505,6 @@ public class UserDashboard extends javax.swing.JFrame {
         AllSongs.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
-<<<<<<< HEAD
-=======
-    private void Recent3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recent3ActionPerformed
-        playButtonIndex(2);
-    }//GEN-LAST:event_Recent3ActionPerformed
->>>>>>> now_playing_feat
-=======
->>>>>>> f59b4336202663a8634c3d4889c760c61494f1ab
 
     /**
      * @param args the command line arguments
