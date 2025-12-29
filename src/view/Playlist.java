@@ -4,10 +4,12 @@
  */
 package view;
 import Controller.SongController;
+import Model.PlaySource;
 import Model.Song;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
+import service.PlaybackManager;
 
 /**
  *
@@ -268,14 +270,25 @@ public class Playlist extends javax.swing.JFrame {
         songList.setCellRenderer(new ListCellRenderer<>());
         songList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
-        // Double-click to play song
+        // Double-click to play song from playlist
+        // Send full playlist and selected index to PlaybackManager
         songList.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
-                    Song sel = songList.getSelectedValue();
-                    if (sel != null) {
-                        songController.playSong(sel);
+                    Song selectedSong = songList.getSelectedValue();
+                    if (selectedSong != null && playlistSongs != null) {
+                        int selectedIndex = playlistSongs.indexOf(selectedSong);
+                        
+                        // Send full playlist and selected index to PlaybackManager
+                        PlaybackManager.getInstance().setPlaylist(playlistSongs, selectedIndex, PlaySource.PLAYLIST);
+                        
+                        // Open Player UI with correct play source
+                        Player playerWindow = Player.getInstance();
+                        playerWindow.setPlaySource(PlaySource.PLAYLIST);
+                        playerWindow.setVisible(true);
+                        
+                        logger.info("Playing from Playlist: " + selectedSong.getTitle());
                     }
                 }
             }
