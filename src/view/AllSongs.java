@@ -89,6 +89,7 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(954, 725));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -236,7 +237,7 @@ public class AllSongs extends javax.swing.JFrame implements NowPlayingListener {
         getContentPane().add(Likedsongs1);
         Likedsongs1.setBounds(110, 280, 130, 30);
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(600, 570, 200, 100);
+        jPanel1.setBounds(600, 570, 200, 10);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
