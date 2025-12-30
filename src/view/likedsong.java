@@ -54,7 +54,7 @@ public class likedsong extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -64,24 +64,13 @@ public class likedsong extends javax.swing.JFrame {
         search1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        song1 = new javax.swing.JButton();
-        song2 = new javax.swing.JButton();
-        song3 = new javax.swing.JButton();
-        song4 = new javax.swing.JButton();
-        song5 = new javax.swing.JButton();
-        song6 = new javax.swing.JButton();
-        song7 = new javax.swing.JButton();
         Backbtn = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         NowPlaying = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        LikedSongTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -106,7 +95,6 @@ public class likedsong extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 searchFocusGained(evt);
             }
-
             public void focusLost(java.awt.event.FocusEvent evt) {
                 searchFocusLost(evt);
             }
@@ -132,70 +120,7 @@ public class likedsong extends javax.swing.JFrame {
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel2.setText("Liked Songs");
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(20, 180, 300, 50);
-
-        song1.setBackground(new java.awt.Color(95, 138, 184));
-        song1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song1.setForeground(new java.awt.Color(255, 255, 255));
-        song1.setText("\"Die With A Smile\" - Lady Gaga, Bruno Mars");
-        song1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song1.addActionListener(this::song1ActionPerformed);
-        jPanel1.add(song1);
-        song1.setBounds(50, 270, 470, 32);
-
-        song2.setBackground(new java.awt.Color(95, 138, 184));
-        song2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song2.setForeground(new java.awt.Color(255, 255, 255));
-        song2.setText("\"Espresso\" - Sabrina Carpenter");
-        song2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song2.addActionListener(this::song2ActionPerformed);
-        jPanel1.add(song2);
-        song2.setBounds(50, 310, 470, 32);
-
-        song3.setBackground(new java.awt.Color(95, 138, 184));
-        song3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song3.setForeground(new java.awt.Color(255, 255, 255));
-        song3.setText("\"Good Luck, Babe!\" - Chappell Roan");
-        song3.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song3.addActionListener(this::song3ActionPerformed);
-        jPanel1.add(song3);
-        song3.setBounds(50, 350, 470, 32);
-
-        song4.setBackground(new java.awt.Color(95, 138, 184));
-        song4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song4.setForeground(new java.awt.Color(255, 255, 255));
-        song4.setText("\"As It Was\" - Harry Styles");
-        song4.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song4.addActionListener(this::song4ActionPerformed);
-        jPanel1.add(song4);
-        song4.setBounds(50, 390, 470, 32);
-
-        song5.setBackground(new java.awt.Color(95, 138, 184));
-        song5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song5.setForeground(new java.awt.Color(255, 255, 255));
-        song5.setText(".......");
-        song5.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song5.addActionListener(this::song5ActionPerformed);
-        jPanel1.add(song5);
-        song5.setBounds(50, 430, 470, 32);
-
-        song6.setBackground(new java.awt.Color(95, 138, 184));
-        song6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song6.setForeground(new java.awt.Color(255, 255, 255));
-        song6.setText(".......");
-        song6.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song6.addActionListener(this::song6ActionPerformed);
-        jPanel1.add(song6);
-        song6.setBounds(50, 470, 470, 32);
-
-        song7.setBackground(new java.awt.Color(95, 138, 184));
-        song7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        song7.setForeground(new java.awt.Color(255, 255, 255));
-        song7.setText("........");
-        song7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        song7.addActionListener(this::song7ActionPerformed);
-        jPanel1.add(song7);
-        song7.setBounds(50, 510, 470, 32);
+        jLabel2.setBounds(20, 160, 300, 50);
 
         Backbtn.setBackground(java.awt.SystemColor.activeCaption);
         Backbtn.setFont(new java.awt.Font("Segoe UI Black", 1, 22)); // NOI18N
@@ -204,48 +129,6 @@ public class likedsong extends javax.swing.JFrame {
         Backbtn.addActionListener(this::BackbtnActionPerformed);
         jPanel1.add(Backbtn);
         Backbtn.setBounds(770, 580, 110, 30);
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("1.");
-        jPanel1.add(jLabel3);
-        jLabel3.setBounds(30, 270, 41, 25);
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("2.");
-        jPanel1.add(jLabel4);
-        jLabel4.setBounds(30, 310, 20, 25);
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("3.");
-        jPanel1.add(jLabel5);
-        jLabel5.setBounds(30, 350, 20, 25);
-
-        jLabel6.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setText("4.");
-        jPanel1.add(jLabel6);
-        jLabel6.setBounds(30, 390, 20, 25);
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel7.setText("5.");
-        jPanel1.add(jLabel7);
-        jLabel7.setBounds(30, 430, 18, 25);
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("6.");
-        jPanel1.add(jLabel8);
-        jLabel8.setBounds(30, 470, 18, 25);
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("7.");
-        jPanel1.add(jLabel9);
-        jLabel9.setBounds(30, 510, 18, 25);
 
         NowPlaying.setBackground(new java.awt.Color(95, 138, 184));
         NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
@@ -263,15 +146,144 @@ public class likedsong extends javax.swing.JFrame {
         jPanel1.add(NowPlaying);
         NowPlaying.setBounds(-10, 560, 310, 80);
 
+        LikedSongTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "SN", "Title ", "Artist", "Duration"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(LikedSongTable);
+        if (LikedSongTable.getColumnModel().getColumnCount() > 0) {
+            LikedSongTable.getColumnModel().getColumn(0).setResizable(false);
+            LikedSongTable.getColumnModel().getColumn(1).setResizable(false);
+            LikedSongTable.getColumnModel().getColumn(2).setResizable(false);
+            LikedSongTable.getColumnModel().getColumn(3).setResizable(false);
+        }
+
+        jScrollPane1.setViewportView(jScrollPane2);
+
+        jPanel1.add(jScrollPane1);
+        jScrollPane1.setBounds(210, 220, 540, 330);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE));
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -391,29 +403,18 @@ public class likedsong extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
+    private javax.swing.JTable LikedSongTable;
     private javax.swing.JPanel NowPlaying;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton search;
     private javax.swing.JButton search1;
-    private javax.swing.JButton song1;
-    private javax.swing.JButton song2;
-    private javax.swing.JButton song3;
-    private javax.swing.JButton song4;
-    private javax.swing.JButton song5;
-    private javax.swing.JButton song6;
-    private javax.swing.JButton song7;
     // End of variables declaration//GEN-END:variables
 }
