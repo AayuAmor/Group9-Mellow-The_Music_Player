@@ -52,8 +52,6 @@ public class Playlist extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         Createnew = new javax.swing.JButton();
-        Playlist1 = new javax.swing.JButton();
-        Playlist2 = new javax.swing.JButton();
         Back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         Search = new javax.swing.JTextField();
@@ -89,25 +87,7 @@ public class Playlist extends javax.swing.JFrame {
         Createnew.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Createnew.addActionListener(this::CreatenewActionPerformed);
         jPanel1.add(Createnew);
-        Createnew.setBounds(680, 340, 190, 180);
-
-        Playlist1.setText("Playlist 1");
-        Playlist1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Playlist1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Playlist1.setIconTextGap(0);
-        Playlist1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Playlist1.addActionListener(this::Playlist1ActionPerformed);
-        jPanel1.add(Playlist1);
-        Playlist1.setBounds(40, 340, 190, 180);
-
-        Playlist2.setText("Playlist 2");
-        Playlist2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        Playlist2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Playlist2.setIconTextGap(0);
-        Playlist2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Playlist2.addActionListener(this::Playlist2ActionPerformed);
-        jPanel1.add(Playlist2);
-        Playlist2.setBounds(360, 340, 190, 180);
+        Createnew.setBounds(850, 160, 120, 100);
 
         Back.setBackground(new java.awt.Color(153, 153, 153));
         Back.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -212,14 +192,6 @@ public class Playlist extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_CreatenewActionPerformed
 
-    private void Playlist1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Playlist1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Playlist1ActionPerformed
-
-    private void Playlist2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Playlist2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Playlist2ActionPerformed
-
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
         UserDashboard UserDashboard = new UserDashboard();
@@ -256,8 +228,6 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JButton Back;
     private javax.swing.JButton Createnew;
     private javax.swing.JPanel NowPlaying;
-    private javax.swing.JButton Playlist1;
-    private javax.swing.JButton Playlist2;
     private javax.swing.JTextField Search;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;

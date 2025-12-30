@@ -112,6 +112,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -299,7 +300,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(510, 230, 220, 210);
+        Recs3.setBounds(520, 220, 220, 210);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -398,12 +399,14 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
         }
+
+        jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 480, 590, 130);
@@ -422,17 +425,11 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs4.setIconTextGap(0);
         Recs4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs4.addActionListener(this::Recs4ActionPerformed);
-        jPanel1.add(Recs4);
-        Recs4.setBounds(560, 350, 150, 150);
+        // Don't add Recs4 to panel - it overlaps with Recs3
+        // jPanel1.add(Recs4);
+        // Recs4.setBounds(560, 350, 150, 150);
 
-        Likedsongs1.setBackground(new java.awt.Color(40, 52, 46));
-        Likedsongs1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
-        Likedsongs1.setForeground(new java.awt.Color(204, 204, 204));
-        Likedsongs1.setText("Liked Songs");
-        Likedsongs1.setBorder(null);
-        Likedsongs1.addActionListener(this::Likedsongs1ActionPerformed);
-        jPanel1.add(Likedsongs1);
-        Likedsongs1.setBounds(110, 280, 130, 30);
+        // Likedsongs1 removed - duplicate of Likedsongs button
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
