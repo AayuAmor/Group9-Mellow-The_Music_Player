@@ -60,13 +60,14 @@ public class likedsong extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        search = new javax.swing.JButton();
         search1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         Backbtn = new javax.swing.JButton();
         NowPlaying = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
+        nowPlayingSongJLabel = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -87,31 +88,41 @@ public class likedsong extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
         jLabel1.setBounds(10, 10, 200, 129);
 
-        search.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
-        search.setForeground(java.awt.SystemColor.controlShadow);
-        search.setText("Search");
-        search.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        search.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                searchFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                searchFocusLost(evt);
-            }
-        });
-        search.addActionListener(this::searchActionPerformed);
-        jPanel2.add(search);
-        search.setBounds(409, 76, 445, 38);
-
         search1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
         search1.addActionListener(this::search1ActionPerformed);
         jPanel2.add(search1);
-        search1.setBounds(332, 76, 71, 38);
+        search1.setBounds(330, 60, 71, 50);
 
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setLayout(null);
         jPanel2.add(jPanel3);
         jPanel3.setBounds(0, 153, 956, 0);
+
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jTextField1.setText("Search");
+        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextField1FocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextField1FocusLost(evt);
+            }
+        });
+        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+        );
+
+        jPanel2.add(jPanel4);
+        jPanel4.setBounds(410, 60, 360, 50);
 
         jPanel1.add(jPanel2);
         jPanel2.setBounds(-4, -10, 1040, 170);
@@ -134,10 +145,10 @@ public class likedsong extends javax.swing.JFrame {
         NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
         NowPlaying.setLayout(null);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel10.setText("Song");
-        NowPlaying.add(jLabel10);
-        jLabel10.setBounds(120, 30, 60, 20);
+        nowPlayingSongJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        nowPlayingSongJLabel.setText("Song");
+        NowPlaying.add(nowPlayingSongJLabel);
+        nowPlayingSongJLabel.setBounds(80, 30, 200, 20);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
         NowPlaying.add(jLabel11);
@@ -288,6 +299,24 @@ public class likedsong extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
+
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+        // TODO add your handling code here:
+        if (jTextField1.getText().equals("Search")){
+            jTextField1.setText("");
+        }
+    }//GEN-LAST:event_jTextField1FocusGained
+
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+        // TODO add your handling code here:
+        if (jTextField1.getText().equals("")){
+            jTextField1.setText("Search");
+        }
+    }//GEN-LAST:event_jTextField1FocusLost
+
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_searchActionPerformed
@@ -312,20 +341,6 @@ public class likedsong extends javax.swing.JFrame {
         dashboard.setVisible(true);
         this.dispose();
     }// GEN-LAST:event_BackbtnActionPerformed
-
-    private void searchFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_searchFocusGained
-        // TODO add your handling code here:
-        if (search.getText().equals("Search")) {
-            search.setText("");
-        }
-    }// GEN-LAST:event_searchFocusGained
-
-    private void searchFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_searchFocusLost
-        // TODO add your handling code here:
-        if (search.getText().equals("")) {
-            search.setText("Search");
-        }
-    }// GEN-LAST:event_searchFocusLost
 
     private void song1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_song1ActionPerformed
         // Play liked song 1
@@ -406,15 +421,16 @@ public class likedsong extends javax.swing.JFrame {
     private javax.swing.JTable LikedSongTable;
     private javax.swing.JPanel NowPlaying;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JButton search;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel nowPlayingSongJLabel;
     private javax.swing.JButton search1;
     // End of variables declaration//GEN-END:variables
 }
