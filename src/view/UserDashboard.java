@@ -350,15 +350,14 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         javax.swing.GroupLayout NowPlayingLayout = new javax.swing.GroupLayout(NowPlaying);
         NowPlaying.setLayout(NowPlayingLayout);
         NowPlayingLayout.setHorizontalGroup(
-            NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 280, Short.MAX_VALUE)
-        );
+                NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 280, Short.MAX_VALUE));
         NowPlayingLayout.setVerticalGroup(
-            NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(NowPlayingLayout.createSequentialGroup()
-                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 4, Short.MAX_VALUE))
-        );
+                NowPlayingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(NowPlayingLayout.createSequentialGroup()
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 66,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 4, Short.MAX_VALUE)));
 
         jPanel1.add(NowPlaying);
         NowPlaying.setBounds(480, 640, 280, 70);
@@ -548,9 +547,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         AllSongs AllSongs = new AllSongs();
         AllSongs.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
-
+    }// GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
