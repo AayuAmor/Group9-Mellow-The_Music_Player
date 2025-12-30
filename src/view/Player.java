@@ -4,8 +4,11 @@
  */
 package view;
 
+import Dao.LikedSongDao;
+import Dao.SongDAO;
 import Model.PlaySource;
 import Model.Song;
+import Model.UserSession;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -25,6 +28,8 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
     private static Player instance;
 
     private final PlaybackManager playbackManager;
+    private final LikedSongDao likedSongDao;
+    private final SongDAO songDao;
 
     /**
      * Get singleton instance - creates if not exists
@@ -53,6 +58,8 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
     private Player() {
         initComponents();
         playbackManager = PlaybackManager.getInstance();
+        songDao = new SongDAO();
+        likedSongDao = new LikedSongDao();
 
         // Initialize PlayPausebtn with play icon
         setPlayPauseIcon(false);
@@ -72,6 +79,13 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
     public void onNowPlayingChanged(Song song, boolean playing) {
         if (song == null) {
             return;
+        }
+
+        // Check if song is liked in database (if user is logged in and song has ID)
+        UserSession session = UserSession.getInstance();
+        if (session.isLoggedIn() && song.getSongId() > 0) {
+            boolean isLiked = likedSongDao.isSongLiked(session.getUserId(), song.getSongId());
+            song.setLiked(isLiked);
         }
 
         // Update metadata display
@@ -302,14 +316,14 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(backBtn)
-                .addGap(38, 38, 38)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(25, 25, 25)
+                                .addComponent(backBtn)
+                                .addGap(38, 38, 38)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 117,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
@@ -436,6 +450,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         addToPlaylistBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addtoplaylist.png"))); // NOI18N
 
         loopSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
+        loopSongBtn.addActionListener(this::loopSongBtnActionPerformed);
 
         PlayPausebtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/pause.png"))); // NOI18N
         PlayPausebtn.addActionListener(this::PlayPausebtnActionPerformed);
@@ -582,29 +597,73 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
 
     @SuppressWarnings("unused")
     private void likeSongBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_likeSongBtnActionPerformed
-        // Like current song - add to liked songs
+        // Like/unlike current song and sync with database
         Song currentSong = playbackManager.getCurrentSong();
-        if (currentSong != null) {
-            // Toggle like state in the song model (single source of truth)
-            boolean isCurrentlyLiked = currentSong.isLiked();
-            currentSong.setLiked(!isCurrentlyLiked);
+        UserSession session = UserSession.getInstance();
 
-            // Update button appearance to match new state
-            if (currentSong.isLiked()) {
-                likeSongBtn.setBackground(new java.awt.Color(100, 50, 100)); // Dark purple when liked
-                likeSongBtn.setOpaque(true);
-                likeSongBtn.setBorderPainted(false);
-                logger.info(() -> "Liked song: " + currentSong.getTitle());
+        if (currentSong == null) {
+            logger.warning("No song currently playing to like");
+            return;
+        }
+
+        if (!session.isLoggedIn()) {
+            logger.warning("User not logged in - cannot like songs");
+            javax.swing.JOptionPane.showMessageDialog(this, "You must be logged in to like songs", "Error",
+                    javax.swing.JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int userId = session.getUserId();
+        int songId = currentSong.getSongId();
+
+        // If song doesn't have DB ID, insert it first
+        if (songId <= 0) {
+            logger.info("Song not in database - inserting: " + currentSong.getTitle());
+            songId = songDao.insertSongIfNotExists(currentSong);
+
+            if (songId > 0) {
+                currentSong.setSongId(songId);
+                logger.info("Song inserted successfully with ID: " + songId);
             } else {
+                logger.warning("Failed to insert song into database");
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "Failed to add song to database. Cannot like this song.",
+                        "Error",
+                        javax.swing.JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+
+        boolean isCurrentlyLiked = currentSong.isLiked();
+
+        // Toggle like state with database
+        if (isCurrentlyLiked) {
+            // Unlike the song
+            boolean success = likedSongDao.unlikeSong(userId, songId);
+
+            if (success) {
+                currentSong.setLiked(false);
                 likeSongBtn.setBackground(new java.awt.Color(164, 183, 203)); // Default when not liked
                 likeSongBtn.setOpaque(true);
                 likeSongBtn.setBorderPainted(false);
-                logger.info(() -> "Unliked song: " + currentSong.getTitle());
+                logger.info("Unliked song: " + currentSong.getTitle());
+            } else {
+                logger.warning("Failed to unlike song in database");
             }
 
-            // TODO: Persist like to database through SongController
         } else {
-            logger.warning("No song currently playing to like");
+            // Like the song
+            boolean success = likedSongDao.likeSong(userId, songId);
+
+            if (success) {
+                currentSong.setLiked(true);
+                likeSongBtn.setBackground(new java.awt.Color(100, 50, 100)); // Dark purple when liked
+                likeSongBtn.setOpaque(true);
+                likeSongBtn.setBorderPainted(false);
+                logger.info("Liked song: " + currentSong.getTitle());
+            } else {
+                logger.warning("Failed to like song in database");
+            }
         }
     }// GEN-LAST:event_likeSongBtnActionPerformed
 

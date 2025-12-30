@@ -3,11 +3,11 @@ package service;
 import Controller.PlayerController;
 import Model.PlaySource;
 import Model.Song;
-import utils.NowPlayingState;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import utils.NowPlayingState;
+import utils.PlayerState;
 
 /**
  * Global Playback Manager - Singleton pattern
@@ -25,14 +25,14 @@ import java.util.logging.Logger;
 public class PlaybackManager {
     private static final Logger logger = Logger.getLogger(PlaybackManager.class.getName());
     private static PlaybackManager instance;
-    
+
     private final PlayerController playerController;
     private Song currentSong;
     private List<Song> playlist = new ArrayList<>();
     private int currentIndex = -1;
     private boolean isLooping = false;
     private PlaySource playSource = PlaySource.DASHBOARD;
-    
+
     /**
      * Get singleton instance
      */
@@ -42,41 +42,50 @@ public class PlaybackManager {
         }
         return instance;
     }
-    
+
     /**
      * Private constructor - use getInstance()
      */
     private PlaybackManager() {
         this.playerController = PlayerController.getInstance();
     }
-    
+
     /**
      * Set playlist and start playing song at given index
-     * Updates NowPlayingState and launches Player UI
+     * Updates NowPlayingState and PlayerState
      * 
-     * @param songs Full list of songs (playlist)
+     * @param songs         Full list of songs (playlist)
      * @param selectedIndex Index of song to start playing
-     * @param source Where playback was initiated from (for back button navigation)
+     * @param source        Where playback was initiated from (for back button
+     *                      navigation)
      */
     public synchronized void setPlaylist(List<Song> songs, int selectedIndex, PlaySource source) {
         if (songs == null || songs.isEmpty() || selectedIndex < 0 || selectedIndex >= songs.size()) {
             logger.warning("Invalid playlist or index");
             return;
         }
-        
+
         this.playlist = new ArrayList<>(songs);
         this.currentIndex = selectedIndex;
         this.playSource = source;
         this.currentSong = playlist.get(currentIndex);
-        
+
         // Start playback
         playerController.playSong(currentSong);
+
+        // Update both NowPlayingState (for UI listeners) and PlayerState (for direct
+        // access)
         NowPlayingState.getInstance().setCurrentSong(currentSong, true);
-        
-        logger.info("Playlist set: " + songs.size() + " songs, starting at index " + selectedIndex + 
-                   " from source: " + source.name());
+        PlayerState.getInstance().setCurrentSong(currentSong);
+        PlayerState.getInstance().setPlaying(true);
+        PlayerState.getInstance().setCurrentPosition(0);
+
+        System.out.println(
+                "[PlaybackManager] Song set to play: " + currentSong.getTitle() + " (index " + selectedIndex + ")");
+        logger.info("Playlist set: " + songs.size() + " songs, starting at index " + selectedIndex +
+                " from source: " + source.name());
     }
-    
+
     /**
      * Play or resume the currently set song
      * Only restarts if song changed - otherwise resumes from pause position
@@ -86,29 +95,33 @@ public class PlaybackManager {
             logger.warning("No song set for playback");
             return;
         }
-        
+
         // If already playing this song, just resume
-        if (playerController.getCurrentSong() != null && 
-            playerController.getCurrentSong().equals(currentSong)) {
+        if (playerController.getCurrentSong() != null &&
+                playerController.getCurrentSong().equals(currentSong)) {
             playerController.resumeSong();
         } else {
             // New song - start from beginning
             playerController.playSong(currentSong);
         }
-        
+
         NowPlayingState.getInstance().setPlaying(true);
+        PlayerState.getInstance().setPlaying(true);
+        System.out.println("[PlaybackManager] Playing: " + currentSong.getTitle());
         logger.info("Playing: " + currentSong.getTitle());
     }
-    
+
     /**
      * Pause current playback
      */
     public synchronized void pause() {
         playerController.pauseSong();
         NowPlayingState.getInstance().setPlaying(false);
+        PlayerState.getInstance().setPlaying(false);
+        System.out.println("[PlaybackManager] Paused");
         logger.info("Paused");
     }
-    
+
     /**
      * Toggle between play and pause
      */
@@ -119,7 +132,7 @@ public class PlaybackManager {
             play();
         }
     }
-    
+
     /**
      * Play next song in playlist
      */
@@ -128,15 +141,15 @@ public class PlaybackManager {
             logger.warning("Playlist empty or no current index");
             return;
         }
-        
+
         // Move to next, or loop to start if at end
         currentIndex = (currentIndex + 1) % playlist.size();
         currentSong = playlist.get(currentIndex);
-        
+
         play();
         logger.info("Playing next: " + currentSong.getTitle() + " (index " + currentIndex + ")");
     }
-    
+
     /**
      * Play previous song in playlist
      */
@@ -145,15 +158,15 @@ public class PlaybackManager {
             logger.warning("Playlist empty or no current index");
             return;
         }
-        
+
         // Move to previous, or loop to end if at start
         currentIndex = (currentIndex - 1 + playlist.size()) % playlist.size();
         currentSong = playlist.get(currentIndex);
-        
+
         play();
         logger.info("Playing previous: " + currentSong.getTitle() + " (index " + currentIndex + ")");
     }
-    
+
     /**
      * Toggle loop mode on/off
      */
@@ -161,50 +174,50 @@ public class PlaybackManager {
         isLooping = !isLooping;
         logger.info("Loop mode: " + (isLooping ? "ON" : "OFF"));
     }
-    
+
     /**
      * Get current song
      */
     public synchronized Song getCurrentSong() {
         return currentSong;
     }
-    
+
     /**
      * Get current playlist
      */
     public synchronized List<Song> getPlaylist() {
         return new ArrayList<>(playlist);
     }
-    
+
     /**
      * Get current index in playlist
      */
     public synchronized int getCurrentIndex() {
         return currentIndex;
     }
-    
+
     /**
      * Check if loop is enabled
      */
     public synchronized boolean isLooping() {
         return isLooping;
     }
-    
+
     /**
      * Get the source/origin of current playback (for back button navigation)
      */
     public synchronized PlaySource getPlaySource() {
         return playSource;
     }
-    
+
     /**
      * Check if given song is currently playing
      */
     public synchronized boolean isPlaying(Song song) {
-        return currentSong != null && currentSong.equals(song) && 
-               NowPlayingState.getInstance().isPlaying();
+        return currentSong != null && currentSong.equals(song) &&
+                NowPlayingState.getInstance().isPlaying();
     }
-    
+
     /**
      * Called by PlayerController when song ends
      * Handles loop or auto-play next song

@@ -4,8 +4,11 @@
  */
 package view;
 
+import Dao.LikedSongDao;
 import Model.PlaySource;
 import Model.Song;
+import Model.UserSession;
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import service.PlaybackManager;
@@ -22,29 +25,61 @@ public class likedsong extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(likedsong.class.getName());
     private List<Song> likedSongs = new ArrayList<>();
+    private final LikedSongDao likedSongDao;
 
     /**
      * Creates new form likedsong
      */
     public likedsong() {
+        this.likedSongDao = new LikedSongDao();
         initComponents();
-        initializeLikedSongs();
+        loadLikedSongs();
+
+        // After initComponents, configure NowPlaying panel with NowPlayingCard
+        NowPlaying.removeAll();
+        NowPlaying.setLayout(new BorderLayout());
+        NowPlaying.setOpaque(true);
+        NowPlaying.setBackground(new java.awt.Color(95, 138, 184));
+        NowPlaying.add(new NowPlayingCard(), BorderLayout.CENTER);
+        NowPlaying.setPreferredSize(new java.awt.Dimension(0, 80));
+        NowPlaying.revalidate();
+        NowPlaying.repaint();
     }
 
     /**
-     * Initialize the list of liked songs (placeholder data)
-     * TODO: Load from database in production
+     * Load liked songs from database for logged-in user
      */
-    private void initializeLikedSongs() {
-        // This is placeholder data - in production, load from database/file
-        // For now, create dummy songs for demonstration
-        likedSongs.add(new Song("Die With A Smile", "Lady Gaga, Bruno Mars", "Die With A Smile", 213, ""));
-        likedSongs.add(new Song("Espresso", "Sabrina Carpenter", "Short n' Sweet", 194, ""));
-        likedSongs.add(new Song("Song 3", "Artist 3", "Album 3", 200, ""));
-        likedSongs.add(new Song("Song 4", "Artist 4", "Album 4", 210, ""));
-        likedSongs.add(new Song("Song 5", "Artist 5", "Album 5", 205, ""));
-        likedSongs.add(new Song("Song 6", "Artist 6", "Album 6", 215, ""));
-        likedSongs.add(new Song("Song 7", "Artist 7", "Album 7", 200, ""));
+    private void loadLikedSongs() {
+        UserSession session = UserSession.getInstance();
+        if (!session.isLoggedIn()) {
+            logger.warning("User not logged in - cannot load liked songs");
+            return;
+        }
+
+        int userId = session.getUserId();
+        likedSongs = likedSongDao.getLikedSongs(userId);
+
+        if (likedSongs == null || likedSongs.isEmpty()) {
+            logger.info("No liked songs found for user " + userId);
+            // Could display a message to the user
+            return;
+        }
+
+        // Render liked songs in the UI
+        renderLikedSongs();
+
+        logger.info("Loaded " + likedSongs.size() + " liked songs");
+    }
+
+    /**
+     * Render liked songs in the table
+     * TODO: Implement table rendering similar to other views
+     */
+    private void renderLikedSongs() {
+        // This would populate a JTable or JList with liked songs
+        // For now, this is a placeholder for the rendering logic
+        // The actual implementation would depend on the UI components in the form
+        logger.info("Rendering " + likedSongs.size() + " liked songs");
     }
 
     /**
@@ -54,7 +89,9 @@ public class likedsong extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
@@ -67,8 +104,6 @@ public class likedsong extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         Backbtn = new javax.swing.JButton();
         NowPlaying = new javax.swing.JPanel();
-        nowPlayingSongJLabel = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         LikedSongTable = new javax.swing.JTable();
@@ -104,6 +139,7 @@ public class likedsong extends javax.swing.JFrame {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 jTextField1FocusGained(evt);
             }
+
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jTextField1FocusLost(evt);
             }
@@ -113,13 +149,11 @@ public class likedsong extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE));
         jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-        );
+                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE));
 
         jPanel2.add(jPanel4);
         jPanel4.setBounds(410, 60, 360, 50);
@@ -144,132 +178,121 @@ public class likedsong extends javax.swing.JFrame {
         NowPlaying.setBackground(new java.awt.Color(95, 138, 184));
         NowPlaying.setForeground(new java.awt.Color(102, 102, 102));
         NowPlaying.setLayout(null);
-
-        nowPlayingSongJLabel.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        nowPlayingSongJLabel.setText("Song");
-        NowPlaying.add(nowPlayingSongJLabel);
-        nowPlayingSongJLabel.setBounds(80, 30, 200, 20);
-
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/nowplaying.PNG"))); // NOI18N
-        NowPlaying.add(jLabel11);
-        jLabel11.setBounds(40, 0, 270, 70);
-
         jPanel1.add(NowPlaying);
-        NowPlaying.setBounds(-10, 560, 310, 80);
+        NowPlaying.setBounds(50, 540, 550, 80);
 
         LikedSongTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "SN", "Title ", "Artist", "Duration"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "SN", "Title ", "Artist", "Duration"
+                }) {
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+                return canEdit[columnIndex];
             }
         });
         jScrollPane2.setViewportView(LikedSongTable);
@@ -283,39 +306,38 @@ public class likedsong extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(210, 220, 540, 330);
+        jScrollPane1.setBounds(210, 220, 560, 290);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 955, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING,
+                                javax.swing.GroupLayout.DEFAULT_SIZE, 633, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }// GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
+    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextField1FocusGained
         // TODO add your handling code here:
-        if (jTextField1.getText().equals("Search")){
+        if (jTextField1.getText().equals("Search")) {
             jTextField1.setText("");
         }
-    }//GEN-LAST:event_jTextField1FocusGained
+    }// GEN-LAST:event_jTextField1FocusGained
 
-    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusLost
+    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextField1FocusLost
         // TODO add your handling code here:
-        if (jTextField1.getText().equals("")){
+        if (jTextField1.getText().equals("")) {
             jTextField1.setText("Search");
         }
-    }//GEN-LAST:event_jTextField1FocusLost
+    }// GEN-LAST:event_jTextField1FocusLost
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchActionPerformed
         // TODO add your handling code here:
@@ -421,7 +443,6 @@ public class likedsong extends javax.swing.JFrame {
     private javax.swing.JTable LikedSongTable;
     private javax.swing.JPanel NowPlaying;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -430,7 +451,6 @@ public class likedsong extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JLabel nowPlayingSongJLabel;
     private javax.swing.JButton search1;
     // End of variables declaration//GEN-END:variables
 }

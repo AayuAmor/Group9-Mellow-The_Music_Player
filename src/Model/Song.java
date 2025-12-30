@@ -5,10 +5,11 @@
 package Model;
 
 /**
- *
- * @author oakin
+ * Song model class
+ * Represents a song with metadata
  */
 public class Song {
+    private int songId; // Database ID for persistence operations
     private String title;
     private String artist;
     private String album;
@@ -32,6 +33,14 @@ public class Song {
         this.album = album;
         this.durationSeconds = durationSeconds;
         this.filePath = filePath;
+    }
+
+    public int getSongId() {
+        return songId;
+    }
+
+    public void setSongId(int songId) {
+        this.songId = songId;
     }
 
     public String getTitle() {

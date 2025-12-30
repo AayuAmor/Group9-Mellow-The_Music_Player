@@ -33,8 +33,8 @@ public class AdminDashboard extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         UserTable = new javax.swing.JTable();
-        Reset = new javax.swing.JButton();
-        Delete = new javax.swing.JButton();
+        Resetbtn = new javax.swing.JButton();
+        DeleteBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         Account = new javax.swing.JButton();
         AdminDashboard = new javax.swing.JLabel();
@@ -130,15 +130,15 @@ public class AdminDashboard extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(UserTable);
 
-        Reset.setBackground(new java.awt.Color(0, 153, 0));
-        Reset.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Reset.setText("Reset");
-        Reset.addActionListener(this::ResetActionPerformed);
+        Resetbtn.setBackground(new java.awt.Color(0, 153, 0));
+        Resetbtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Resetbtn.setText("Reset");
+        Resetbtn.addActionListener(this::ResetbtnActionPerformed);
 
-        Delete.setBackground(new java.awt.Color(0, 153, 0));
-        Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Delete.setText("Delete");
-        Delete.addActionListener(this::DeleteActionPerformed);
+        DeleteBtn.setBackground(new java.awt.Color(0, 153, 0));
+        DeleteBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        DeleteBtn.setText("Delete");
+        DeleteBtn.addActionListener(this::DeleteBtnActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -151,8 +151,8 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(Reset))
-                    .addComponent(Delete))
+                        .addComponent(Resetbtn))
+                    .addComponent(DeleteBtn))
                 .addGap(21, 21, 21))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -167,9 +167,9 @@ public class AdminDashboard extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(Reset)
+                        .addComponent(Resetbtn)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Delete)
+                        .addComponent(DeleteBtn)
                         .addContainerGap(447, Short.MAX_VALUE))
                     .addComponent(jScrollPane1)))
         );
@@ -200,7 +200,7 @@ public class AdminDashboard extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_AccountActionPerformed
 
-    private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
+    private void ResetbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetbtnActionPerformed
         // TODO add your handling code here:
             int[] selectedRows = UserTable.getSelectedRows();
     if (selectedRows.length == 0) {
@@ -213,9 +213,9 @@ public class AdminDashboard extends javax.swing.JFrame {
             model.setValueAt(null, row, col);
         }
     }
-    }//GEN-LAST:event_ResetActionPerformed
+    }//GEN-LAST:event_ResetbtnActionPerformed
 
-    private void DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteActionPerformed
+    private void DeleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeleteBtnActionPerformed
         // TODO add your handling code here:
         int[] selectedRows = UserTable.getSelectedRows();
     if (selectedRows.length == 0) {
@@ -228,7 +228,7 @@ public class AdminDashboard extends javax.swing.JFrame {
     for (int i = selectedRows.length - 1; i >= 0; i--) {
         model.removeRow(selectedRows[i]);
     }
-    }//GEN-LAST:event_DeleteActionPerformed
+    }//GEN-LAST:event_DeleteBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -258,8 +258,8 @@ public class AdminDashboard extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Account;
     private javax.swing.JLabel AdminDashboard;
-    private javax.swing.JButton Delete;
-    private javax.swing.JButton Reset;
+    private javax.swing.JButton DeleteBtn;
+    private javax.swing.JButton Resetbtn;
     private javax.swing.JTable UserTable;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
