@@ -111,6 +111,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -184,7 +185,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
                                                 javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(jLabel10))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 258, Short.MAX_VALUE)));
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 278, Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
                 jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(jPanel2Layout.createSequentialGroup()
@@ -201,7 +202,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
                                 .addContainerGap()));
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(310, 90, 660, 110);
+        jPanel2.setBounds(310, 80, 660, 110);
 
         searchBtn.setBackground(new java.awt.Color(197, 191, 191));
         searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
@@ -267,7 +268,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Reccomendation.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         Reccomendation.setText("Reccomendation");
         jPanel1.add(Reccomendation);
-        Reccomendation.setBounds(310, 220, 150, 20);
+        Reccomendation.setBounds(310, 200, 150, 20);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         jLabel1.setText("Recently Played");
@@ -285,7 +286,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(310, 250, 160, 170);
+        Recs1.setBounds(280, 230, 210, 200);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -298,7 +299,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(540, 260, 180, 150);
+        Recs3.setBounds(510, 230, 220, 210);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -341,7 +342,7 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(760, 260, 190, 160);
+        Recs2.setBounds(750, 230, 210, 210);
 
         NowPlaying.setBackground(new java.awt.Color(214, 214, 214));
 
@@ -397,14 +398,12 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
             }
         });
         jTable1.getTableHeader().setReorderingAllowed(false);
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(1).setResizable(false);
             jTable1.getColumnModel().getColumn(2).setResizable(false);
         }
-
-        jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 480, 590, 130);
@@ -439,10 +438,10 @@ public class UserDashboard extends javax.swing.JFrame implements utils.NowPlayin
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 978, Short.MAX_VALUE));
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE));
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 728, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
