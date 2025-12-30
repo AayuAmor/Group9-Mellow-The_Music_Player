@@ -6,19 +6,7 @@ import javax.swing.*;
 import utils.NowPlayingState;
 import utils.PlayerState;
 
-/**
- * NowPlayingCard - Reusable Component for Now Playing Display
- * 
- * Reads song info from PlayerState singleton via NowPlayingState observer
- * pattern.
- * Shows "Now Playing: <song_name> - <artist>"
- * Clicking opens Player.java without disrupting timestamp
- * 
- * AUTO-REFRESHES when PlayerState changes via NowPlayingListener
- * 
- * Usage: Simply add to any panel with:
- * panel.add(new NowPlayingCard(), BorderLayout.CENTER);
- */
+
 public class NowPlayingCard extends JPanel implements NowPlayingState.NowPlayingListener {
     private final JLabel songInfoLabel;
 

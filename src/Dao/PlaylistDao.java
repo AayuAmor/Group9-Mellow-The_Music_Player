@@ -278,6 +278,49 @@ public class PlaylistDao {
     }
 
     /**
+     * Update playlist name
+     * 
+     * @param playlistId The playlist ID
+     * @param newName    The new playlist name
+     * @return true if successful, false otherwise
+     */
+    public boolean updatePlaylistName(int playlistId, String newName) {
+        String query = "UPDATE playlists SET playlist_name = ? WHERE playlist_id = ?";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dbConnection.openconnection();
+            stmt = conn.prepareStatement(query);
+
+            stmt.setString(1, newName);
+            stmt.setInt(2, playlistId);
+
+            int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                System.out.println("[PlaylistDao] Updated playlist " + playlistId + " name to: " + newName);
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Error updating playlist name: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+                if (conn != null)
+                    dbConnection.closeConnection(conn);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get playlist by ID
      * 
      * @param playlistId The playlist ID

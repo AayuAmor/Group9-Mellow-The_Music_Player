@@ -21,9 +21,10 @@ import service.PlaylistManager;
  * Each card shows playlist name and song count
  * Clicking a card opens PlaylistFile.java
  */
-public class Playlist extends javax.swing.JFrame {
+public class Playlist_CRUD extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Playlist.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger
+            .getLogger(Playlist_CRUD.class.getName());
 
     private final SongController songController;
     private final PlaylistDao playlistDao;
@@ -33,7 +34,7 @@ public class Playlist extends javax.swing.JFrame {
     /**
      * Creates new form Playlist with a shared controller.
      */
-    public Playlist(SongController controller) {
+    public Playlist_CRUD(SongController controller) {
         this.songController = controller;
         this.playlistDao = new PlaylistDao();
         initComponents();
@@ -52,7 +53,7 @@ public class Playlist extends javax.swing.JFrame {
     }
 
     // Default constructor for builder/runtime compatibility (not used by dashboard)
-    public Playlist() {
+    public Playlist_CRUD() {
         this.songController = new SongController();
         this.playlistDao = new PlaylistDao();
         initComponents();
@@ -91,10 +92,9 @@ public class Playlist extends javax.swing.JFrame {
         Createnew = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        editPlaylistBtn = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
         NowPlaying = new javax.swing.JPanel();
         playlistCardRendererPanel = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1000, 700));
@@ -112,7 +112,7 @@ public class Playlist extends javax.swing.JFrame {
         jPanel1.add(BackBtn);
         BackBtn.setBounds(840, 590, 110, 40);
 
-        jPanel2.setBackground(new java.awt.Color(89, 141, 193));
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
 
         SearchTextField.setBackground(new java.awt.Color(153, 153, 153));
@@ -144,11 +144,8 @@ public class Playlist extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Create New Playlist");
 
-        editPlaylistBtn.setBackground(new java.awt.Color(153, 204, 255));
-        editPlaylistBtn.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        editPlaylistBtn.setText("Edit Playlist");
-        editPlaylistBtn.setBorder(null);
-        editPlaylistBtn.addActionListener(this::editPlaylistBtnActionPerformed);
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel5.setText("Edit Playlist");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -162,26 +159,23 @@ public class Playlist extends javax.swing.JFrame {
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout
                                                 .createSequentialGroup()
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addComponent(searchBtn,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 58,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(SearchTextField,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 550,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(57, 57, 57))
-                                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addComponent(editPlaylistBtn,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 170,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(47, 47, 47)))
-                                                .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
+                                                .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 58,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(153, 153, 153))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(SearchTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                        550, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(57, 57, 57))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                jPanel2Layout.createSequentialGroup()
+                                                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(191, 191, 191)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
+                                                jPanel2Layout.createSequentialGroup()
+                                                        .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGap(153, 153, 153))
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING,
                                                 jPanel2Layout.createSequentialGroup()
                                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE,
@@ -204,17 +198,17 @@ public class Playlist extends javax.swing.JFrame {
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE,
                                                                 javax.swing.GroupLayout.DEFAULT_SIZE,
                                                                 javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(editPlaylistBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                        36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addGap(18, 18, 18)
+                                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 70,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))
                                         .addGroup(jPanel2Layout.createSequentialGroup()
                                                 .addContainerGap(10, Short.MAX_VALUE)
                                                 .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
-                                        javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap()));
 
         jPanel1.add(jPanel2);
@@ -236,15 +230,10 @@ public class Playlist extends javax.swing.JFrame {
                         .addGap(0, 970, Short.MAX_VALUE));
         playlistCardRendererPanelLayout.setVerticalGroup(
                 playlistCardRendererPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGap(0, 320, Short.MAX_VALUE));
+                        .addGap(0, 350, Short.MAX_VALUE));
 
         jPanel1.add(playlistCardRendererPanel);
-        playlistCardRendererPanel.setBounds(10, 250, 970, 320);
-
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel4.setText("Playlist");
-        jPanel1.add(jLabel4);
-        jLabel4.setBounds(30, 180, 200, 70);
+        playlistCardRendererPanel.setBounds(10, 220, 970, 350);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -258,13 +247,6 @@ public class Playlist extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void editPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_editPlaylistBtnActionPerformed
-        // Open Playlist_CRUD view for editing playlists
-        Playlist_CRUD crudView = new Playlist_CRUD();
-        crudView.setVisible(true);
-        this.dispose();
-    }// GEN-LAST:event_editPlaylistBtnActionPerformed
 
     private void SearchTextFieldFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchTextFieldFocusLost
         // TODO add your handling code here:
@@ -311,8 +293,8 @@ public class Playlist extends javax.swing.JFrame {
 
     private void BackBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BackBtnActionPerformed
         // TODO add your handling code here:
-        UserDashboard UserDashboard = new UserDashboard();
-        UserDashboard.setVisible(true);
+        Playlist playlist = new Playlist();
+        playlist.setVisible(true);
         this.dispose();
     }// GEN-LAST:event_BackBtnActionPerformed
 
@@ -346,7 +328,7 @@ public class Playlist extends javax.swing.JFrame {
         // </editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new Playlist().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Playlist_CRUD().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -354,10 +336,9 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JButton Createnew;
     private javax.swing.JPanel NowPlaying;
     private javax.swing.JTextField SearchTextField;
-    private javax.swing.JButton editPlaylistBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel playlistCardRendererPanel;
@@ -365,9 +346,9 @@ public class Playlist extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
-     * Load and render playlist cards for logged-in user using PlaylistManager cache
+     * Load and render playlist cards for logged-in user in CRUD mode
      * Each card shows playlist name and song count
-     * Clicking a card opens PlaylistFile.java
+     * Clicking a card shows edit confirmation dialog
      */
     private void loadPlaylistCards() {
         UserSession session = UserSession.getInstance();
@@ -386,10 +367,10 @@ public class Playlist extends javax.swing.JFrame {
         playlistCardRendererPanel.setLayout(new GridLayout(0, 3, 15, 15));
         playlistCardRendererPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Create PlaylistCard for each playlist in NORMAL mode
+        // Create PlaylistCard for each playlist in CRUD mode
         for (PlaylistModel playlist : playlists) {
-            PlaylistCard card = new PlaylistCard(playlist, PlaylistCard.Mode.NORMAL, () -> {
-                openPlaylistFile(playlist.getPlaylistId(), playlist.getPlaylistName());
+            PlaylistCard card = new PlaylistCard(playlist, PlaylistCard.Mode.CRUD, () -> {
+                showEditConfirmation(playlist);
             });
             playlistCardRendererPanel.add(card);
         }
@@ -397,17 +378,33 @@ public class Playlist extends javax.swing.JFrame {
         playlistCardRendererPanel.revalidate();
         playlistCardRendererPanel.repaint();
 
-        logger.info("Loaded " + playlists.size() + " playlists from cache");
+        logger.info("Loaded " + playlists.size() + " playlists in CRUD mode");
     }
 
     /**
-     * Open PlaylistFile.java with the selected playlist
+     * Show confirmation dialog before editing playlist
      */
-    private void openPlaylistFile(int playlistId, String playlistName) {
-        PlaylistFile playlistFile = new PlaylistFile(playlistId, playlistName);
-        playlistFile.setVisible(true);
+    private void showEditConfirmation(PlaylistModel playlist) {
+        int choice = JOptionPane.showConfirmDialog(
+                this,
+                "Do you want to edit this playlist?",
+                "Edit Playlist: " + playlist.getPlaylistName(),
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (choice == JOptionPane.YES_OPTION) {
+            openPlaylistEdit(playlist);
+        }
+    }
+
+    /**
+     * Open Playlist_Edit.java with selected playlist
+     */
+    private void openPlaylistEdit(PlaylistModel playlist) {
+        Playlist_Edit editView = new Playlist_Edit(playlist);
+        editView.setVisible(true);
         this.dispose();
-        logger.info("Opening playlist: " + playlistName + " (ID: " + playlistId + ")");
+        logger.info("Opening edit view for playlist: " + playlist.getPlaylistName());
     }
 
     /**
