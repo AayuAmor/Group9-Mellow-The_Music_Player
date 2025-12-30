@@ -30,6 +30,8 @@ public class Playlist_CRUD extends javax.swing.JFrame {
     private final PlaylistDao playlistDao;
     private JList<Song> songList;
     private List<Song> playlistSongs; // For future extension: filtering songs into playlists
+    private JScrollPane playlistScrollPane;
+    private JPanel playlistGridPanel;
 
     /**
      * Creates new form Playlist with a shared controller.
@@ -38,6 +40,7 @@ public class Playlist_CRUD extends javax.swing.JFrame {
         this.songController = controller;
         this.playlistDao = new PlaylistDao();
         initComponents();
+        initPlaylistGrid();
         initSongList();
         loadPlaylistCards();
 
@@ -57,6 +60,7 @@ public class Playlist_CRUD extends javax.swing.JFrame {
         this.songController = new SongController();
         this.playlistDao = new PlaylistDao();
         initComponents();
+        initPlaylistGrid();
         initSongList();
         loadPlaylistCards();
 
@@ -278,8 +282,10 @@ public class Playlist_CRUD extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "Playlist created successfully!", "Success",
                             JOptionPane.INFORMATION_MESSAGE);
 
-                    // Reload playlist cards
-                    loadPlaylistCards();
+                    // Refresh cache and re-render cards
+                    PlaylistManager.getInstance().refreshCache();
+                    List<PlaylistModel> playlists = PlaylistManager.getInstance().getPlaylists();
+                    renderPlaylists(playlists);
                 } else {
                     JOptionPane.showMessageDialog(this, "Failed to create playlist", "Error",
                             JOptionPane.ERROR_MESSAGE);
@@ -346,6 +352,27 @@ public class Playlist_CRUD extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     /**
+     * Initialize playlist grid structure ONCE
+     * Creates JScrollPane and playlistGridPanel that will be reused
+     */
+    private void initPlaylistGrid() {
+        // Create grid panel with 3 columns and proper spacing
+        playlistGridPanel = new JPanel(new GridLayout(0, 3, 20, 20));
+        playlistGridPanel.setBackground(new java.awt.Color(204, 204, 204));
+        playlistGridPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // Create scroll pane ONCE
+        playlistScrollPane = new JScrollPane(playlistGridPanel);
+        playlistScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        playlistScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        playlistScrollPane.setBorder(null);
+
+        // Add scroll pane to parent container
+        playlistCardRendererPanel.setLayout(new BorderLayout());
+        playlistCardRendererPanel.add(playlistScrollPane, BorderLayout.CENTER);
+    }
+
+    /**
      * Load and render playlist cards for logged-in user in CRUD mode
      * Each card shows playlist name and song count
      * Clicking a card shows edit confirmation dialog
@@ -359,26 +386,30 @@ public class Playlist_CRUD extends javax.swing.JFrame {
 
         // Use PlaylistManager for cached playlists
         List<PlaylistModel> playlists = PlaylistManager.getInstance().getPlaylists();
+        renderPlaylists(playlists);
+    }
 
-        // Clear existing cards
-        playlistCardRendererPanel.removeAll();
-
-        // Use GridLayout with 3 columns and proper spacing
-        playlistCardRendererPanel.setLayout(new GridLayout(0, 3, 15, 15));
-        playlistCardRendererPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    /**
+     * Render playlists in grid - ONLY clears and adds cards
+     * Does NOT recreate panels or scroll panes
+     */
+    private void renderPlaylists(List<PlaylistModel> playlists) {
+        // MUST clear old cards
+        playlistGridPanel.removeAll();
 
         // Create PlaylistCard for each playlist in CRUD mode
         for (PlaylistModel playlist : playlists) {
             PlaylistCard card = new PlaylistCard(playlist, PlaylistCard.Mode.CRUD, () -> {
                 showEditConfirmation(playlist);
             });
-            playlistCardRendererPanel.add(card);
+            playlistGridPanel.add(card);
         }
 
-        playlistCardRendererPanel.revalidate();
-        playlistCardRendererPanel.repaint();
+        // REQUIRED: revalidate and repaint
+        playlistGridPanel.revalidate();
+        playlistGridPanel.repaint();
 
-        logger.info("Loaded " + playlists.size() + " playlists in CRUD mode");
+        logger.info("Rendered " + playlists.size() + " playlists in CRUD mode");
     }
 
     /**

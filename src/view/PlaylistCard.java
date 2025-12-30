@@ -24,7 +24,8 @@ public class PlaylistCard extends javax.swing.JPanel {
      */
     public enum Mode {
         NORMAL, // Click opens PlaylistFile.java
-        CRUD // Click opens Playlist_Edit.java with confirmation
+        CRUD, // Click opens Playlist_Edit.java with confirmation
+        ADD // Click adds song to playlist
     }
 
     private final PlaylistModel playlist;

@@ -99,8 +99,8 @@
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="playlistNameJLabel" min="-2" pref="218" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="604" max="32767" attributes="0"/>
+                      <Component id="playlistNameJLabel" min="-2" pref="537" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="285" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>

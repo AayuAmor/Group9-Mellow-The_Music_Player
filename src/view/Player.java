@@ -448,6 +448,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
         buttonsHolderPanel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(147, 176, 206), 10, true));
 
         addToPlaylistBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/addtoplaylist.png"))); // NOI18N
+        addToPlaylistBtn.addActionListener(this::addToPlaylistBtnActionPerformed);
 
         loopSongBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/fad_loop.png"))); // NOI18N
         loopSongBtn.addActionListener(this::loopSongBtnActionPerformed);
@@ -715,8 +716,10 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
     private void addToPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {
         Song currentSong = playbackManager.getCurrentSong();
         if (currentSong != null) {
-            logger.info(() -> "Adding to playlist: " + currentSong.getTitle());
-            // TODO: Open playlist selection dialog or add to default playlist
+            logger.info(() -> "Opening add to playlist: " + currentSong.getTitle());
+            // Open AddToPlaylist_Interface without disposing Player
+            // Player continues playing in background
+            new AddToPlaylist_Interface(currentSong).setVisible(true);
         } else {
             logger.warning("No song currently playing to add");
         }
