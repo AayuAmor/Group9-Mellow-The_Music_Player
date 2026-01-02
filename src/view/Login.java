@@ -151,6 +151,14 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(ForgotPassword);
         ForgotPassword.setBounds(610, 340, 130, 20);
 
+        // Admin Login button
+        javax.swing.JButton adminLoginBtn = new javax.swing.JButton();
+        adminLoginBtn.setText("Admin Login");
+        adminLoginBtn.setBackground(new java.awt.Color(200,200,200));
+        adminLoginBtn.addActionListener(this::adminLoginActionPerformed);
+        getContentPane().add(adminLoginBtn);
+        adminLoginBtn.setBounds(460, 450, 100, 25);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
         getContentPane().add(jLabel2);
@@ -207,6 +215,13 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_ForgotPasswordActionPerformed
 
+    private void adminLoginActionPerformed(java.awt.event.ActionEvent evt) {
+        Dao.AdminLogin adminLoginView = new Dao.AdminLogin();
+        Controller.AdminLoginController adminController = new Controller.AdminLoginController(adminLoginView);
+        adminController.open();
+        this.dispose();
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -230,6 +245,10 @@ public class Login extends javax.swing.JFrame {
 
         /* Create and display the form via controller to ensure listeners are attached */
         java.awt.EventQueue.invokeLater(() -> {
+            // Ensure admin exists (default credentials)
+            Dao.userDao udao = new Dao.userDao();
+            udao.ensureAdminExists("admin", "admin@mellow.com", "admin123");
+
             Login loginView = new Login();
             Controller.LoginController controller = new Controller.LoginController(loginView);
             controller.open();

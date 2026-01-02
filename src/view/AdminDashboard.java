@@ -17,6 +17,7 @@ public class AdminDashboard extends javax.swing.JFrame {
      */
     public AdminDashboard() {
         initComponents();
+        loadUsers();
     }
 
     /**
@@ -229,6 +230,17 @@ public class AdminDashboard extends javax.swing.JFrame {
         model.removeRow(selectedRows[i]);
     }
     }//GEN-LAST:event_DeleteActionPerformed
+
+    private void loadUsers() {
+        Dao.userDao dao = new Dao.userDao();
+        java.util.List<Model.UserData> users = dao.getAllUsers();
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(new Object[]{"USERNAME", "EMAIL", "DATE CREATED", "ROLE"}, 0);
+        for (Model.UserData u : users) {
+            String created = u.getCreatedAt() != null ? u.getCreatedAt().toString() : "";
+            model.addRow(new Object[]{u.getUsername(), u.getEmail(), created, u.getRole()});
+        }
+        UserTable.setModel(model);
+    }
 
     /**
      * @param args the command line arguments

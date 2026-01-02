@@ -14,6 +14,7 @@ public class UserData {
     private String password;
     private String email;
     private String role;
+    private java.sql.Timestamp createdAt;
     
     public void setUsername(String username) {
         this.username = username;
@@ -49,7 +50,18 @@ public class UserData {
     public String getRole() {
         return role;
     }
+
+    public void setCreatedAt(java.sql.Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+    public java.sql.Timestamp getCreatedAt() {
+        return createdAt;
+    }
     
+    // No-arg constructor
+    public UserData() {
+    }
+
     // Constructor for signup
     public UserData(String username, String email, String password) {
         this.username = username;
