@@ -3,38 +3,115 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package view;
+
 import Controller.SongController;
+import Controller.SongSearchController;
+import Model.PlaySource;
 import Model.Song;
 import java.awt.Image;
+import java.io.File;
+import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableModel;
+import service.PlaybackManager;
 
 /**
  *
  * @author Asus
  */
-public class UserDashboard extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(UserDashboard.class.getName());
+public class UserDashboard extends javax.swing.JFrame implements SongSearchView {
+
+    private static final java.util.logging.Logger logger = java.util.logging.Logger
+            .getLogger(UserDashboard.class.getName());
+    private final SongController songController = new SongController();
+    private final SongSearchController searchController = new SongSearchController();
+    private List<Song> loadedSongs = Collections.emptyList();
+    private List<Song> allSongsCache = Collections.emptyList();
+    private static boolean songsLoadedOnce = false;
 
     /**
      * Creates new form UserDashboard
      */
     public UserDashboard() {
         initComponents();
-        
+        setRecentlyPlayedColumnWidths();
+        jTable1.setFillsViewportHeight(true);
+
         // Display logged-in username
         Model.UserSession session = Model.UserSession.getInstance();
-        if(session.isLoggedIn()) {
+        if (session.isLoggedIn()) {
             Userdisplay.setText("Hello, " + session.getUsername());
         }
-        
-        SongController controller = new SongController();
-        List<Song> songs = controller.getAllLocalSongs();
 
-        loadSongsToUI(songs);
+        // STEP 1: Load local songs once during application startup
+        if (!songsLoadedOnce) {
+            logger.info("Starting to load local songs from Music directory...");
 
+            // Use dynamic, safe path - NOT hardcoded
+            String musicPath = System.getProperty("user.home") + File.separator + "Music";
+            songController.loadLocalSongsOnce(musicPath);
+            songsLoadedOnce = true;
+
+            logger.info("Local songs loading completed.");
+        }
+
+        // STEP 2: Fetch all songs AFTER loading
+        List<Song> allSongs = songController.getAllSongs();
+        allSongsCache = allSongs;
+        logger.info("Total songs fetched from cache: " + (allSongs != null ? allSongs.size() : 0));
+
+        // STEP 3: Render songs if available
+        if (allSongs != null && !allSongs.isEmpty()) {
+            logger.info("Starting dashboard rendering with " + allSongs.size() + " songs...");
+
+            // Store in loadedSongs for UI interaction
+            loadedSongs = allSongs;
+
+            // Render recommendation buttons
+            loadSongsToUI(allSongs);
+
+            // Render Recently Played table
+            renderRecentlyPlayed(allSongs);
+
+            logger.info("Dashboard rendering completed.");
+        } else {
+            logger.warning("No songs found in cache. Music directory may be empty or inaccessible.");
+        }
+
+        // Add mouse click listener to recently played table
+        // When user clicks a song: load full playlist into PlaybackManager and start
+        // playback
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = jTable1.rowAtPoint(evt.getPoint());
+                if (row >= 0 && loadedSongs != null && row < loadedSongs.size()) {
+                    Song selectedSong = loadedSongs.get(row);
+
+                    // Send full playlist and selected index to PlaybackManager
+                    PlaybackManager.getInstance().setPlaylist(loadedSongs, row, PlaySource.DASHBOARD);
+
+                    // Open Player UI with correct play source
+                    Player playerWindow = Player.getInstance();
+                    playerWindow.setPlaySource(PlaySource.DASHBOARD);
+                    playerWindow.setVisible(true);
+
+                    logger.info("Playing from Dashboard: " + selectedSong.getTitle());
+                }
+            }
+        });
+
+        // After initComponents, configure NowPlaying panel with NowPlayingCard
+        NowPlaying.removeAll();
+        NowPlaying.setLayout(new java.awt.BorderLayout());
+        NowPlaying.setOpaque(true);
+        NowPlaying.setBackground(new java.awt.Color(89, 141, 193));
+        NowPlaying.add(new NowPlayingCard(), java.awt.BorderLayout.CENTER);
+        NowPlaying.setPreferredSize(new java.awt.Dimension(0, 80));
+        NowPlaying.revalidate();
+        NowPlaying.repaint();
     }
 
     /**
@@ -43,7 +120,14 @@ public class UserDashboard extends javax.swing.JFrame {
      * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPopupMenu1 = new javax.swing.JPopupMenu();
@@ -55,8 +139,6 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        searchBtn = new javax.swing.JButton();
-        SearchBar = new javax.swing.JTextField();
         Playlist = new javax.swing.JButton();
         Likedsongs = new javax.swing.JButton();
         Account = new javax.swing.JButton();
@@ -72,12 +154,15 @@ public class UserDashboard extends javax.swing.JFrame {
         Userdisplay = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         Recs2 = new javax.swing.JButton();
+        NowPlaying = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        searchPanel = new javax.swing.JPanel();
+        searchBtn = new javax.swing.JButton();
+        SearchBar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        Recs4 = new javax.swing.JButton();
         Likedsongs1 = new javax.swing.JButton();
 
         jToolBar1.setRollover(true);
@@ -106,54 +191,32 @@ public class UserDashboard extends javax.swing.JFrame {
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel10))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 258, Short.MAX_VALUE))
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 88,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel10))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 278, Short.MAX_VALUE)));
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(23, 23, 23)
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 171,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap()));
 
         jPanel1.add(jPanel2);
-        jPanel2.setBounds(310, 140, 650, 130);
-
-        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
-        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
-        jPanel1.add(searchBtn);
-        searchBtn.setBounds(310, 50, 70, 30);
-
-        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
-        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
-        SearchBar.setText("               Search");
-        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(102, 102, 102)));
-        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                SearchBarFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                SearchBarFocusLost(evt);
-            }
-        });
-        SearchBar.addActionListener(this::SearchBarActionPerformed);
-        jPanel1.add(SearchBar);
-        SearchBar.setBounds(310, 50, 650, 30);
+        jPanel2.setBounds(310, 80, 660, 110);
 
         Playlist.setBackground(new java.awt.Color(40, 52, 46));
         Playlist.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -194,12 +257,12 @@ public class UserDashboard extends javax.swing.JFrame {
         Reccomendation.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         Reccomendation.setText("Reccomendation");
         jPanel1.add(Reccomendation);
-        Reccomendation.setBounds(310, 310, 150, 20);
+        Reccomendation.setBounds(310, 200, 150, 20);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Variable", 1, 16)); // NOI18N
         jLabel1.setText("Recently Played");
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(310, 520, 120, 30);
+        jLabel1.setBounds(310, 440, 120, 30);
 
         Recs1.setBackground(new java.awt.Color(217, 213, 213));
         Recs1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -212,7 +275,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs1.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs1.addActionListener(this::Recs1ActionPerformed);
         jPanel1.add(Recs1);
-        Recs1.setBounds(320, 350, 150, 150);
+        Recs1.setBounds(280, 230, 210, 200);
 
         Recs3.setBackground(new java.awt.Color(217, 213, 213));
         Recs3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -225,7 +288,7 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs3.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs3.addActionListener(this::Recs3ActionPerformed);
         jPanel1.add(Recs3);
-        Recs3.setBounds(560, 350, 150, 150);
+        Recs3.setBounds(520, 230, 210, 200);
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/iconamoon_playlist.png"))); // NOI18N
         jPanel1.add(jLabel4);
@@ -268,7 +331,12 @@ public class UserDashboard extends javax.swing.JFrame {
         Recs2.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
         Recs2.addActionListener(this::Recs2ActionPerformed);
         jPanel1.add(Recs2);
-        Recs2.setBounds(790, 350, 150, 150);
+        Recs2.setBounds(770, 230, 200, 200);
+
+        NowPlaying.setBackground(new java.awt.Color(214, 214, 214));
+        NowPlaying.setLayout(null);
+        jPanel1.add(NowPlaying);
+        NowPlaying.setBounds(360, 640, 480, 70);
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/allsongs.png"))); // NOI18N
         jPanel1.add(jLabel11);
@@ -276,43 +344,95 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jTable1.setBackground(new java.awt.Color(225, 223, 223));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {},
-                {}
-            },
-            new String [] {
+                new Object[][] {
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null },
+                        { null, null, null, null }
+                },
+                new String[] {
+                        "SN", "Title", "Artist", "Duration"
+                }) {
+            Class[] types = new Class[] {
+                    java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean[] {
+                    false, false, false, false
+            };
 
+            public Class getColumnClass(int columnIndex) {
+                return types[columnIndex];
             }
-        ));
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit[columnIndex];
+            }
+        });
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane2.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         jScrollPane1.setViewportView(jScrollPane2);
 
         jPanel1.add(jScrollPane1);
-        jScrollPane1.setBounds(330, 560, 590, 130);
+        jScrollPane1.setBounds(330, 480, 590, 130);
+
+        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
+
+        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
+        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
+        SearchBar.setText("               Search");
+        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
+                new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchBarFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchBarFocusLost(evt);
+            }
+        });
+        SearchBar.addActionListener(this::SearchBarActionPerformed);
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 592,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchPanelLayout.createSequentialGroup()
+                                .addGroup(searchPanelLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, 42,
+                                                Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
+
+        jPanel1.add(searchPanel);
+        searchPanel.setBounds(320, 20, 650, 40);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
-        jLabel2.setBounds(0, 0, 980, 710);
-
-        Recs4.setBackground(new java.awt.Color(229, 226, 226));
-        Recs4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        Recs4.setForeground(new java.awt.Color(153, 153, 153));
-        Recs4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Heavy - The Marías.jpg"))); // NOI18N
-        Recs4.setText("The Marias- Heavy");
-        Recs4.setBorder(null);
-        Recs4.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        Recs4.setIconTextGap(0);
-        Recs4.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        Recs4.addActionListener(this::Recs4ActionPerformed);
-        jPanel1.add(Recs4);
-        Recs4.setBounds(560, 350, 150, 150);
+        jLabel2.setBounds(0, 0, 990, 730);
 
         Likedsongs1.setBackground(new java.awt.Color(40, 52, 46));
         Likedsongs1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -326,57 +446,55 @@ public class UserDashboard extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 978, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE));
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
-        );
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 728, Short.MAX_VALUE));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchBarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_SearchBarActionPerformed
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
+        performSearch();
+    }// GEN-LAST:event_searchBtnActionPerformed
 
-    private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs3ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
+    private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SearchBarActionPerformed
+        performSearch();
+    }// GEN-LAST:event_SearchBarActionPerformed
+
+    private void Recs3ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs3ActionPerformed
+        // Recs3 is index 1 (from loadSongsToUI mapping)
+        playRecommendationSong(1);
+    }// GEN-LAST:event_Recs3ActionPerformed
+
+    private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PlaylistActionPerformed
+        Playlist playlistWindow = new Playlist(songController);
+        playlistWindow.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_Recs3ActionPerformed
+    }// GEN-LAST:event_PlaylistActionPerformed
 
-    private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PlaylistActionPerformed
-        // TODO add your handling code here:
-        Playlist Playlist = new Playlist();
-        Playlist.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_PlaylistActionPerformed
-
-    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_logoutActionPerformed
         // Logout and return to Login window
         int confirm = javax.swing.JOptionPane.showConfirmDialog(
-            this,
-            "Are you sure you want to logout?",
-            "Confirm Logout",
-            javax.swing.JOptionPane.YES_NO_OPTION,
-            javax.swing.JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if(confirm == javax.swing.JOptionPane.YES_OPTION) {
+                this,
+                "Are you sure you want to logout?",
+                "Confirm Logout",
+                javax.swing.JOptionPane.YES_NO_OPTION,
+                javax.swing.JOptionPane.QUESTION_MESSAGE);
+
+        if (confirm == javax.swing.JOptionPane.YES_OPTION) {
             // Clear user session
             Model.UserSession.getInstance().clearSession();
-            
+
             this.dispose();
             view.Login loginView = new view.Login();
             Controller.LoginController loginController = new Controller.LoginController(loginView);
             loginController.open();
         }
-    }//GEN-LAST:event_logoutActionPerformed
+    }// GEN-LAST:event_logoutActionPerformed
 
-    private void AccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AccountActionPerformed
+    private void AccountActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_AccountActionPerformed
         // Only allow Account page when logged in; otherwise redirect to Login
         Model.UserSession session = Model.UserSession.getInstance();
         if (session.isLoggedIn()) {
@@ -385,76 +503,76 @@ public class UserDashboard extends javax.swing.JFrame {
             this.dispose();
         } else {
             javax.swing.JOptionPane.showMessageDialog(
-                this,
-                "Please login to view your account.",
-                "Login Required",
-                javax.swing.JOptionPane.INFORMATION_MESSAGE
-            );
+                    this,
+                    "Please login to view your account.",
+                    "Login Required",
+                    javax.swing.JOptionPane.INFORMATION_MESSAGE);
             this.dispose();
             view.Login loginView = new view.Login();
             Controller.LoginController loginController = new Controller.LoginController(loginView);
             loginController.open();
         }
-    }//GEN-LAST:event_AccountActionPerformed
+    }// GEN-LAST:event_AccountActionPerformed
 
-    private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs1ActionPerformed
-        // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Recs1ActionPerformed
+    private void Recs1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs1ActionPerformed
+        // Recs1 is index 0 (from loadSongsToUI mapping)
+        playRecommendationSong(0);
+    }// GEN-LAST:event_Recs1ActionPerformed
 
-    private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Recs4ActionPerformed
+    private void Recs4ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs4ActionPerformed
+        // Recs4 is index 2 (from loadSongsToUI mapping)
+        playRecommendationSong(2);
+    }// GEN-LAST:event_Recs4ActionPerformed
 
-    private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchBarFocusGained
+    private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusGained
         // TODO add your handling code here:
-        if(SearchBar.getText().equals("               Search")){
-            SearchBar.setText("");  
+        if (SearchBar.getText().equals("               Search")) {
+            SearchBar.setText("");
         }
-    }//GEN-LAST:event_SearchBarFocusGained
+    }// GEN-LAST:event_SearchBarFocusGained
 
-    private void SearchBarFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SearchBarFocusLost
+    private void SearchBarFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusLost
         // TODO add your handling code here:
-        if(SearchBar.getText().equals("")){
+        if (SearchBar.getText().equals("")) {
             SearchBar.setText("               Search");
         }
-    }//GEN-LAST:event_SearchBarFocusLost
+    }// GEN-LAST:event_SearchBarFocusLost
 
-    private void LikedsongsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LikedsongsActionPerformed
+    private void LikedsongsActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_LikedsongsActionPerformed
         // TODO add your handling code here:
         likedsong likedsong = new likedsong();
         likedsong.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_LikedsongsActionPerformed
+    }// GEN-LAST:event_LikedsongsActionPerformed
 
-    private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Recs2ActionPerformed
+    private void Recs2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Recs2ActionPerformed
+        // Recs2 is index 3 (from loadSongsToUI mapping)
+        playRecommendationSong(3);
+    }// GEN-LAST:event_Recs2ActionPerformed
+
+    private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_Likedsongs1ActionPerformed
         // TODO add your handling code here:
-        Player Player= new Player();
-        Player.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_Recs2ActionPerformed
+    }// GEN-LAST:event_Likedsongs1ActionPerformed
 
-    private void Likedsongs1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Likedsongs1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Likedsongs1ActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         AllSongs AllSongs = new AllSongs();
         AllSongs.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }// GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+        // <editor-fold defaultstate="collapsed" desc=" Look and feel setting code
+        // (optional) ">
+        /*
+         * If Nimbus (introduced in Java SE 6) is not available, stay with the default
+         * look and feel.
+         * For details see
+         * http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -466,7 +584,7 @@ public class UserDashboard extends javax.swing.JFrame {
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
+        // </editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new UserDashboard().setVisible(true));
@@ -476,12 +594,12 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JButton Account;
     private javax.swing.JButton Likedsongs;
     private javax.swing.JButton Likedsongs1;
+    private javax.swing.JPanel NowPlaying;
     private javax.swing.JButton Playlist;
     private javax.swing.JLabel Reccomendation;
     private javax.swing.JButton Recs1;
     private javax.swing.JButton Recs2;
     private javax.swing.JButton Recs3;
-    private javax.swing.JButton Recs4;
     private javax.swing.JTextField SearchBar;
     private javax.swing.JLabel Userdisplay;
     private javax.swing.JButton jButton1;
@@ -506,29 +624,157 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
     private javax.swing.JButton searchBtn;
+    private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 
-private void loadSongsToUI(List<Song> songs) {
-    JButton[] recButtons = {Recs1, Recs3, Recs4, Recs2};
+    private void loadSongsToUI(List<Song> songs) {
+        JButton[] recButtons = { Recs1, Recs3, Recs2 };
+        loadedSongs = songs;
+        for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
+            Song song = songs.get(i);
+            String duration = String.format("%d:%02d", song.getDurationSeconds() / 60, song.getDurationSeconds() % 60);
+            recButtons[i].setText(song.getTitle() + " - " + song.getArtist() + " (" + duration + ")");
 
-    for (int i = 0; i < recButtons.length && i < songs.size(); i++) {
-        Song song = songs.get(i);
-        recButtons[i].setText(song.getTitle() + " - " + song.getArtist());
+            // Load image
+            ImageIcon icon;
+            try {
+                icon = new ImageIcon(getClass().getResource(song.getImagePath()));
+            } catch (Exception e) {
+                icon = new ImageIcon(getClass().getResource("/Images/default_song.jpg"));
+            }
+            Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            recButtons[i].setIcon(new ImageIcon(img));
 
-        // Load image
-        ImageIcon icon;
-        try {
-            icon = new ImageIcon(getClass().getResource(song.getImagePath()));
-        } catch (Exception e) {
-            icon = new ImageIcon(getClass().getResource("/Images/default_song.jpg"));
+            recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
+            recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
         }
-        Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-        recButtons[i].setIcon(new ImageIcon(img));
-
-        recButtons[i].setHorizontalTextPosition(SwingConstants.CENTER);
-        recButtons[i].setVerticalTextPosition(SwingConstants.BOTTOM);
     }
-}
 
-    
+    /**
+     * OLD: File chooser for loading songs
+     * KEPT for backwards compatibility
+     */
+    // Legacy loader retained intentionally (unused)
+    private void searchBtnActionPerformedOld(java.awt.event.ActionEvent evt) {
+        // no-op for current flow
+    }
+
+    private void setRecentlyPlayedColumnWidths() {
+        javax.swing.table.TableColumnModel columns = jTable1.getColumnModel();
+        columns.getColumn(0).setMinWidth(35);
+        columns.getColumn(0).setPreferredWidth(45);
+        columns.getColumn(0).setMaxWidth(55);
+        columns.getColumn(1).setPreferredWidth(240);
+        columns.getColumn(2).setPreferredWidth(180);
+        columns.getColumn(3).setMinWidth(60);
+        columns.getColumn(3).setPreferredWidth(70);
+        columns.getColumn(3).setMaxWidth(80);
+    }
+
+    /**
+     * Play a recommendation song by index
+     * Sends playlist and selected index to PlaybackManager and opens Player
+     */
+    private void playRecommendationSong(int index) {
+        if (loadedSongs == null || index < 0 || index >= loadedSongs.size()) {
+            logger.warning("Invalid recommendation song index: " + index);
+            return;
+        }
+
+        Song selectedSong = loadedSongs.get(index);
+
+        // Send full playlist and selected index to PlaybackManager
+        PlaybackManager.getInstance().setPlaylist(loadedSongs, index, PlaySource.DASHBOARD);
+
+        // Open Player UI with correct play source
+        Player playerWindow = Player.getInstance();
+        playerWindow.setPlaySource(PlaySource.DASHBOARD);
+        playerWindow.setVisible(true);
+
+        logger.info("Playing from Dashboard recommendation: " + selectedSong.getTitle());
+    }
+
+    /**
+     * Render recently played songs in the JTable.
+     * Displays up to the first 10 songs with Title, Artist, and Duration.
+     * Follows MVC principles - View only renders data from Controller.
+     * 
+     * @param songs List of songs to display
+     */
+    private void renderRecentlyPlayed(List<Song> songs) {
+        logger.info("renderRecentlyPlayed called with " + (songs != null ? songs.size() : 0) + " songs");
+
+        // Get the table model
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+
+        // Verify table structure
+        int columnCount = model.getColumnCount();
+        logger.info("JTable column count: " + columnCount);
+
+        // Clear existing rows
+        model.setRowCount(0);
+
+        if (songs == null || songs.isEmpty()) {
+            logger.warning("No songs to render in Recently Played table.");
+            return;
+        }
+
+        // Display up to the first 10 songs
+        int limit = Math.min(10, songs.size());
+        logger.info("Rendering " + limit + " songs in Recently Played table...");
+
+        for (int i = 0; i < limit; i++) {
+            Song song = songs.get(i);
+            String title = song.getTitle();
+            String artist = song.getArtist();
+            int durationSeconds = song.getDurationSeconds();
+            String duration = String.format("%d:%02d", durationSeconds / 60, durationSeconds % 60);
+
+            model.addRow(new Object[] { i + 1, title, artist, duration });
+        }
+
+        logger.info("Successfully added " + model.getRowCount() + " rows to Recently Played table.");
+    }
+
+    /**
+     * Handle search button click - perform search
+     */
+
+    /**
+     * Perform search and update the table
+     */
+    private void performSearch() {
+        logger.fine(() -> "UI triggerSearch term='" + SearchBar.getText() + "'");
+        searchController.searchLocal(SearchBar.getText(), allSongsCache, this);
+    }
+
+    @Override
+    public void updateSongTable(List<Song> songs) {
+        logger.fine(() -> "UI updateSongTable count=" + (songs == null ? 0 : songs.size()));
+        loadedSongs = songs != null ? songs : Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (int i = 0; i < loadedSongs.size(); i++) {
+            Song song = loadedSongs.get(i);
+            String duration = String.format("%d:%02d", song.getDurationSeconds() / 60,
+                    song.getDurationSeconds() % 60);
+            model.addRow(new Object[] { i + 1, song.getTitle(), song.getArtist(), duration });
+        }
+
+        // Refresh recommendation buttons with the filtered set
+        loadSongsToUI(loadedSongs);
+    }
+
+    @Override
+    public void clearSongTable() {
+        loadedSongs = Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
 }

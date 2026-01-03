@@ -19,34 +19,37 @@ import java.util.List;
  * @author Asus
  */
 public class userDao {
-    MySqlConnection mysql = new MySqlConnection() {}; 
-    public void signUp(UserData user){
+    MySqlConnection mysql = new MySqlConnection() {
+    };
+
+    public void signUp(UserData user) {
         Connection conn = mysql.openconnection();
-        String sql=  "Insert into users (username, email, password, role) values(?,?,?,?)";
-        try(PreparedStatement pstm = conn.prepareStatement(sql)){
+        String sql = "Insert into users (username, email, password, role) values(?,?,?,?)";
+        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+            String hashed = PasswordService.hashPassword(user.getPassword());
             pstm.setString(1, user.getUsername());
             pstm.setString(2, user.getEmail());
-            pstm.setString(3, user.getPassword());
+            pstm.setString(3, hashed);
             pstm.setString(4, "user"); // Default role is 'user'
             pstm.executeUpdate();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
-        }finally{
+        } finally {
             mysql.closeConnection(conn);
         }
     }
-    
-public boolean check(UserData user) {
-    Connection conn = mysql.openconnection();
-    String sql = "Select * from users where username = ? or email= ?";
-    try(PreparedStatement pstm = conn.prepareStatement(sql)){
+
+    public boolean check(UserData user) {
+        Connection conn = mysql.openconnection();
+        String sql = "Select * from users where username = ? or email= ?";
+        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
             pstm.setString(1, user.getUsername());
             pstm.setString(2, user.getEmail());
             ResultSet result = pstm.executeQuery();
             return result.next();
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println(e);
-        }finally{
+        } finally {
             mysql.closeConnection(conn);
         }
         return false;
@@ -108,8 +111,24 @@ public boolean check(UserData user) {
         }
     }
 
+    public boolean deleteUserById(int userId) {
+        Connection conn = mysql.openconnection();
+        String sql = "DELETE FROM users WHERE user_id = ?";
+        try (PreparedStatement pstm = conn.prepareStatement(sql)) {
+            pstm.setInt(1, userId);
+            int rows = pstm.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        } finally {
+            mysql.closeConnection(conn);
+        }
+    }
+
     /**
-     * Ensure at least one admin exists. If not, create the default admin with provided credentials.
+     * Ensure at least one admin exists. If not, create the default admin with
+     * provided credentials.
      */
     public void ensureAdminExists(String username, String email, String plainPassword) {
         Connection conn = mysql.openconnection();
@@ -136,7 +155,8 @@ public boolean check(UserData user) {
     }
 
     /**
-     * Authenticate admin by username or email and password. Returns UserData if credentials match and role is admin, otherwise null.
+     * Authenticate admin by username or email and password. Returns UserData if
+     * credentials match and role is admin, otherwise null.
      */
     public UserData authenticateAdmin(String usernameOrEmail, String plainPassword) {
         Connection conn = mysql.openconnection();
@@ -156,7 +176,12 @@ public boolean check(UserData user) {
                     if (utils.PasswordService.isHashed(storedPassword)) {
                         passwordMatches = utils.PasswordService.verifyPassword(plainPassword, storedPassword);
                     } else {
+                        // Fallback: accept a legacy plain-text password and upgrade it to hashed
                         passwordMatches = storedPassword != null && storedPassword.equals(plainPassword);
+                        if (passwordMatches) {
+                            String newHashed = utils.PasswordService.hashPassword(plainPassword);
+                            upgradeAdminPassword(conn, rs.getInt("user_id"), newHashed);
+                        }
                     }
                 } catch (Exception ex) {
                     System.out.println("Password verification error: " + ex.getMessage());
@@ -178,5 +203,16 @@ public boolean check(UserData user) {
             mysql.closeConnection(conn);
         }
         return null;
+    }
+
+    private void upgradeAdminPassword(Connection conn, int userId, String hashedPassword) {
+        String updateSql = "UPDATE users SET password = ? WHERE user_id = ?";
+        try (PreparedStatement up = conn.prepareStatement(updateSql)) {
+            up.setString(1, hashedPassword);
+            up.setInt(2, userId);
+            up.executeUpdate();
+        } catch (SQLException ex) {
+            System.out.println("Failed to upgrade admin password hash: " + ex.getMessage());
+        }
     }
 }
