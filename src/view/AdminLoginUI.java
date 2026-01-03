@@ -7,19 +7,24 @@ package view;
 //import java.awt.event.ActionListener;
 
 import java.awt.event.ActionListener;
+import javax.swing.JOptionPane;
+import Dao.userDao;
+import Model.UserData;
+import Model.UserSession;
 
 /**
  *
  * @author Asus
  */
-public class Login extends javax.swing.JFrame {
+public class AdminLoginUI extends javax.swing.JFrame {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Login.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger
+            .getLogger(AdminLoginUI.class.getName());
 
     /**
      * Creates new form Login
      */
-    public Login() {
+    public AdminLoginUI() {
         initComponents();
     }
 
@@ -39,12 +44,9 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         email = new javax.swing.JTextField();
-        login = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        signup = new javax.swing.JButton();
         ForgotPassword = new javax.swing.JButton();
         loginAdminBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -58,22 +60,22 @@ public class Login extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         jLabel1.setFont(new java.awt.Font("Arial Black", 1, 25)); // NOI18N
-        jLabel1.setText("LOGIN");
+        jLabel1.setText("LOGIN ADMIN");
         jLabel1.setAlignmentX(5.0F);
         jLabel1.setAlignmentY(0.0F);
         getContentPane().add(jLabel1);
-        jLabel1.setBounds(580, 110, 120, 50);
+        jLabel1.setBounds(580, 110, 220, 50);
 
         jLabel7.setFont(new java.awt.Font("Arial Black", 1, 27)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(204, 204, 204));
-        jLabel7.setText("LOGIN");
+        jLabel7.setText("LOGIN ADMIN");
         jLabel7.setAlignmentX(2.0F);
         getContentPane().add(jLabel7);
-        jLabel7.setBounds(570, 90, 120, 90);
+        jLabel7.setBounds(570, 90, 220, 90);
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/mellow logo.png"))); // NOI18N
         getContentPane().add(jLabel3);
-        jLabel3.setBounds(-20, 0, 190, 120);
+        jLabel3.setBounds(-20, 0, 290, 120);
 
         password.setBackground(new java.awt.Color(221, 220, 220));
         password.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -112,24 +114,10 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(email);
         email.setBounds(460, 220, 280, 30);
 
-        login.setBackground(new java.awt.Color(153, 196, 239));
-        login.setFont(new java.awt.Font("Yu Gothic Medium", 1, 16)); // NOI18N
-        login.setForeground(new java.awt.Color(89, 149, 209));
-        login.setText("LOGIN");
-        login.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(239, 240, 241), 1, true));
-        login.addActionListener(this::loginActionPerformed);
-        getContentPane().add(login);
-        login.setBounds(640, 390, 100, 30);
-
         jLabel5.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel5.setText("Email :");
         getContentPane().add(jLabel5);
         jLabel5.setBounds(460, 190, 60, 20);
-
-        jLabel8.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
-        jLabel8.setText("Don't have an account?");
-        getContentPane().add(jLabel8);
-        jLabel8.setBounds(480, 450, 150, 20);
 
         jLabel6.setFont(new java.awt.Font("Serif", 1, 14)); // NOI18N
         jLabel6.setText("Password :");
@@ -140,14 +128,6 @@ public class Login extends javax.swing.JFrame {
         jLabel4.setText("A Personal Space just for you.");
         getContentPane().add(jLabel4);
         jLabel4.setBounds(210, 540, 210, 30);
-
-        signup.setBackground(new java.awt.Color(224, 223, 223));
-        signup.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        signup.setForeground(new java.awt.Color(83, 118, 224));
-        signup.setText("Create one.");
-        signup.addActionListener(this::signupActionPerformed);
-        getContentPane().add(signup);
-        signup.setBounds(640, 450, 100, 23);
 
         ForgotPassword.setBackground(new java.awt.Color(242, 242, 242));
         ForgotPassword.setForeground(new java.awt.Color(51, 102, 255));
@@ -164,7 +144,7 @@ public class Login extends javax.swing.JFrame {
         loginAdminBtn.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(239, 240, 241), 1, true));
         loginAdminBtn.addActionListener(this::loginAdminBtnActionPerformed);
         getContentPane().add(loginAdminBtn);
-        loginAdminBtn.setBounds(560, 520, 150, 30);
+        loginAdminBtn.setBounds(610, 400, 150, 30);
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/login and sign up bg111.jpg"))); // NOI18N
         jLabel2.setText("jLabel2");
@@ -177,14 +157,6 @@ public class Login extends javax.swing.JFrame {
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_passwordActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_passwordActionPerformed
-
-    private void loginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_loginActionPerformed
-        // Handled by Controller.LoginController via AddLoginListener
-    }// GEN-LAST:event_loginActionPerformed
-
-    private void signupActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_signupActionPerformed
-        // Handled by Controller.LoginController via AddSignupButtonListener
-    }// GEN-LAST:event_signupActionPerformed
 
     private void emailFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_emailFocusGained
         // TODO add your handling code here:
@@ -224,15 +196,11 @@ public class Login extends javax.swing.JFrame {
     }// GEN-LAST:event_ForgotPasswordActionPerformed
 
     private void loginAdminBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_loginAdminBtnActionPerformed
-        AdminLoginUI adminLogin = new AdminLoginUI();
-        adminLogin.setVisible(true);
-        this.dispose();
+        attemptLogin();
     }// GEN-LAST:event_loginAdminBtnActionPerformed
 
     private void adminLoginActionPerformed(java.awt.event.ActionEvent evt) {
-        AdminLoginUI adminLoginView = new AdminLoginUI();
-        adminLoginView.setVisible(true);
-        this.dispose();
+        attemptLogin();
     }
 
     /**
@@ -268,9 +236,8 @@ public class Login extends javax.swing.JFrame {
             Dao.userDao udao = new Dao.userDao();
             udao.ensureAdminExists("admin", "admin@mellow.com", "admin123");
 
-            Login loginView = new Login();
-            Controller.LoginController controller = new Controller.LoginController(loginView);
-            controller.open();
+            AdminLoginUI loginView = new AdminLoginUI();
+            loginView.setVisible(true);
         });
     }
 
@@ -285,26 +252,51 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JButton login;
     private javax.swing.JButton loginAdminBtn;
     private javax.swing.JPasswordField password;
-    private javax.swing.JButton signup;
     // End of variables declaration//GEN-END:variables
 
-    public void AddLoginListener(ActionListener listener) {
-        login.addActionListener(listener);
+    public void addAdminLoginListener(ActionListener listener) {
+        loginAdminBtn.addActionListener(listener);
     }
 
-    public void AddSignupButtonListener(ActionListener listener) {
-        signup.addActionListener(listener);
-    }
-
-    public javax.swing.JPasswordField getPassword() {
+    public javax.swing.JPasswordField getPasswordField() {
         return password;
     }
 
-    public javax.swing.JTextField getEmail() {
+    public javax.swing.JTextField getEmailField() {
         return email;
+    }
+
+    private void attemptLogin() {
+        String usernameOrEmail = email.getText().trim();
+        String pwd = new String(password.getPassword());
+
+        if (usernameOrEmail.isEmpty() || "Enter your email".equalsIgnoreCase(usernameOrEmail)) {
+            JOptionPane.showMessageDialog(this, "Please enter your admin email or username.", "Validation Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (pwd.isBlank() || "Enter your password".equalsIgnoreCase(pwd)) {
+            JOptionPane.showMessageDialog(this, "Password is required.", "Validation Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        userDao dao = new userDao();
+        UserData admin = dao.authenticateAdmin(usernameOrEmail, pwd);
+
+        if (admin != null) {
+            UserSession.getInstance().setUserData(admin);
+            JOptionPane.showMessageDialog(this, "Welcome, " + admin.getUsername(), "Login Successful",
+                    JOptionPane.INFORMATION_MESSAGE);
+            AdminDashboard admindashboard = new AdminDashboard();
+            admindashboard.setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(this, "Invalid admin credentials.", "Login Failed",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

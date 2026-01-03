@@ -13,8 +13,10 @@ import Model.UserSession;
 import java.awt.*;
 import java.util.List;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import service.PlaybackManager;
 import service.PlaylistManager;
+import service.SearchService;
 
 /**
  * Playlist view - displays user's playlists as cards
@@ -27,10 +29,14 @@ public class Playlist extends javax.swing.JFrame {
 
     private final SongController songController;
     private final PlaylistDao playlistDao;
+    private final SearchService searchService = SearchService.getInstance();
     private JList<Song> songList;
     private List<Song> playlistSongs; // For future extension: filtering songs into playlists
     private JScrollPane playlistScrollPane;
     private JPanel playlistGridPanel;
+    private JTable searchResultsTable;
+    private JScrollPane searchResultsScroll;
+    private List<Song> searchResults = new java.util.ArrayList<>();
 
     /**
      * Creates new form Playlist with a shared controller.
@@ -41,6 +47,7 @@ public class Playlist extends javax.swing.JFrame {
         initComponents();
         initPlaylistGrid();
         initSongList();
+        initSearchResultsTable();
         loadPlaylistCards();
 
         // After initComponents, configure NowPlaying panel with NowPlayingCard
@@ -61,6 +68,7 @@ public class Playlist extends javax.swing.JFrame {
         initComponents();
         initPlaylistGrid();
         initSongList();
+        initSearchResultsTable();
         loadPlaylistCards();
 
         // After initComponents, configure NowPlaying panel with NowPlayingCard
@@ -84,18 +92,20 @@ public class Playlist extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         BackBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        SearchTextField = new javax.swing.JTextField();
-        searchBtn = new javax.swing.JButton();
         Createnew = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         editPlaylistBtn = new javax.swing.JButton();
+        searchPanel = new javax.swing.JPanel();
+        searchBtn = new javax.swing.JButton();
+        SearchBar = new javax.swing.JTextField();
         NowPlaying = new javax.swing.JPanel();
         playlistCardRendererPanel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -119,23 +129,6 @@ public class Playlist extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(89, 141, 193));
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 4));
 
-        SearchTextField.setBackground(new java.awt.Color(153, 153, 153));
-        SearchTextField.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        SearchTextField.setText("Search");
-        SearchTextField.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                SearchTextFieldFocusGained(evt);
-            }
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                SearchTextFieldFocusLost(evt);
-            }
-        });
-        SearchTextField.addActionListener(this::SearchTextFieldActionPerformed);
-
-        searchBtn.setBackground(new java.awt.Color(153, 153, 153));
-        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-
         Createnew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/createNewPlaylistBtn_image.jpg"))); // NOI18N
         Createnew.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Createnew.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
@@ -154,6 +147,50 @@ public class Playlist extends javax.swing.JFrame {
         editPlaylistBtn.setBorder(null);
         editPlaylistBtn.addActionListener(this::editPlaylistBtnActionPerformed);
 
+        searchPanel.setBackground(new java.awt.Color(89, 141, 193));
+
+        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
+
+        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
+        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
+        SearchBar.setText("               Search");
+        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
+                new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchBarFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchBarFocusLost(evt);
+            }
+        });
+        SearchBar.addActionListener(this::SearchBarActionPerformed);
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 592,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchPanelLayout.createSequentialGroup()
+                                .addGroup(searchPanelLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, 42,
+                                                Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -169,20 +206,20 @@ public class Playlist extends javax.swing.JFrame {
                                                 .addGroup(jPanel2Layout
                                                         .createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                                                .addComponent(searchBtn,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 58,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addPreferredGap(
-                                                                        javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                                .addComponent(SearchTextField,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE, 550,
-                                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(57, 57, 57))
-                                                        .addGroup(jPanel2Layout.createSequentialGroup()
                                                                 .addComponent(editPlaylistBtn,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE, 170,
                                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                .addGap(47, 47, 47)))
+                                                                .addGap(47, 47, 47))
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING,
+                                                                jPanel2Layout.createSequentialGroup()
+                                                                        .addComponent(searchPanel,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addPreferredGap(
+                                                                                javax.swing.LayoutStyle.ComponentPlacement.RELATED,
+                                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                                                Short.MAX_VALUE)))
                                                 .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
                                                         javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(153, 153, 153))
@@ -197,25 +234,16 @@ public class Playlist extends javax.swing.JFrame {
                                 .addComponent(jLabel1)
                                 .addGap(0, 0, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addContainerGap(10, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addGap(20, 20, 20)
-                                                .addGroup(jPanel2Layout
-                                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(searchBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(SearchTextField,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE,
-                                                                javax.swing.GroupLayout.DEFAULT_SIZE,
-                                                                javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-                                                        javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(searchPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+                                                        javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(34, 34, 34)
                                                 .addComponent(editPlaylistBtn, javax.swing.GroupLayout.PREFERRED_SIZE,
                                                         36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(jPanel2Layout.createSequentialGroup()
-                                                .addContainerGap(10, Short.MAX_VALUE)
-                                                .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
-                                                        javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(Createnew, javax.swing.GroupLayout.PREFERRED_SIZE, 110,
+                                                javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 30,
                                         javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -263,26 +291,33 @@ public class Playlist extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
+        performSearch();
+    }// GEN-LAST:event_searchBtnActionPerformed
+
+    private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusGained
+        if (SearchBar.getText().equals("               Search")) {
+            SearchBar.setText("");
+        }
+    }// GEN-LAST:event_SearchBarFocusGained
+
+    private void SearchBarFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusLost
+        if (SearchBar.getText().isBlank()) {
+            SearchBar.setText("               Search");
+            showPlaylistsGrid();
+        }
+    }// GEN-LAST:event_SearchBarFocusLost
+
+    private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SearchBarActionPerformed
+        performSearch();
+    }// GEN-LAST:event_SearchBarActionPerformed
+
     private void editPlaylistBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_editPlaylistBtnActionPerformed
         // Open Playlist_CRUD view for editing playlists
         Playlist_CRUD crudView = new Playlist_CRUD();
         crudView.setVisible(true);
         this.dispose();
     }// GEN-LAST:event_editPlaylistBtnActionPerformed
-
-    private void SearchTextFieldFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchTextFieldFocusLost
-        // TODO add your handling code here:
-        if (SearchTextField.getText().equals("")) {
-            SearchTextField.setText("Search");
-        }
-    }// GEN-LAST:event_SearchTextFieldFocusLost
-
-    private void SearchTextFieldFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchTextFieldFocusGained
-        // TODO add your handling code here:
-        if (SearchTextField.getText().equals("Search")) {
-            SearchTextField.setText("");
-        }
-    }// GEN-LAST:event_SearchTextFieldFocusGained
 
     private void CreatenewActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_CreatenewActionPerformed
         // Prompt user for playlist name
@@ -359,7 +394,7 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JButton BackBtn;
     private javax.swing.JButton Createnew;
     private javax.swing.JPanel NowPlaying;
-    private javax.swing.JTextField SearchTextField;
+    private javax.swing.JTextField SearchBar;
     private javax.swing.JButton editPlaylistBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -368,6 +403,7 @@ public class Playlist extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel playlistCardRendererPanel;
     private javax.swing.JButton searchBtn;
+    private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -389,6 +425,36 @@ public class Playlist extends javax.swing.JFrame {
         // Add scroll pane to parent container
         playlistCardRendererPanel.setLayout(new BorderLayout());
         playlistCardRendererPanel.add(playlistScrollPane, BorderLayout.CENTER);
+    }
+
+    /**
+     * Table to show song search results inside Playlist view.
+     */
+    private void initSearchResultsTable() {
+        searchResultsTable = new JTable(new DefaultTableModel(
+                new Object[] { "SN", "Title", "Artist", "Album", "Duration" }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        });
+
+        searchResultsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int row = searchResultsTable.getSelectedRow();
+                    if (row >= 0) {
+                        playFromSearchResults(row);
+                    }
+                }
+            }
+        });
+
+        searchResultsScroll = new JScrollPane(searchResultsTable);
+        searchResultsScroll.setVisible(false);
+        searchResultsScroll.setBounds(10, 250, 970, 320);
+        jPanel1.add(searchResultsScroll);
     }
 
     /**
@@ -492,6 +558,60 @@ public class Playlist extends javax.swing.JFrame {
         jPanel1.add(scroll);
         jPanel1.revalidate();
         jPanel1.repaint();
+    }
+
+    private void performSearch() {
+        String term = SearchBar.getText().trim();
+
+        if (term.isEmpty() || term.equals("Search") || term.equals("               Search")) {
+            showPlaylistsGrid();
+            return;
+        }
+
+        searchService.searchSongs(term, results -> {
+            searchResults = results;
+            javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel) searchResultsTable
+                    .getModel();
+            model.setRowCount(0);
+
+            for (int i = 0; i < results.size(); i++) {
+                Song song = results.get(i);
+                String duration = String.format("%d:%02d", song.getDurationSeconds() / 60,
+                        song.getDurationSeconds() % 60);
+                model.addRow(new Object[] { i + 1, song.getTitle(), song.getArtist(), song.getAlbum(), duration });
+            }
+
+            playlistCardRendererPanel.setVisible(false);
+            playlistScrollPane.setVisible(false);
+            searchResultsScroll.setVisible(true);
+            jPanel1.revalidate();
+            jPanel1.repaint();
+        }, ex -> {
+            logger.log(java.util.logging.Level.SEVERE, "Search failed", ex);
+            JOptionPane.showMessageDialog(this,
+                    "Unable to search songs right now. Please try again.",
+                    "Search Error",
+                    JOptionPane.ERROR_MESSAGE);
+        });
+    }
+
+    private void showPlaylistsGrid() {
+        searchResultsScroll.setVisible(false);
+        playlistCardRendererPanel.setVisible(true);
+        playlistScrollPane.setVisible(true);
+    }
+
+    private void playFromSearchResults(int row) {
+        if (searchResults == null || row < 0 || row >= searchResults.size()) {
+            return;
+        }
+
+        Song selectedSong = searchResults.get(row);
+        PlaybackManager.getInstance().setPlaylist(searchResults, row, PlaySource.PLAYLIST);
+        Player playerWindow = Player.getInstance();
+        playerWindow.setPlaySource(PlaySource.PLAYLIST);
+        playerWindow.setVisible(true);
+        logger.info("Playing from search results: " + selectedSong.getTitle());
     }
 
     private static class ListCellRenderer<T extends Song> extends DefaultListCellRenderer {

@@ -5,36 +5,30 @@
 package view;
 
 import Controller.SongController;
+import Controller.SongSearchController;
 import Model.PlaySource;
 import Model.Song;
+import java.util.Collections;
 import java.util.List;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import service.PlaybackManager;
 
-/**
- *
- * @author Asus
- */
-public class AllSongs extends javax.swing.JFrame {
+public class AllSongs extends javax.swing.JFrame implements SongSearchView {
 
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(AllSongs.class.getName());
-    private final SongController songController;
-    private List<Song> allSongs;
+    private static final Logger logger = Logger.getLogger(AllSongs.class.getName());
+    private final SongController songController = new SongController();
+    private final SongSearchController searchController = new SongSearchController();
+    private List<Song> allSongs = Collections.emptyList();
+    private List<Song> masterSongs = Collections.emptyList();
 
-    /**
-     * Creates new form AllSongs
-     */
     public AllSongs() {
         initComponents();
-        songController = new SongController();
-
-        // Fetch all songs from SongController and populate table
-        loadAllSongs();
+        setLocationRelativeTo(null);
         setAllSongsColumnWidths();
+        loadAllSongs();
 
-        // Add mouse listener for song selection
-        // When user clicks a song: load full playlist into PlaybackManager and start
-        // playback
         jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -42,10 +36,8 @@ public class AllSongs extends javax.swing.JFrame {
                 if (row >= 0 && allSongs != null && row < allSongs.size()) {
                     Song selectedSong = allSongs.get(row);
 
-                    // Send full playlist and selected index to PlaybackManager
                     PlaybackManager.getInstance().setPlaylist(allSongs, row, PlaySource.ALL_SONGS);
 
-                    // Open Player UI with correct play source
                     Player playerWindow = Player.getInstance();
                     playerWindow.setPlaySource(PlaySource.ALL_SONGS);
                     playerWindow.setVisible(true);
@@ -55,7 +47,6 @@ public class AllSongs extends javax.swing.JFrame {
             }
         });
 
-        // After initComponents, configure NowPlaying panel with NowPlayingCard
         NowPlaying.removeAll();
         NowPlaying.setLayout(new java.awt.BorderLayout());
         NowPlaying.setOpaque(true);
@@ -66,6 +57,32 @@ public class AllSongs extends javax.swing.JFrame {
         NowPlaying.repaint();
     }
 
+    @Override
+    public void updateSongTable(List<Song> songs) {
+        logger.fine(() -> "AllSongs updateSongTable count=" + (songs == null ? 0 : songs.size()));
+        allSongs = songs != null ? songs : Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+        for (int i = 0; i < allSongs.size(); i++) {
+            Song song = allSongs.get(i);
+            String duration = String.format("%d:%02d", song.getDurationSeconds() / 60,
+                    song.getDurationSeconds() % 60);
+            model.addRow(new Object[] { i + 1, song.getTitle(), song.getArtist(), duration });
+        }
+    }
+
+    @Override
+    public void clearSongTable() {
+        allSongs = Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        model.setRowCount(0);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,13 +90,13 @@ public class AllSongs extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jLabel3 = new javax.swing.JLabel();
-        searchBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        SearchBar = new javax.swing.JTextField();
         Backtodashboard = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -89,12 +106,15 @@ public class AllSongs extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         NowPlaying = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        searchPanel = new javax.swing.JPanel();
+        SearchBar = new javax.swing.JTextField();
+        searchBtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         Likedsongs1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(1000, 675));
+        setPreferredSize(new java.awt.Dimension(998, 702));
         setResizable(false);
         getContentPane().setLayout(null);
 
@@ -102,36 +122,11 @@ public class AllSongs extends javax.swing.JFrame {
         getContentPane().add(jLabel3);
         jLabel3.setBounds(0, 10, 210, 140);
 
-        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
-        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
-        getContentPane().add(searchBtn);
-        searchBtn.setBounds(310, 50, 70, 30);
-
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(102, 102, 102));
         jLabel1.setText("All Songs");
         getContentPane().add(jLabel1);
         jLabel1.setBounds(340, 120, 140, 32);
-
-        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
-        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
-        SearchBar.setText("               Search");
-        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
-                new java.awt.Color(102, 102, 102)));
-        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                SearchBarFocusGained(evt);
-            }
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                SearchBarFocusLost(evt);
-            }
-        });
-        SearchBar.addActionListener(this::SearchBarActionPerformed);
-        getContentPane().add(SearchBar);
-        SearchBar.setBounds(310, 50, 650, 30);
 
         Backtodashboard.setBackground(new java.awt.Color(40, 52, 46));
         Backtodashboard.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
@@ -220,6 +215,51 @@ public class AllSongs extends javax.swing.JFrame {
         getContentPane().add(jLabel6);
         jLabel6.setBounds(30, 270, 50, 50);
 
+        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
+        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
+        SearchBar.setText("               Search");
+        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
+                new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchBarFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchBarFocusLost(evt);
+            }
+        });
+        SearchBar.addActionListener(this::SearchBarActionPerformed);
+
+        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 592,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchPanelLayout.createSequentialGroup()
+                                .addGroup(searchPanelLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, 42,
+                                                Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
+
+        getContentPane().add(searchPanel);
+        searchPanel.setBounds(320, 20, 650, 40);
+
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         getContentPane().add(jLabel5);
         jLabel5.setBounds(0, 0, 1000, 700);
@@ -238,6 +278,11 @@ public class AllSongs extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
+        logger.fine(() -> "AllSongs triggerSearch term='" + SearchBar.getText() + "'");
+        searchController.searchLocal(SearchBar.getText(), masterSongs, this);
+    }// GEN-LAST:event_searchBtnActionPerformed
+
     private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusGained
         // TODO add your handling code here:
         if (SearchBar.getText().equals("               Search")) {
@@ -253,7 +298,8 @@ public class AllSongs extends javax.swing.JFrame {
     }// GEN-LAST:event_SearchBarFocusLost
 
     private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SearchBarActionPerformed
-        // TODO add your handling code here:
+        logger.fine(() -> "AllSongs triggerSearch (enter) term='" + SearchBar.getText() + "'");
+        searchController.searchLocal(SearchBar.getText(), masterSongs, this);
     }// GEN-LAST:event_SearchBarActionPerformed
 
     private void PlaylistActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_PlaylistActionPerformed
@@ -327,6 +373,7 @@ public class AllSongs extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable2;
     private javax.swing.JButton searchBtn;
+    private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 
     /**
@@ -336,7 +383,8 @@ public class AllSongs extends javax.swing.JFrame {
      */
     private void loadAllSongs() {
         // Fetch all songs from controller
-        allSongs = songController.getAllSongs();
+        masterSongs = songController.getAllSongs();
+        allSongs = masterSongs;
 
         // Get table model and clear existing rows
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
@@ -369,4 +417,5 @@ public class AllSongs extends javax.swing.JFrame {
         columns.getColumn(3).setPreferredWidth(70);
         columns.getColumn(3).setMaxWidth(80);
     }
+
 }

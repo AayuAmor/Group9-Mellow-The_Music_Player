@@ -12,6 +12,11 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import service.PlaybackManager;
+import utils.LikedSongsNotifier;
+import javax.swing.JOptionPane;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javax.swing.SwingUtilities;
 
 /**
  * Liked Songs view - displays user's favorited songs
@@ -26,6 +31,13 @@ public class likedsong extends javax.swing.JFrame {
             .getLogger(likedsong.class.getName());
     private List<Song> likedSongs = new ArrayList<>();
     private final LikedSongDao likedSongDao;
+    private List<Song> displayedSongs = new ArrayList<>();
+    private final ExecutorService searchExecutor = Executors.newSingleThreadExecutor(r -> {
+        Thread t = new Thread(r, "liked-songs-search");
+        t.setDaemon(true);
+        return t;
+    });
+    private final Runnable refreshCallback = this::refreshLikedSongs;
 
     /**
      * Creates new form likedsong
@@ -34,6 +46,22 @@ public class likedsong extends javax.swing.JFrame {
         this.likedSongDao = new LikedSongDao();
         initComponents();
         loadLikedSongs();
+
+        // Refresh when Player toggles like/unlike
+        LikedSongsNotifier.register(refreshCallback);
+
+        // Play on double-click
+        LikedSongTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                if (evt.getClickCount() == 2) {
+                    int row = LikedSongTable.getSelectedRow();
+                    if (row >= 0) {
+                        playSongFromLiked(row);
+                    }
+                }
+            }
+        });
 
         // After initComponents, configure NowPlaying panel with NowPlayingCard
         NowPlaying.removeAll();
@@ -59,14 +87,8 @@ public class likedsong extends javax.swing.JFrame {
         int userId = session.getUserId();
         likedSongs = likedSongDao.getLikedSongs(userId);
 
-        if (likedSongs == null || likedSongs.isEmpty()) {
-            logger.info("No liked songs found for user " + userId);
-            // Could display a message to the user
-            return;
-        }
-
-        // Render liked songs in the UI
-        renderLikedSongs();
+        List<Song> toRender = new ArrayList<>(likedSongs);
+        SwingUtilities.invokeLater(() -> renderLikedSongs(toRender));
 
         logger.info("Loaded " + likedSongs.size() + " liked songs");
     }
@@ -75,11 +97,56 @@ public class likedsong extends javax.swing.JFrame {
      * Render liked songs in the table
      * TODO: Implement table rendering similar to other views
      */
-    private void renderLikedSongs() {
-        // This would populate a JTable or JList with liked songs
-        // For now, this is a placeholder for the rendering logic
-        // The actual implementation would depend on the UI components in the form
-        logger.info("Rendering " + likedSongs.size() + " liked songs");
+    private void renderLikedSongs(List<Song> songs) {
+        displayedSongs = songs == null ? new ArrayList<>() : new ArrayList<>(songs);
+        javax.swing.table.DefaultTableModel model = new javax.swing.table.DefaultTableModel(
+                new Object[] { "SN", "Title", "Artist", "Duration" }, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        for (int i = 0; i < displayedSongs.size(); i++) {
+            Song s = displayedSongs.get(i);
+            String duration = String.format("%d:%02d", s.getDurationSeconds() / 60, s.getDurationSeconds() % 60);
+            model.addRow(new Object[] { i + 1, s.getTitle(), s.getArtist(), duration });
+        }
+
+        LikedSongTable.setModel(model);
+    }
+
+    private void refreshLikedSongs() {
+        searchExecutor.submit(this::loadLikedSongs);
+    }
+
+    private void performSearch() {
+        UserSession session = UserSession.getInstance();
+        if (!session.isLoggedIn()) {
+            JOptionPane.showMessageDialog(this, "Please login to view liked songs.", "Login Required",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String term = SearchBar.getText().trim();
+        if (term.isEmpty() || term.equals("Search") || term.equals("               Search")) {
+            renderLikedSongs(likedSongs);
+            return;
+        }
+
+        int userId = session.getUserId();
+        searchExecutor.submit(() -> {
+            List<Song> results = likedSongDao.searchLikedSongs(userId, term);
+            SwingUtilities.invokeLater(() -> {
+                if (results.isEmpty()) {
+                    JOptionPane.showMessageDialog(this,
+                            "No liked songs found for: " + term,
+                            "Search Results",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+                renderLikedSongs(results);
+            });
+        });
     }
 
     /**
@@ -91,16 +158,17 @@ public class likedsong extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        search1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
+        searchPanel = new javax.swing.JPanel();
+        searchBtn = new javax.swing.JButton();
+        SearchBar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         Backbtn = new javax.swing.JButton();
         NowPlaying = new javax.swing.JPanel();
@@ -123,40 +191,57 @@ public class likedsong extends javax.swing.JFrame {
         jPanel2.add(jLabel1);
         jLabel1.setBounds(10, 10, 200, 129);
 
-        search1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-        search1.addActionListener(this::search1ActionPerformed);
-        jPanel2.add(search1);
-        search1.setBounds(330, 60, 71, 50);
-
         jPanel3.setBackground(new java.awt.Color(0, 0, 0));
         jPanel3.setLayout(null);
         jPanel2.add(jPanel3);
         jPanel3.setBounds(0, 153, 956, 0);
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jTextField1.setText("Search");
-        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+        searchPanel.setBackground(new java.awt.Color(89, 141, 193));
+
+        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
+
+        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
+        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
+        SearchBar.setText("               Search");
+        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
+                new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextField1FocusGained(evt);
+                SearchBarFocusGained(evt);
             }
 
             public void focusLost(java.awt.event.FocusEvent evt) {
-                jTextField1FocusLost(evt);
+                SearchBarFocusLost(evt);
             }
         });
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        SearchBar.addActionListener(this::SearchBarActionPerformed);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE));
-        jPanel4Layout.setVerticalGroup(
-                jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE));
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 592,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchPanelLayout.createSequentialGroup()
+                                .addGroup(searchPanelLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, 42,
+                                                Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
 
-        jPanel2.add(jPanel4);
-        jPanel4.setBounds(410, 60, 360, 50);
+        jPanel2.add(searchPanel);
+        searchPanel.setBounds(220, 20, 650, 40);
 
         jPanel1.add(jPanel2);
         jPanel2.setBounds(-4, -10, 1040, 170);
@@ -321,23 +406,31 @@ public class likedsong extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
+        performSearch();
+    }// GEN-LAST:event_searchBtnActionPerformed
+
+    private void SearchBarFocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusGained
+        if (SearchBar.getText().equals("               Search")) {
+            SearchBar.setText("");
+        }
+    }// GEN-LAST:event_SearchBarFocusGained
+
+    private void SearchBarFocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_SearchBarFocusLost
+        if (SearchBar.getText().isBlank()) {
+            SearchBar.setText("               Search");
+        }
+    }// GEN-LAST:event_SearchBarFocusLost
+
+    private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SearchBarActionPerformed
+        performSearch();
+    }// GEN-LAST:event_SearchBarActionPerformed
+
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
     }// GEN-LAST:event_jTextField1ActionPerformed
 
-    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextField1FocusGained
-        // TODO add your handling code here:
-        if (jTextField1.getText().equals("Search")) {
-            jTextField1.setText("");
-        }
-    }// GEN-LAST:event_jTextField1FocusGained
-
-    private void jTextField1FocusLost(java.awt.event.FocusEvent evt) {// GEN-FIRST:event_jTextField1FocusLost
-        // TODO add your handling code here:
-        if (jTextField1.getText().equals("")) {
-            jTextField1.setText("Search");
-        }
-    }// GEN-LAST:event_jTextField1FocusLost
+    // GEN-LAST:event_jTextField1FocusLost
 
     private void searchActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchActionPerformed
         // TODO add your handling code here:
@@ -394,11 +487,12 @@ public class likedsong extends javax.swing.JFrame {
      * Sends full liked songs list and index to PlaybackManager
      */
     private void playSongFromLiked(int index) {
-        if (index >= 0 && index < likedSongs.size()) {
-            Song selectedSong = likedSongs.get(index);
+        List<Song> source = (displayedSongs == null || displayedSongs.isEmpty()) ? likedSongs : displayedSongs;
+        if (index >= 0 && index < source.size()) {
+            Song selectedSong = source.get(index);
 
             // Send full liked songs list and selected index to PlaybackManager
-            PlaybackManager.getInstance().setPlaylist(likedSongs, index, PlaySource.LIKED_SONGS);
+            PlaybackManager.getInstance().setPlaylist(source, index, PlaySource.LIKED_SONGS);
 
             // Open Player UI with correct play source
             Player playerWindow = Player.getInstance();
@@ -438,19 +532,26 @@ public class likedsong extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> new likedsong().setVisible(true));
     }
 
+    @Override
+    public void dispose() {
+        LikedSongsNotifier.unregister(refreshCallback);
+        searchExecutor.shutdownNow();
+        super.dispose();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Backbtn;
     private javax.swing.JTable LikedSongTable;
     private javax.swing.JPanel NowPlaying;
+    private javax.swing.JTextField SearchBar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JButton search1;
+    private javax.swing.JButton searchBtn;
+    private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 }

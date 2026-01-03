@@ -16,6 +16,7 @@ import javax.swing.ImageIcon;
 import service.PlaybackManager;
 import utils.NowPlayingState;
 import utils.NowPlayingState.NowPlayingListener;
+import utils.LikedSongsNotifier;
 
 /**
  * Player UI - Singleton pattern ensures only one player window exists
@@ -648,6 +649,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
                 likeSongBtn.setOpaque(true);
                 likeSongBtn.setBorderPainted(false);
                 logger.info("Unliked song: " + currentSong.getTitle());
+                LikedSongsNotifier.notifyChanged();
             } else {
                 logger.warning("Failed to unlike song in database");
             }
@@ -662,6 +664,7 @@ public class Player extends javax.swing.JFrame implements NowPlayingListener {
                 likeSongBtn.setOpaque(true);
                 likeSongBtn.setBorderPainted(false);
                 logger.info("Liked song: " + currentSong.getTitle());
+                LikedSongsNotifier.notifyChanged();
             } else {
                 logger.warning("Failed to like song in database");
             }

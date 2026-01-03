@@ -5,12 +5,13 @@
 package view;
 
 import Controller.SongController;
-import Dao.SongDAO;
+import Controller.SongSearchController;
 import Model.PlaySource;
 import Model.Song;
 import java.awt.Image;
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -20,13 +21,14 @@ import service.PlaybackManager;
  *
  * @author Asus
  */
-public class UserDashboard extends javax.swing.JFrame {
+public class UserDashboard extends javax.swing.JFrame implements SongSearchView {
 
     private static final java.util.logging.Logger logger = java.util.logging.Logger
             .getLogger(UserDashboard.class.getName());
     private final SongController songController = new SongController();
-    private final SongDAO songDao = new SongDAO();
-    private List<Song> loadedSongs;
+    private final SongSearchController searchController = new SongSearchController();
+    private List<Song> loadedSongs = Collections.emptyList();
+    private List<Song> allSongsCache = Collections.emptyList();
     private static boolean songsLoadedOnce = false;
 
     /**
@@ -57,6 +59,7 @@ public class UserDashboard extends javax.swing.JFrame {
 
         // STEP 2: Fetch all songs AFTER loading
         List<Song> allSongs = songController.getAllSongs();
+        allSongsCache = allSongs;
         logger.info("Total songs fetched from cache: " + (allSongs != null ? allSongs.size() : 0));
 
         // STEP 3: Render songs if available
@@ -123,6 +126,7 @@ public class UserDashboard extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
     // <editor-fold defaultstate="collapsed" desc="Generated
+    // <editor-fold defaultstate="collapsed" desc="Generated
     // Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -135,8 +139,6 @@ public class UserDashboard extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        searchBtn = new javax.swing.JButton();
-        SearchBar = new javax.swing.JTextField();
         Playlist = new javax.swing.JButton();
         Likedsongs = new javax.swing.JButton();
         Account = new javax.swing.JButton();
@@ -157,6 +159,9 @@ public class UserDashboard extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        searchPanel = new javax.swing.JPanel();
+        searchBtn = new javax.swing.JButton();
+        SearchBar = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         Likedsongs1 = new javax.swing.JButton();
 
@@ -212,31 +217,6 @@ public class UserDashboard extends javax.swing.JFrame {
 
         jPanel1.add(jPanel2);
         jPanel2.setBounds(310, 80, 660, 110);
-
-        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
-        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
-        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
-        jPanel1.add(searchBtn);
-        searchBtn.setBounds(310, 30, 70, 30);
-
-        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
-        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
-        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
-        SearchBar.setText("               Search");
-        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
-                new java.awt.Color(102, 102, 102)));
-        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                SearchBarFocusGained(evt);
-            }
-
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                SearchBarFocusLost(evt);
-            }
-        });
-        SearchBar.addActionListener(this::SearchBarActionPerformed);
-        jPanel1.add(SearchBar);
-        SearchBar.setBounds(310, 30, 650, 30);
 
         Playlist.setBackground(new java.awt.Color(40, 52, 46));
         Playlist.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
@@ -405,6 +385,51 @@ public class UserDashboard extends javax.swing.JFrame {
         jPanel1.add(jScrollPane1);
         jScrollPane1.setBounds(330, 480, 590, 130);
 
+        searchBtn.setBackground(new java.awt.Color(197, 191, 191));
+        searchBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/meteor-icons_search.png"))); // NOI18N
+        searchBtn.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(51, 51, 51)));
+        searchBtn.addActionListener(this::searchBtnActionPerformed);
+
+        SearchBar.setBackground(new java.awt.Color(160, 148, 148));
+        SearchBar.setFont(new java.awt.Font("Segoe UI Black", 1, 18)); // NOI18N
+        SearchBar.setForeground(new java.awt.Color(204, 204, 204));
+        SearchBar.setText("               Search");
+        SearchBar.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153),
+                new java.awt.Color(102, 102, 102)));
+        SearchBar.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SearchBarFocusGained(evt);
+            }
+
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SearchBarFocusLost(evt);
+            }
+        });
+        SearchBar.addActionListener(this::SearchBarActionPerformed);
+
+        javax.swing.GroupLayout searchPanelLayout = new javax.swing.GroupLayout(searchPanel);
+        searchPanel.setLayout(searchPanelLayout);
+        searchPanelLayout.setHorizontalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, searchPanelLayout.createSequentialGroup()
+                                .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(SearchBar, javax.swing.GroupLayout.PREFERRED_SIZE, 592,
+                                        javax.swing.GroupLayout.PREFERRED_SIZE)));
+        searchPanelLayout.setVerticalGroup(
+                searchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(searchPanelLayout.createSequentialGroup()
+                                .addGroup(searchPanelLayout
+                                        .createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(searchBtn, javax.swing.GroupLayout.DEFAULT_SIZE,
+                                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(SearchBar, javax.swing.GroupLayout.DEFAULT_SIZE, 42,
+                                                Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)));
+
+        jPanel1.add(searchPanel);
+        searchPanel.setBounds(320, 20, 650, 40);
+
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Untitled design (2).png"))); // NOI18N
         jPanel1.add(jLabel2);
         jLabel2.setBounds(0, 0, 990, 730);
@@ -429,6 +454,10 @@ public class UserDashboard extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_searchBtnActionPerformed
+        performSearch();
+    }// GEN-LAST:event_searchBtnActionPerformed
 
     private void SearchBarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_SearchBarActionPerformed
         performSearch();
@@ -595,6 +624,7 @@ public class UserDashboard extends javax.swing.JFrame {
     private javax.swing.JToolBar jToolBar1;
     private javax.swing.JButton logout;
     private javax.swing.JButton searchBtn;
+    private javax.swing.JPanel searchPanel;
     // End of variables declaration//GEN-END:variables
 
     private void loadSongsToUI(List<Song> songs) {
@@ -624,16 +654,9 @@ public class UserDashboard extends javax.swing.JFrame {
      * OLD: File chooser for loading songs
      * KEPT for backwards compatibility
      */
+    // Legacy loader retained intentionally (unused)
     private void searchBtnActionPerformedOld(java.awt.event.ActionEvent evt) {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        int res = chooser.showOpenDialog(this);
-        if (res == JFileChooser.APPROVE_OPTION) {
-            File selected = chooser.getSelectedFile();
-            Path root = selected.toPath();
-            songController.loadSongs(root);
-            loadSongsToUI(songController.getSongs());
-        }
+        // no-op for current flow
     }
 
     private void setRecentlyPlayedColumnWidths() {
@@ -716,56 +739,42 @@ public class UserDashboard extends javax.swing.JFrame {
     /**
      * Handle search button click - perform search
      */
-    private void searchBtnActionPerformed(java.awt.event.ActionEvent evt) {
-        performSearch();
-    }
 
     /**
      * Perform search and update the table
      */
     private void performSearch() {
-        String searchTerm = SearchBar.getText().trim();
+        logger.fine(() -> "UI triggerSearch term='" + SearchBar.getText() + "'");
+        searchController.searchLocal(SearchBar.getText(), allSongsCache, this);
+    }
 
-        // Ignore placeholder text or empty search
-        if (searchTerm.isEmpty() || searchTerm.equals("Search")) {
-            logger.info("Empty search - reloading all songs");
-            loadSongsToUI(loadedSongs);
-            return;
+    @Override
+    public void updateSongTable(List<Song> songs) {
+        logger.fine(() -> "UI updateSongTable count=" + (songs == null ? 0 : songs.size()));
+        loadedSongs = songs != null ? songs : Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+
+        for (int i = 0; i < loadedSongs.size(); i++) {
+            Song song = loadedSongs.get(i);
+            String duration = String.format("%d:%02d", song.getDurationSeconds() / 60,
+                    song.getDurationSeconds() % 60);
+            model.addRow(new Object[] { i + 1, song.getTitle(), song.getArtist(), duration });
         }
 
-        logger.info("Searching for: " + searchTerm);
+        // Refresh recommendation buttons with the filtered set
+        loadSongsToUI(loadedSongs);
+    }
 
-        // Search in loaded songs (local) by title or artist
-        List<Song> localResults = loadedSongs.stream()
-                .filter(song -> song.getTitle().toLowerCase().contains(searchTerm.toLowerCase()) ||
-                        song.getArtist().toLowerCase().contains(searchTerm.toLowerCase()))
-                .collect(java.util.stream.Collectors.toList());
+    @Override
+    public void clearSongTable() {
+        loadedSongs = Collections.emptyList();
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+    }
 
-        // Also search database songs
-        List<Song> dbResults = songDao.searchSongs(searchTerm);
-
-        // Merge results (avoid duplicates by file path)
-        java.util.Map<String, Song> uniqueSongs = new java.util.HashMap<>();
-        for (Song song : localResults) {
-            uniqueSongs.put(song.getFilePath(), song);
-        }
-        for (Song song : dbResults) {
-            if (!uniqueSongs.containsKey(song.getFilePath())) {
-                uniqueSongs.put(song.getFilePath(), song);
-            }
-        }
-
-        List<Song> searchResults = new java.util.ArrayList<>(uniqueSongs.values());
-
-        if (searchResults.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No songs found matching: " + searchTerm,
-                    "Search Results",
-                    JOptionPane.INFORMATION_MESSAGE);
-            return;
-        }
-
-        logger.info("Found " + searchResults.size() + " results");
-        loadSongsToUI(searchResults);
+    @Override
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
     }
 }

@@ -13,6 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import utils.MetadataReader;
@@ -24,6 +25,7 @@ import utils.MetadataReader;
 public class SongDAO {
     private static final String DEFAULT_IMAGE = "/Images/default_song.png";
     private static final Set<String> SUPPORTED_EXTS = Set.of("mp3", "wav", "flac");
+    private static final Logger logger = Logger.getLogger(SongDAO.class.getName());
     private final MySqlConnection dbConnection = new MySqlConnection();
 
     /**
@@ -169,20 +171,47 @@ public class SongDAO {
      */
     public List<Song> searchSongs(String searchTerm) {
         List<Song> songs = new ArrayList<>();
-        String query = "SELECT song_id, song_name, artist, album, duration, file_path " +
-                "FROM songs " +
-                "WHERE song_name LIKE ? OR artist LIKE ? " +
-                "ORDER BY song_name";
+        String term = searchTerm == null ? "" : searchTerm.trim().toLowerCase();
+        if (term.isEmpty()) {
+            return songs;
+        }
+
+        logger.fine(() -> "DAO search term='" + term + "'");
+
+        String[] words = term.split("\\s+");
+        List<String> filtered = new ArrayList<>();
+        for (String w : words) {
+            if (!w.isBlank()) {
+                filtered.add(w);
+            }
+        }
+        if (filtered.isEmpty()) {
+            return songs;
+        }
+
+        StringBuilder sql = new StringBuilder(
+                "SELECT song_id, song_name, artist, album, duration, file_path FROM songs WHERE ");
+        for (int i = 0; i < filtered.size(); i++) {
+            if (i > 0) {
+                sql.append(" AND ");
+            }
+            sql.append("(LOWER(song_name) LIKE ? OR LOWER(artist) LIKE ? OR LOWER(album) LIKE ?)");
+        }
+        sql.append(" ORDER BY song_name");
 
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = dbConnection.openconnection();
-            stmt = conn.prepareStatement(query);
+            stmt = conn.prepareStatement(sql.toString());
 
-            String likePattern = "%" + searchTerm + "%";
-            stmt.setString(1, likePattern);
-            stmt.setString(2, likePattern);
+            int paramIndex = 1;
+            for (String w : filtered) {
+                String like = "%" + w + "%";
+                stmt.setString(paramIndex++, like);
+                stmt.setString(paramIndex++, like);
+                stmt.setString(paramIndex++, like);
+            }
 
             ResultSet rs = stmt.executeQuery();
 
@@ -196,6 +225,7 @@ public class SongDAO {
                 song.setSongId(rs.getInt("song_id"));
                 songs.add(song);
             }
+            logger.fine(() -> "DAO rows fetched=" + songs.size());
         } catch (SQLException e) {
             System.err.println("Error searching songs: " + e.getMessage());
             e.printStackTrace();

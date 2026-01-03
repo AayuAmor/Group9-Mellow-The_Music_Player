@@ -222,4 +222,57 @@ public class LikedSongDao {
 
         return 0;
     }
+
+    /**
+     * Search liked songs for a user by title, artist, or album.
+     */
+    public List<Song> searchLikedSongs(int userId, String term) {
+        List<Song> songs = new ArrayList<>();
+        String query = "SELECT s.song_id, s.song_name, s.artist, s.album, s.duration, s.file_path " +
+                "FROM songs s " +
+                "INNER JOIN liked_songs ls ON s.song_id = ls.song_id " +
+                "WHERE ls.user_id = ? AND (s.song_name LIKE ? OR s.artist LIKE ? OR s.album LIKE ?) " +
+                "ORDER BY s.song_name";
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            conn = dbConnection.openconnection();
+            stmt = conn.prepareStatement(query);
+
+            String like = "%" + (term == null ? "" : term.trim()) + "%";
+            stmt.setInt(1, userId);
+            stmt.setString(2, like);
+            stmt.setString(3, like);
+            stmt.setString(4, like);
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Song song = new Song(
+                        rs.getString("song_name"),
+                        rs.getString("artist"),
+                        rs.getString("album"),
+                        rs.getInt("duration"),
+                        rs.getString("file_path"));
+                song.setSongId(rs.getInt("song_id"));
+                song.setLiked(true);
+                songs.add(song);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error searching liked songs: " + e.getMessage());
+        } finally {
+            try {
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (conn != null) {
+                    dbConnection.closeConnection(conn);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return songs;
+    }
 }
